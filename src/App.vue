@@ -1,15 +1,19 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <NavigationBar />
+  <SetupForm />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
+import NavigationBar from "@/components/NavigationBar.vue";
+import SetupForm from "@/components/SetupForm.vue";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NavigationBar, SetupForm
   }
 }
 </script>
