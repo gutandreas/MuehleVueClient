@@ -8,12 +8,13 @@ export default {
       loginState: false,
       stoneColors: ["BLACK", "WHITE"],
       answers: {
-        a0: "a0",
-        a1: "a1",
-        a2: "a2",
-        a3: "a3",
-        a4: "a4",
-        a5: "a5",
+        name: "a0",
+        modus: "a1",
+        level: "a2",
+        join: "a3",
+        color: "a4",
+        firststone: "a5",
+        gamecode: "a6",
       },
       stepOrder: [],
       step: 0,
@@ -30,7 +31,7 @@ export default {
       this.stepOrder.push(0)
     },
     step1(){
-      this.answers.a1 === "c" ? this.step = 2 : this.step = 3;
+      this.answers.modus === "c" ? this.step = 2 : this.step = 3;
       console.log(this.step)
       this.stepOrder.push(1)
     },
@@ -40,22 +41,29 @@ export default {
       this.stepOrder.push(2)
     },
     step3(){
-      this.answers.a3 === "s"? this.step = 4 : this.step = 5;
+      this.answers.join === "s"? this.step = 4 : this.step = 5;
       console.log(this.step)
       this.stepOrder.push(3)
     },
     step4(color){
       if (color === 'b') {
         console.log("Schwarz")
-        this.answers.a4 = 'b'
+        this.answers.color = 'b'
       } else {
         console.log("Weiss")
-        this.answers.a4 = 'w';
+        this.answers.color = 'w';
       }
+      this.answers.join === "s" ? this.step = 5 : this.step = 6;
       this.step = 5;
       console.log(this.step);
       this.stepOrder.push(4)
     },
+    step5(){
+      this.step = 6;
+      console.log(this.step);
+      this.stepOrder.push(5)
+    },
+
 
     goToPreviousStep(){
       console.log(this.stepOrder)
@@ -64,27 +72,28 @@ export default {
 
     },
     validateName() {
-      this.answers.a0 = this.answers.a0.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      this.answers.name = this.answers.name.toUpperCase().replace(/[^A-Z0-9]/g, '');
     },
     validateGameCode() {
-      this.answers.a5 = this.answers.a5.toUpperCase().replace(/[^A-Z0-9]/g, '');
-      this.answers.a5 === "" ? this.completed = false : this.completed = true;
+      this.answers.gamecode = this.answers.gamecode.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      this.answers.gamecode === "" ? this.completed = false : this.completed = true;
     },
 
 
 
     sendHttpRequest(){
-      const url = this.$hostname.concat("/setup");
+      const url = this.$hostname.concat("/setup/").concat(this.answers.modus);
       console.log(url)
       fetch( url, {
         method: 'POST',
         body: JSON.stringify({
-          "name" : this.answers.a0,
-          "modus": this.answers.a1,
-          "level" : this.answers.a2,
-          "start/join" : this.answers.a3,
-          "color" : this.answers.a4,
-          "gameCode": this.answers.a5,
+          "name" : this.answers.name,
+          "modus": this.answers.modus,
+          "level" : this.answers.level,
+          "join" : this.answers.join,
+          "color" : this.answers.color,
+          "firststone" : this.answers.firststone,
+          "gamecode": this.answers.gamecode,
 
         }),
         headers: {
@@ -134,10 +143,10 @@ export default {
               class="form-control"
               placeholder="Spielername"
               id="spielerNameInput"
-              v-model="this.answers.a0"
+              v-model="this.answers.name"
               @input="validateName"
           >
-          <button class="btn btn-primary" :disabled="this.answers.a0.length===0" @click="step0">Weiter</button>
+          <button class="btn btn-primary" :disabled="this.answers.name.length===0" @click="step0">Weiter</button>
 
         </div>
 
@@ -149,7 +158,7 @@ export default {
                   type="radio"
                   class="form-check-input"
                   name="step1"
-                  v-model="this.answers.a1"
+                  v-model="this.answers.modus"
                   value="c"
                   @change="step1"
               />
@@ -160,7 +169,7 @@ export default {
                   type="radio"
                   class="form-check-input"
                   name="step1"
-                  v-model="this.answers.a1"
+                  v-model="this.answers.modus"
                   value="l"
                   @change="step1"
               />
@@ -171,7 +180,7 @@ export default {
                   type="radio"
                   class="form-check-input"
                   name="step1"
-                  v-model="this.answers.a1"
+                  v-model="this.answers.modus"
                   value="b"
                   @change="step1"
               />
@@ -186,7 +195,7 @@ export default {
                 type="radio"
                 class="form-check-input"
                 name="step2"
-                v-model="this.answers.a2"
+                v-model="this.answers.level"
                 value="0"
                 @change="step2"
             />
@@ -197,7 +206,7 @@ export default {
                 type="radio"
                 class="form-check-input"
                 name="step2"
-                v-model="this.answers.a2"
+                v-model="this.answers.level"
                 value="1"
                 @change="step2"
             />
@@ -208,7 +217,7 @@ export default {
                 type="radio"
                 class="form-check-input"
                 name="step2"
-                v-model="this.answers.a2"
+                v-model="this.answers.level"
                 value="2"
                 @change="step2"
             />
@@ -225,7 +234,7 @@ export default {
               class="form-check-input ms-3"
               value="s"
               name="login"
-              v-model=answers.a3
+              v-model=answers.join
               @change="step3"
           />
           <label class="form-check-label">Neues Spiel eröffnen</label>
@@ -236,7 +245,7 @@ export default {
               class="form-check-input ms-3"
               value="j"
               name="login"
-              v-model=answers.a3
+              v-model=answers.join
               @change="step3"
 
           />
@@ -252,8 +261,36 @@ export default {
             <span><img id="stoneBlackImage" src="/StoneBlack.png" alt="Schwarzer Stein" class="stone-image" @click="step4('b')"></span>
             <span><img id="stoneWhiteImage" src="/StoneWhite.png" alt="Weisser Stein" class="stone-image" @click="step4('w')"></span>
           </div>
+        </div><div v-if="step===5">
+        <div class="form-check align-items-center">
+          <h5 class="form-label">Welcher Spieler soll das Spiel eröffnen?</h5>
+          <div class="form-check">
+            <input
+                type="radio"
+                class="form-check-input ms-3"
+                value="e"
+                name="login"
+                v-model=answers.firststone
+                @change="step5"
+            />
+            <label class="form-check-label">Eigener Spieler</label>
+          </div>
+          <div class="form-check">
+            <input
+                type="radio"
+                class="form-check-input ms-3"
+                value="g"
+                name="login"
+                v-model=answers.firststone
+                @change="step5"
+
+            />
+            <label class="form-check-label">Gegnerischer Spieler</label>
+          </div>
+
         </div>
-        <div v-if="step===5">
+      </div>
+        <div v-if="step===6">
           <div class="form-check align-items-center">
             <h5>Wähle einen Gamecode, damit sich dein Gegner mit dem Spiel verbinden kann:</h5>
             <input
@@ -261,7 +298,7 @@ export default {
                 class="form-control"
                 placeholder="Gamecode"
                 id="gameCodeInput"
-                v-model="this.answers.a5"
+                v-model="this.answers.gamecode"
                 @input="validateGameCode"
                 >
 
