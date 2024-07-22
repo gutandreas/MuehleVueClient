@@ -1,4 +1,4 @@
-<script >
+<script>
 export default {
   name: "SetupForm",
   data() {
@@ -22,30 +22,30 @@ export default {
     }
   },
   methods: {
-    startGame(){
+    startGame() {
       console.log(this.game)
     },
-    step0(){
-      this.step=1
+    step0() {
+      this.step = 1
       console.log(this.step)
       this.stepOrder.push(0)
     },
-    step1(){
+    step1() {
       this.answers.modus === "c" ? this.step = 2 : this.step = 3;
       console.log(this.step)
       this.stepOrder.push(1)
     },
-    step2(){
-      this.step=5;
+    step2() {
+      this.step = 5;
       console.log(this.step)
       this.stepOrder.push(2)
     },
-    step3(){
-      this.answers.join === "s"? this.step = 4 : this.step = 5;
+    step3() {
+      this.answers.join === "s" ? this.step = 4 : this.step = 5;
       console.log(this.step)
       this.stepOrder.push(3)
     },
-    step4(color){
+    step4(color) {
       if (color === 'b') {
         console.log("Schwarz")
         this.answers.color = 'b'
@@ -58,14 +58,14 @@ export default {
       console.log(this.step);
       this.stepOrder.push(4)
     },
-    step5(){
+    step5() {
       this.step = 6;
       console.log(this.step);
       this.stepOrder.push(5)
     },
 
 
-    goToPreviousStep(){
+    goToPreviousStep() {
       console.log(this.stepOrder)
       this.step = this.stepOrder[this.stepOrder.length - 1];
       this.stepOrder.pop();
@@ -80,19 +80,18 @@ export default {
     },
 
 
-
-    sendHttpRequest(){
+    sendHttpRequest() {
       const url = this.$hostname.concat("/setup/").concat(this.answers.modus);
       console.log(url)
-      fetch( url, {
+      fetch(url, {
         method: 'POST',
         body: JSON.stringify({
-          "name" : this.answers.name,
+          "name": this.answers.name,
           "modus": this.answers.modus,
-          "level" : this.answers.level,
-          "join" : this.answers.join,
-          "color" : this.answers.color,
-          "firststone" : this.answers.firststone,
+          "level": this.answers.level,
+          "join": this.answers.join,
+          "color": this.answers.color,
+          "firststone": this.answers.firststone,
           "gamecode": this.answers.gamecode,
 
         }),
@@ -128,7 +127,7 @@ export default {
 <template>
   <div id="setup-form">
     {{ game }}
-    <div class="card">
+    <div class="card m-1">
       <div class="card-header text-center">
         <h5>Neues Spiel starten</h5>
       </div>
@@ -136,11 +135,11 @@ export default {
 
         <h3>Spieleinstellungen</h3>
 
-        <div class="form-check align-items-center" v-if="step===0">
+        <div v-if="step===0">
           <h5>Wähle deinen Spielernamen:</h5>
           <input
               type="text"
-              class="form-control"
+              class="form-control mb-2"
               placeholder="Spielername"
               id="spielerNameInput"
               v-model="this.answers.name"
@@ -151,41 +150,41 @@ export default {
         </div>
 
         <div v-if="step === 1">
-          <h5>Möchtest du gegen den Computergegner oder gegen einen eingeloggten Spieler antreten? Oder willst du ein bestehendes Spiel beobachten?</h5>
-          <div class="form-check align-items-center">
-            <div class="form-check">
-              <input
-                  type="radio"
-                  class="form-check-input"
-                  name="step1"
-                  v-model="this.answers.modus"
-                  value="c"
-                  @change="step1"
-              />
-              <label class="form-check-label">Computergegner</label>
-            </div>
-            <div class="form-check">
-              <input
-                  type="radio"
-                  class="form-check-input"
-                  name="step1"
-                  v-model="this.answers.modus"
-                  value="l"
-                  @change="step1"
-              />
-              <label class="form-check-label">Loginspiel</label>
-            </div>
-            <div class="form-check">
-              <input
-                  type="radio"
-                  class="form-check-input"
-                  name="step1"
-                  v-model="this.answers.modus"
-                  value="b"
-                  @change="step1"
-              />
-              <label class="form-check-label">Spiel beobachten</label>
-            </div>
+          <h5>Möchtest du gegen den Computergegner oder gegen einen eingeloggten Spieler antreten? Oder willst du ein
+            bestehendes Spiel beobachten?</h5>
+
+          <div class="form-check">
+            <input
+                type="radio"
+                class="form-check-input"
+                name="step1"
+                v-model="this.answers.modus"
+                value="c"
+                @change="step1"
+            />
+            <label class="form-check-label">Computergegner</label>
+          </div>
+          <div class="form-check">
+            <input
+                type="radio"
+                class="form-check-input"
+                name="step1"
+                v-model="this.answers.modus"
+                value="l"
+                @change="step1"
+            />
+            <label class="form-check-label">Loginspiel</label>
+          </div>
+          <div class="form-check">
+            <input
+                type="radio"
+                class="form-check-input"
+                name="step1"
+                v-model="this.answers.modus"
+                value="b"
+                @change="step1"
+            />
+            <label class="form-check-label">Spiel beobachten</label>
           </div>
         </div>
         <div v-if="step===2">
@@ -226,50 +225,50 @@ export default {
 
         </div>
         <div v-if="step===3">
-        <div class="form-check align-items-center">
-          <h5 class="form-label">Möchtest du ein neues Spiel eröffnen oder einem Spiel beitreten?</h5>
+          <h5>Möchtest du ein neues Spiel eröffnen oder einem Spiel beitreten?</h5>
           <div class="form-check">
-          <input
-              type="radio"
-              class="form-check-input ms-3"
-              value="s"
-              name="login"
-              v-model=answers.join
-              @change="step3"
-          />
-          <label class="form-check-label">Neues Spiel eröffnen</label>
+            <input
+                type="radio"
+                class="form-check-input"
+                value="s"
+                name="login"
+                v-model=answers.join
+                @change="step3"
+            />
+            <label class="form-check-label">Neues Spiel eröffnen</label>
           </div>
           <div class="form-check">
-          <input
-              type="radio"
-              class="form-check-input ms-3"
-              value="j"
-              name="login"
-              v-model=answers.join
-              @change="step3"
+            <input
+                type="radio"
+                class="form-check-input"
+                value="j"
+                name="login"
+                v-model=answers.join
+                @change="step3"
 
-          />
-          <label class="form-check-label">Einem bestehenden Spiel beitreten</label>
+            />
+            <label class="form-check-label">Einem bestehenden Spiel beitreten</label>
           </div>
 
-        </div>
         </div>
         <div v-if="step===4">
           <h5 class="form-label">Wähle deine Steinfarbe:</h5>
 
           <div class="text-center mt-3">
-            <span><img id="stoneBlackImage" src="/StoneBlack.png" alt="Schwarzer Stein" class="stone-image" @click="step4('b')"></span>
-            <span><img id="stoneWhiteImage" src="/StoneWhite.png" alt="Weisser Stein" class="stone-image" @click="step4('w')"></span>
+            <span><img id="stoneBlackImage" src="/StoneBlack.png" alt="Schwarzer Stein" class="stone-image"
+                       @click="step4('b')"></span>
+            <span><img id="stoneWhiteImage" src="/StoneWhite.png" alt="Weisser Stein" class="stone-image"
+                       @click="step4('w')"></span>
           </div>
-        </div><div v-if="step===5">
-        <div class="form-check align-items-center">
-          <h5 class="form-label">Welcher Spieler soll das Spiel eröffnen?</h5>
+        </div>
+        <div v-if="step===5">
+          <h5>Welcher Spieler soll das Spiel eröffnen?</h5>
           <div class="form-check">
             <input
                 type="radio"
-                class="form-check-input ms-3"
+                class="form-check-input"
                 value="e"
-                name="login"
+                name="open"
                 v-model=answers.firststone
                 @change="step5"
             />
@@ -278,9 +277,9 @@ export default {
           <div class="form-check">
             <input
                 type="radio"
-                class="form-check-input ms-3"
+                class="form-check-input"
                 value="g"
-                name="login"
+                name="open"
                 v-model=answers.firststone
                 @change="step5"
 
@@ -289,27 +288,21 @@ export default {
           </div>
 
         </div>
-      </div>
         <div v-if="step===6">
-          <div class="form-check align-items-center">
-            <h5>Wähle einen Gamecode, damit sich dein Gegner mit dem Spiel verbinden kann:</h5>
-            <input
-                type="text"
-                class="form-control"
-                placeholder="Gamecode"
-                id="gameCodeInput"
-                v-model="this.answers.gamecode"
-                @input="validateGameCode"
-                >
+          <h5>Wähle einen Gamecode, damit sich dein Gegner mit dem Spiel verbinden kann:</h5>
+          <input
+              type="text"
+              class="form-control"
+              placeholder="Gamecode"
+              id="gameCodeInput"
+              v-model="this.answers.gamecode"
+              @input="validateGameCode"
+          >
 
-          </div>
         </div>
 
 
-
-
-
-        <hr />
+        <hr/>
         <div class="d-grid gap-2">
           <button class="btn btn-primary" :disabled=!this.completed @click="sendHttpRequest">Eintragen</button>
           <button class="btn btn-danger" @click="goToPreviousStep">Zurück</button>
@@ -322,11 +315,12 @@ export default {
 
 <style scoped>
 
-.stone-image{
+.stone-image {
   width: 3.5em;
   height: 3.5em;
   cursor: pointer;
 }
+
 .stone-color-circle {
   position: relative;
   width: 50px;
@@ -337,9 +331,6 @@ export default {
   background-color: transparent;
   border: 2px solid transparent; /* Default border */
 }
-
-
-
 
 
 .stone-color-circle::before {

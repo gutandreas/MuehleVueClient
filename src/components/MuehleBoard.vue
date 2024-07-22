@@ -1,5 +1,5 @@
 <template>
-  <div class="muehle-board">
+  <div class="muehle-board rounded-3">
     <!-- Hintergrundbild -->
     <div class="board-background"></div>
 

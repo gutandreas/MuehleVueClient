@@ -7,7 +7,7 @@
       <div class="main-content">
         <div><SetupForm class="left-panel" /></div>
         <div><MuehleBoard class="center-panel"/></div>
-        <div><SetupForm class="right-panel" /></div>
+        <div><status-display class="right-panel" /></div>
       </div>
 
     </div>
@@ -20,11 +20,12 @@ import 'bootstrap';
 import NavigationBar from "@/components/NavigationBar.vue";
 import SetupForm from "@/components/SetupForm.vue";
 import MuehleBoard from "@/components/MuehleBoard.vue";
+import StatusDisplay from "@/components/StatusDisplay.vue";
 
 export default {
   name: 'App',
   components: {
-    NavigationBar, SetupForm, MuehleBoard,
+    NavigationBar, SetupForm, MuehleBoard, StatusDisplay,
   }
 }
 </script>
