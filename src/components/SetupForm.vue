@@ -295,29 +295,5 @@ export default {
   cursor: pointer;
 }
 
-.stone-color-circle {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  display: inline-block;
-  border-radius: 50%; /* Runde Form */
-  cursor: pointer;
-  background-color: transparent;
-  border: 2px solid transparent; /* Default border */
-}
-
-
-.stone-color-circle::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border-color: gray;
-  background-color: transparent; /* Graue Farbe des inneren Kreises */
-}
 
 </style>
