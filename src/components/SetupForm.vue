@@ -83,45 +83,20 @@ export default {
     sendHttpRequest() {
       const url = this.$hostname.concat("/setup/").concat(this.answers.modus);
       console.log(url)
-      fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({
-          "name": this.answers.name,
-          "modus": this.answers.modus,
-          "level": this.answers.level,
-          "join": this.answers.join,
-          "color": this.answers.color,
-          "firststone": this.answers.firststone,
-          "gamecode": this.answers.gamecode,
+      this.$sendMessage(JSON.stringify({
+        "category": "setup",
+        "name": this.answers.name,
+        "modus": this.answers.modus,
+        "level": this.answers.level,
+        "join": this.answers.join,
+        "color": this.answers.color,
+        "firststone": this.answers.firststone,
+        "gamecode": this.answers.gamecode,
 
-        }),
-        headers: {
-          "Content-type": "application/json"
-        }
-      })
-          .then(res => {
-
-            if (!res.ok) {
-              return res.text().then(text => {
-                throw new Error(`HTTP Error: ${res.status} ${text}`);
-              });
-            }
-            return res.json();
-          })
-          .then(responseData => {
-            this.$initWebSocket();
-            console.log(responseData);
-          })
-          .catch(error => {
-            // Fehlerbehandlung und -ausgabe
-            console.error('Fetch error:', error);
-            alert('Fehler: ' + error.message); // Zeigt den Fehler in einem Alert an
-          });
-    }
-
-
+      }));}
   }
 }
+
 
 </script>
 
