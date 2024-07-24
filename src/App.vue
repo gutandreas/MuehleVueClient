@@ -26,12 +26,24 @@ export default {
   name: 'App',
   components: {
     NavigationBar, SetupForm, MuehleBoard, StatusDisplay,
+  },
+  data() {
+    return {
+      ws: null, // WebSocket instance
+      messages: [], // Messages received from the WebSocket server
+      newMessage: '' // Message to send
+    };
+  },
+  mounted() {
+    // Stelle sicher, dass $initWebSocket beim Starten der App aufgerufen wird
+    this.$initWebSocket();
   }
 }
+
 </script>
 
 <style>
-/* Grid-Layout für das gesamte Layout */
+
 .layout-container {
   display: grid;
   grid-template-rows: auto 1fr; /* Navigation oben, Rest des Inhalts flexibel */

@@ -1,6 +1,17 @@
 <script>
 export default {
   name: "StatusDisplay",
+  data() {
+    return {
+      messagetext: "",
+    }
+  },
+  methods: {
+    sendChatMessage(){
+      console.log(this.messagetext)
+      this.messagetext = ""
+    }
+  }
 }
 
 </script>
@@ -24,8 +35,8 @@ export default {
         <h5>Chat</h5>
       </div>
       <div class="card-body text-center mb-1">
-      <textarea class="w-100 mb-1" id="messageBox" type="text" readonly="true" rows="5"></textarea>
-      <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben...">
+      <textarea class="w-100 mb-1" id="messageBox" type="text" readonly="true" rows="5" ></textarea>
+      <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben..." v-model="this.messagetext" @keyup.enter.exact="sendChatMessage()">
       <input class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden"  onclick="sendChatMessage()">
       <input class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben"  onclick="complimentEnemy()">
       <input class="w-100 btn btn-secondary mb-1" id="offendEnemyButton" type="button" value="Gegner beleidigen"  onclick="offendEnemy()">

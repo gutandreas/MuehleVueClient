@@ -58,8 +58,21 @@ export default {
       };
     },
     handlePointClick(point) {
-      // Logik für das Klicken auf einen Punkt
+
       console.log(point.ring + "/" + point.field);
+      const json = JSON.stringify({
+        gamecode : "aaa",
+        command : "stoneaction"
+      })
+      this.sendMessage(json)
+    },
+    sendMessage(message) {
+      console.log(message)
+      this.$sendMessage(this.newMessage);
+    },
+    handleWebSocketMessage(message) {
+      console.log('Message received:', message);
+      // Zusätzliche Nachrichtenverarbeitung hier
     }
   }
 };

@@ -109,6 +109,7 @@ export default {
             return res.json();
           })
           .then(responseData => {
+            this.$initWebSocket();
             console.log(responseData);
           })
           .catch(error => {
@@ -132,8 +133,6 @@ export default {
         <h5>Neues Spiel starten</h5>
       </div>
       <div class="card-body">
-
-        <h3>Spieleinstellungen</h3>
 
         <div v-if="step===0">
           <h5>Wähle deinen Spielernamen:</h5>
@@ -305,7 +304,7 @@ export default {
         <hr/>
         <div class="d-grid gap-2">
           <button class="btn btn-primary" :disabled=!this.completed @click="sendHttpRequest">Eintragen</button>
-          <button class="btn btn-danger" @click="goToPreviousStep">Zurück</button>
+          <button class="btn btn-danger" :disabled="this.step === 0" @click="goToPreviousStep">Zurück</button>
         </div>
       </div>
 
