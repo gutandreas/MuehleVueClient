@@ -1,7 +1,10 @@
 <template>
-    <SetupForm class="left-panel"/>
-    <MuehleBoard class="center-panel"/>
-    <status-display class="right-panel"/>
+  <div class="grid-container">
+    <SetupForm class="left-panel" :sendMessage="sendMessage" :messages="messages" />
+    <MuehleBoard class="center-panel" :sendMessage="sendMessage" :messages="messages" />
+    <StatusDisplay class="right-panel" :messages="messages" />
+  </div>
+
 </template>
 
 <script>
@@ -16,16 +19,26 @@ export default {
   components: {
     SetupForm, MuehleBoard, StatusDisplay,
   },
+
   data() {
     return {
-      ws: null, // WebSocket instance
       messages: [], // Messages received from the WebSocket server
-      newMessage: '' // Message to send
     };
   },
   mounted() {
-    // Stelle sicher, dass $initWebSocket beim Starten der App aufgerufen wird
-    this.$initWebSocket();
+    this.$initWebSocket(this.$gameWebsocketUrl);
+  },
+  beforeUnmount() {
+    this.$closeWebSocket(this.$gameWebsocketUrl);
+  },
+  methods: {
+    handleWebSocketMessage(message) {
+      const data = JSON.parse(message);
+      this.messages.push(data); // Beispiel für die Verarbeitung der empfangenen Nachricht
+    },
+    sendMessage(message) {
+      this.$sendMessage(this.$gameWebsocketUrl, message);
+    }
   }
 }
 
@@ -33,25 +46,12 @@ export default {
 
 <style>
 
-.layout-container {
+.grid-container {
   display: grid;
-  grid-template-rows: auto 1fr; /* Navigation oben, Rest des Inhalts flexibel */
-  grid-template-columns: auto 1fr; /* SetupForm links, MuehleBoard rechts */
-  height: 100vh; /* Volle Höhe des Viewports */
+  grid-template-columns: 0.5fr 1fr 0.5fr; /* Setzt die Breiten der Spalten */
+  grid-template-rows: auto; /* Auto Höhe basierend auf dem Inhalt */
   grid-template-areas:
-    "nav nav nav"
     "left center right";
-}
-
-.nav {
-  grid-area: nav;
-}
-
-.main-content {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  grid-template-areas: "left center right";
-  height: 100%;
   width: 100%;
 }
 

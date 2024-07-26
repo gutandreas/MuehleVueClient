@@ -21,6 +21,7 @@ export default {
 </script>
 
 <style>
+
 #app {
   display: flex;
   flex-direction: column;
@@ -34,4 +35,5 @@ export default {
   flex-direction: column; /* Falls du einen flexiblen Inhalt hast */
   width: 100%; /* Stellt sicher, dass der Inhalt die volle Breite einnimmt */
 }
+
 </style>

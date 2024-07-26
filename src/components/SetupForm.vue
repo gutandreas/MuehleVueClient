@@ -1,6 +1,18 @@
 <script>
 export default {
   name: "SetupForm",
+  props: {
+    sendMessage: {
+      type: Function,
+      required: true,
+    }
+  },
+  watch: {
+    messages(newMessages) {
+      // Reagiere auf neue Nachrichten hier
+      console.log('New messages in ChildComponent1:', newMessages);
+    }
+  },
   data() {
     return {
       modus: ["Computergegner", "Loginspiel", "Beobachten"],
@@ -23,7 +35,19 @@ export default {
   },
   methods: {
     startGame() {
-      console.log(this.game)
+      const json = JSON.stringify({
+        "category": "setup",
+        "name": this.answers.name,
+        "modus": this.answers.modus,
+        "level": this.answers.level,
+        "join": this.answers.join,
+        "color": this.answers.color,
+        "firststone": this.answers.firststone,
+        "gamecode": this.answers.gamecode,
+
+      })
+      console.log(json)
+      this.sendMessage(json);
     },
     step0() {
       this.step = 1
@@ -80,20 +104,7 @@ export default {
     },
 
 
-    sendHttpRequest() {
-      const url = this.$hostname.concat("/setup/").concat(this.answers.modus);
-      console.log(url)
-      this.$sendMessage(JSON.stringify({
-        "category": "setup",
-        "name": this.answers.name,
-        "modus": this.answers.modus,
-        "level": this.answers.level,
-        "join": this.answers.join,
-        "color": this.answers.color,
-        "firststone": this.answers.firststone,
-        "gamecode": this.answers.gamecode,
 
-      }));}
   }
 }
 
@@ -278,7 +289,7 @@ export default {
 
         <hr/>
         <div class="d-grid gap-2">
-          <button class="btn btn-primary" :disabled=!this.completed @click="sendHttpRequest">Eintragen</button>
+          <button class="btn btn-primary" :disabled=!this.completed @click="startGame">Spiel starten</button>
           <button class="btn btn-danger" :disabled="this.step === 0" @click="goToPreviousStep">Zurück</button>
         </div>
       </div>

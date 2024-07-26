@@ -1,74 +1,85 @@
 const WebSocketPlugin = {
-    install(app, options) {
+    install(app) {
         const wsService = {
-            socket: null,
-            messageHandlers: [],
+            sockets: {},
+            messageHandlers: {},
 
-            connect() {
-                if (!this.socket || this.socket.readyState === WebSocket.CLOSED) {
-                    this.socket = new WebSocket(options.url);
+            connect(url) {
+                if (!this.sockets[url] || this.sockets[url].readyState === WebSocket.CLOSED) {
+                    this.sockets[url] = new WebSocket(url);
 
-                    this.socket.onopen = () => {
-                        console.log('WebSocket connection opened.');
+                    this.sockets[url].onopen = () => {
+                        console.log(`WebSocket connection opened for ${url}.`);
                     };
 
-                    this.socket.onmessage = (event) => {
-                        this.messageHandlers.forEach(handler => handler(event.data));
+                    this.sockets[url].onmessage = (event) => {
+                        if (this.messageHandlers[url]) {
+                            this.messageHandlers[url].forEach(handler => handler(event.data));
+                        }
                     };
 
-                    this.socket.onclose = () => {
-                        console.log('WebSocket connection closed.');
+                    this.sockets[url].onclose = () => {
+                        console.log(`WebSocket connection closed for ${url}.`);
                     };
 
-                    this.socket.onerror = (error) => {
-                        console.error('WebSocket error:', error);
+                    this.sockets[url].onerror = (error) => {
+                        console.error(`WebSocket error for ${url}:`, error);
                     };
                 }
             },
 
-            sendMessage(message) {
-                if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-                    this.socket.send(message);
+            sendMessage(url, message) {
+                if (this.sockets[url] && this.sockets[url].readyState === WebSocket.OPEN) {
+                    this.sockets[url].send(message);
                 } else {
-                    console.error('WebSocket is not open. Unable to send message:', message);
+                    console.error(`WebSocket for ${url} is not open. Unable to send message:`, message);
                 }
             },
 
-            addMessageHandler(handler) {
-                this.messageHandlers.push(handler);
+            addMessageHandler(url, handler) {
+                if (!this.messageHandlers[url]) {
+                    this.messageHandlers[url] = [];
+                }
+                this.messageHandlers[url].push(handler);
             },
 
-            removeMessageHandler(handler) {
-                this.messageHandlers = this.messageHandlers.filter(h => h !== handler);
+            removeMessageHandler(url, handler) {
+                if (this.messageHandlers[url]) {
+                    this.messageHandlers[url] = this.messageHandlers[url].filter(h => h !== handler);
+                }
             },
 
-            close() {
-                if (this.socket) {
-                    this.socket.close();
+            close(url) {
+                if (this.sockets[url]) {
+                    this.sockets[url].close();
+                    delete this.sockets[url];
+                    delete this.messageHandlers[url];
                 }
             }
         };
 
-        app.config.globalProperties.$initWebSocket = function() {
-            console.log("Initializing websocket connection...");
-            wsService.connect();
+        app.config.globalProperties.$initWebSocket = function(url) {
+            console.log(`Initializing WebSocket connection for ${url}...`);
+            wsService.connect(url);
             if (this.handleWebSocketMessage) {
-                wsService.addMessageHandler(this.handleWebSocketMessage);
+                wsService.addMessageHandler(url, this.handleWebSocketMessage);
             }
         };
 
-        app.config.globalProperties.$sendMessage = function(message) {
-            wsService.sendMessage(message);
+        app.config.globalProperties.$sendMessage = function(url, message) {
+            wsService.sendMessage(url, message);
         };
 
-        app.config.globalProperties.$closeWebSocket = function() {
-            wsService.close();
+        app.config.globalProperties.$closeWebSocket = function(url) {
+            wsService.close(url);
         };
 
         app.mixin({
             beforeUnmount() {
                 if (this.handleWebSocketMessage) {
-                    wsService.removeMessageHandler(this.handleWebSocketMessage);
+                    Object.keys(wsService.messageHandlers).forEach(url => {
+                        wsService.removeMessageHandler(url, this.handleWebSocketMessage);
+                    });
                 }
             }
         });

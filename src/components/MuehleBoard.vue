@@ -19,7 +19,6 @@ export default {
   name: 'MuehleBoard',
   data() {
     return {
-      // Definiere die Punkte als Prozentsätze der Containergröße
       points: [
         {ring: 0, field: 0, top: '2%', left: '2%'},
         {ring: 0, field: 1, top: '2%', left: '45%'},
@@ -68,7 +67,7 @@ export default {
     },
     sendMessage(message) {
       console.log(message)
-      this.$sendMessage(this.newMessage);
+      this.$sendMessage(message);
     },
     handleWebSocketMessage(message) {
       console.log('Message received:', message);

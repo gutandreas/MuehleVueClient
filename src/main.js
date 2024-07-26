@@ -1,20 +1,19 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import WebSocketPlugin from './plugins/websocket'
+import { createApp } from 'vue';
+import App from './App.vue';
 import router from './router';
+import WebSocketPlugin from './plugins/websocket'; // Importiere das WebSocket-Plugin
 
-// Erstelle die Vue-App
-const app = createApp(App)
+const app = createApp(App);
 
-// Definiere die globale Eigenschaft
-app.config.globalProperties.$hostname = 'http://localhost:8081'
-app.config.globalProperties.$websocketUrl = 'ws://localhost:8081'
+app.config.globalProperties.$hostname = 'http://localhost:8081';
+app.config.globalProperties.$gameWebsocketUrl = 'ws://localhost:8081/websocket/game';
+app.config.globalProperties.$adminWebsocketUrl = 'ws://localhost:8081/websocket/admin';
 
-// WebSocket Plugin verwenden
-app.use(WebSocketPlugin, { url: 'ws://localhost:8081/websocket' });
+// Verwende das WebSocket-Plugin
+app.use(WebSocketPlugin);
 
 // Router verwenden
 app.use(router);
 
 // Montiere die App
-app.mount('#app')
+app.mount('#app');
