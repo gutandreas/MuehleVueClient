@@ -13,6 +13,7 @@ const WebSocketPlugin = {
                     };
 
                     this.sockets[url].onmessage = (event) => {
+                        console.log(`Message received from ${url}:`, event.data);
                         if (this.messageHandlers[url]) {
                             this.messageHandlers[url].forEach(handler => handler(event.data));
                         }
@@ -25,11 +26,14 @@ const WebSocketPlugin = {
                     this.sockets[url].onerror = (error) => {
                         console.error(`WebSocket error for ${url}:`, error);
                     };
+                } else {
+                    console.log(`WebSocket connection already exists for ${url}.`);
                 }
             },
 
             sendMessage(url, message) {
                 if (this.sockets[url] && this.sockets[url].readyState === WebSocket.OPEN) {
+                    console.log(`Sending message to ${url}:`, message);
                     this.sockets[url].send(message);
                 } else {
                     console.error(`WebSocket for ${url} is not open. Unable to send message:`, message);
@@ -41,16 +45,19 @@ const WebSocketPlugin = {
                     this.messageHandlers[url] = [];
                 }
                 this.messageHandlers[url].push(handler);
+                console.log(`Message handler added for ${url}.`);
             },
 
             removeMessageHandler(url, handler) {
                 if (this.messageHandlers[url]) {
                     this.messageHandlers[url] = this.messageHandlers[url].filter(h => h !== handler);
+                    console.log(`Message handler removed for ${url}.`);
                 }
             },
 
             close(url) {
                 if (this.sockets[url]) {
+                    console.log(`Closing WebSocket connection for ${url}.`);
                     this.sockets[url].close();
                     delete this.sockets[url];
                     delete this.messageHandlers[url];
@@ -58,7 +65,6 @@ const WebSocketPlugin = {
             }
         };
 
-        // Expose WebSocket methods globally
         app.config.globalProperties.$initWebSocket = function(url) {
             console.log(`Initializing WebSocket connection for ${url}...`);
             wsService.connect(url);

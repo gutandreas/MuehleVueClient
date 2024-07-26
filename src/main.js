@@ -9,6 +9,7 @@ app.config.globalProperties.$hostname = 'http://localhost:8081';
 app.config.globalProperties.$gameWebsocketUrl = 'ws://localhost:8081/websocket/game';
 app.config.globalProperties.$adminWebsocketUrl = 'ws://localhost:8081/websocket/admin';
 
+
 // Verwende das WebSocket-Plugin
 app.use(WebSocketPlugin);
 

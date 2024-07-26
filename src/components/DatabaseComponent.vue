@@ -5,11 +5,11 @@
         <h5>Datenbank</h5>
       </div>
       <div class="card-body">
-        <button @click="getAllGames">Alle Games abfragen</button>
+        <button @click="sendMessage">Alle Games abfragen</button>
         <button @click="getRunningGames">Alle laufenden Games abfragen</button>
 
         <!-- Tabelle für die Darstellung der Nachrichten -->
-        <table v-if="messages.length" class="table">
+        <table class="table">
           <thead>
           <tr>
             <th>Game Code</th>
@@ -20,21 +20,20 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(message, index) in messages" :key="index">
-            <td>{{ message.gameCode || 'N/A' }}</td>
-            <td>{{ message.round !== undefined ? message.round : 'N/A' }}</td>
-            <td>{{ message.phase || 'N/A' }}</td>
-            <td>{{ message.finished !== undefined ? message.finished : 'N/A' }}</td>
+          <tr v-for="(game, index) in games" :key="index">
+            <td>{{ game.gameCode || 'N/A' }}</td>
+            <td>{{ game.round !== undefined ? game.round : 'N/A' }}</td>
+            <td>{{ game.phase || 'N/A' }}</td>
+            <td>{{ game.finished !== undefined ? game.finished : 'N/A' }}</td>
             <td>
-              <ul v-if="Array.isArray(message.spectators) && message.spectators.length">
-                <li v-for="(spectator, sIndex) in message.spectators" :key="sIndex">{{ spectator }}</li>
+              <ul v-if="Array.isArray(game.spectators) && game.spectators.length">
+                <li v-for="(spectator, sIndex) in game.spectators" :key="sIndex">{{ spectator }}</li>
               </ul>
               <p v-else>No spectators</p>
             </td>
           </tr>
           </tbody>
         </table>
-        <p v-else>No messages available.</p>
       </div>
     </div>
   </div>
@@ -43,39 +42,55 @@
 <script>
 export default {
   name: 'DatabaseComponent',
-  props: {
-    sendMessage: {
-      type: Function,
-      required: true,
-    },
-    messages: {
-      type: Array,
-      required: true,
-    }
+  data() {
+    return {
+      games: [], // Array zur Speicherung der empfangenen Nachrichten
+    };
   },
   methods: {
-    getAllGames() {
-      const json = JSON.stringify({
-        "category": "database",
-        "command": "get",
-        "elements": "games"
-      });
-      console.log('Sending request:', json);
-      this.sendMessage(json);
+    sendMessage() {
+      // Verwende die globale Methode, um die Nachricht zu senden
+      this.$sendMessage(this.$adminWebsocketUrl, JSON.stringify({
+        category: "database",
+        command: "get",
+        element: "games"
+      }));
     },
-    getRunningGames() {
-      const json = JSON.stringify({
-        "category": "database",
-        "command": "get",
-        "elements": "runningGames"
-      });
-      console.log('Sending request:', json);
-      this.sendMessage(json);
+    handleMessage(message) {
+      let jsonObject;
+
+      if (typeof message === 'object') {
+        jsonObject = message;
+      } else {
+        try {
+          jsonObject = JSON.parse(message);
+        } catch (error) {
+          console.error('Error parsing message as JSON:', error);
+          return;
+        }
+      }
+
+      console.log(jsonObject);
+      // Überprüfen, ob jsonObject ein Array ist
+      if (Array.isArray(jsonObject)) {
+        // Jedes Element im Array zu this.games hinzufügen
+        this.games.push(...jsonObject);
+      } else {
+        // Falls nicht, nur das einzelne Objekt hinzufügen
+        this.games.push(jsonObject);
+      }
     }
+  },
+  mounted() {
+    console.log("Test")
+    this.$addMessageHandler(this.$adminWebsocketUrl, this.handleMessage);
+
+  },
+  beforeUnmount() {
+    this.$removeMessageHandler(this.$adminWebsocketUrl, this.handleMessage);
   }
 };
 </script>
-
 <style scoped>
 .table {
   width: 100%;

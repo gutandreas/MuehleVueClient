@@ -12,30 +12,6 @@ import DatabaseComponent from "@/components/DatabaseComponent.vue";
 export default {
   name: 'Admin',
   components: {DatabaseComponent},
-  data() {
-    return {
-      messages: [], // Messages received from the WebSocket server
-    };
-  },
-  methods: {
-    handleWebSocketMessage(message) {
-      try {
-        const data = typeof message === 'string' ? JSON.parse(message) : message;
-        this.messages.push(...data);
-        console.log('Updated messages in Admin:', this.messages);
-      } catch (e) {
-        console.error('Error parsing message:', e);
-      }
-    },
-    sendMessage(message){
-      this.$sendMessage(this.$adminWebsocketUrl, message);
-    }
-  },
-  mounted() {
-    this.$addMessageHandler(this.$adminWebsocketUrl, this.handleWebSocketMessage);
-  }
-
-
 
 };
 </script>
