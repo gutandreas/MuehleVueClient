@@ -17,12 +17,6 @@ export default {
       messages: [], // Messages received from the WebSocket server
     };
   },
-  mounted() {
-    this.$initWebSocket(this.$adminWebsocketUrl);
-  },
-  beforeUnmount() {
-    this.$closeWebSocket(this.$adminWebsocketUrl);
-  },
   methods: {
     handleWebSocketMessage(message) {
       const data = JSON.parse(message);

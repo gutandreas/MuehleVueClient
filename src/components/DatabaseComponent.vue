@@ -9,6 +9,12 @@ export default {
     }
 
   },
+  watch: {
+    messages(newMessages) {
+      // Reagiere auf neue Nachrichten hier
+      console.log('New messages in ChildComponent1:', newMessages);
+    }
+  },
   methods: {
     getAllGames(){
       const json = JSON.stringify({

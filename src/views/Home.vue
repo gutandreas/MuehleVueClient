@@ -25,12 +25,6 @@ export default {
       messages: [], // Messages received from the WebSocket server
     };
   },
-  mounted() {
-    this.$initWebSocket(this.$gameWebsocketUrl);
-  },
-  beforeUnmount() {
-    this.$closeWebSocket(this.$gameWebsocketUrl);
-  },
   methods: {
     handleWebSocketMessage(message) {
       const data = JSON.parse(message);
