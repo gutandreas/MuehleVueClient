@@ -1,90 +1,37 @@
 <template>
   <div id="app">
-    <div class="layout-container">
-      <NavigationBar class="nav" />
-      <MuehleBoard />
-
-      <div class="main-content">
-        <div><SetupForm class="left-panel" /></div>
-        <div><MuehleBoard class="center-panel"/></div>
-        <div><status-display class="right-panel" /></div>
-      </div>
-
+    <NavigationBar class="nav" />
+    <div class="main-content">
+      <router-view />
     </div>
+    <Footer class="footer" />
   </div>
 </template>
 
 <script>
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap';
-import NavigationBar from "@/components/NavigationBar.vue";
-import SetupForm from "@/components/SetupForm.vue";
-import MuehleBoard from "@/components/MuehleBoard.vue";
-import StatusDisplay from "@/components/StatusDisplay.vue";
+import NavigationBar from '@/components/NavigationBar.vue';
+
 
 export default {
   name: 'App',
   components: {
-    NavigationBar, SetupForm, MuehleBoard, StatusDisplay,
-  },
-  data() {
-    return {
-      ws: null, // WebSocket instance
-      messages: [], // Messages received from the WebSocket server
-      newMessage: '' // Message to send
-    };
-  },
-  mounted() {
-    // Stelle sicher, dass $initWebSocket beim Starten der App aufgerufen wird
-    this.$initWebSocket();
+    NavigationBar
   }
-}
-
+};
 </script>
 
 <style>
-
-.layout-container {
-  display: grid;
-  grid-template-rows: auto 1fr; /* Navigation oben, Rest des Inhalts flexibel */
-  grid-template-columns: auto 1fr; /* SetupForm links, MuehleBoard rechts */
-  height: 100vh; /* Volle Höhe des Viewports */
-  grid-template-areas:
-    "nav nav nav"
-    "left center right";
-}
-
-.nav {
-  grid-area: nav;
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Stellt sicher, dass der Container die volle Höhe des Viewports einnimmt */
+  width: 100%; /* Stellt sicher, dass der Container die volle Breite einnimmt */
 }
 
 .main-content {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  grid-template-areas: "left center right";
-  height: 100%;
-  width: 100%;
+  flex: 1; /* Erlaubt dem Hauptinhalt, den verfügbaren Platz einzunehmen */
+  display: flex;
+  flex-direction: column; /* Falls du einen flexiblen Inhalt hast */
+  width: 100%; /* Stellt sicher, dass der Inhalt die volle Breite einnimmt */
 }
-
-.left-panel {
-  grid-area: left;
-  width: 100%;
-  border-right: 2px solid #fff; /* Optional: Border zur Trennung */
-}
-
-.center-panel {
-  grid-area: center;
-  align-items: center; /* Zentriert das Spielfeld vertikal */
-  justify-content: center; /* Zentriert das Spielfeld horizontal */
-  width: 100%;
-  height: 100%;
-  border-top: 2px solid #fff; /* Optional: Border zur Trennung */
-}
-
-.right-panel {
-  grid-area: right;
-  width: 100%;
-  border-left: 2px solid #fff; /* Optional: Border zur Trennung */
-}
-
 </style>
