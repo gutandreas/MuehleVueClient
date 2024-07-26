@@ -1,18 +1,6 @@
 <script>
 export default {
   name: "SetupForm",
-  props: {
-    sendMessage: {
-      type: Function,
-      required: true,
-    }
-  },
-  watch: {
-    messages(newMessages) {
-      // Reagiere auf neue Nachrichten hier
-      console.log('New messages in ChildComponent1:', newMessages);
-    }
-  },
   data() {
     return {
       modus: ["Computergegner", "Loginspiel", "Beobachten"],
@@ -47,7 +35,7 @@ export default {
 
       })
       console.log(json)
-      this.sendMessage(json);
+      this.$sendMessage(this.$gameWebsocketUrl, json);
     },
     step0() {
       this.step = 1

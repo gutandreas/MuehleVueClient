@@ -25,18 +25,6 @@ export default {
       messages: [], // Messages received from the WebSocket server
     };
   },
-  methods: {
-    handleWebSocketMessage(message) {
-      const data = JSON.parse(message);
-      this.messages.push(data); // Beispiel für die Verarbeitung der empfangenen Nachricht
-    },
-    sendMessage(message) {
-      this.$sendMessage(this.$gameWebsocketUrl, message);
-    }
-  },
-  mounted() {
-    this.$addMessageHandler(this.$gameWebsocketUrl, this.handleWebSocketMessage);
-  }
 
 }
 

@@ -57,22 +57,12 @@ export default {
       };
     },
     handlePointClick(point) {
-
       console.log(point.ring + "/" + point.field);
-      const json = JSON.stringify({
-        gamecode : "aaa",
-        command : "stoneaction"
-      })
-      this.sendMessage(json)
+      this.$sendMessage(this.$gameWebsocketUrl, JSON.stringify({
+        gamecode: "aaa"
+      }));
     },
-    sendMessage(message) {
-      console.log(message)
-      this.$sendMessage(message);
-    },
-    handleWebSocketMessage(message) {
-      console.log('Message received:', message);
-      // Zusätzliche Nachrichtenverarbeitung hier
-    }
+
   }
 };
 </script>
