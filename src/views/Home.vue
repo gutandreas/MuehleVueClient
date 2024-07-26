@@ -33,7 +33,11 @@ export default {
     sendMessage(message) {
       this.$sendMessage(this.$gameWebsocketUrl, message);
     }
+  },
+  mounted() {
+    this.$addMessageHandler(this.$gameWebsocketUrl, this.handleWebSocketMessage);
   }
+
 }
 
 </script>

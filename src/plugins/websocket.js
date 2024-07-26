@@ -58,12 +58,10 @@ const WebSocketPlugin = {
             }
         };
 
+        // Expose WebSocket methods globally
         app.config.globalProperties.$initWebSocket = function(url) {
             console.log(`Initializing WebSocket connection for ${url}...`);
             wsService.connect(url);
-            if (this.handleWebSocketMessage) {
-                wsService.addMessageHandler(url, this.handleWebSocketMessage);
-            }
         };
 
         app.config.globalProperties.$sendMessage = function(url, message) {
@@ -72,6 +70,14 @@ const WebSocketPlugin = {
 
         app.config.globalProperties.$closeWebSocket = function(url) {
             wsService.close(url);
+        };
+
+        app.config.globalProperties.$addMessageHandler = function(url, handler) {
+            wsService.addMessageHandler(url, handler);
+        };
+
+        app.config.globalProperties.$removeMessageHandler = function(url, handler) {
+            wsService.removeMessageHandler(url, handler);
         };
 
         app.mixin({

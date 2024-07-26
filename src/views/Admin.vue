@@ -10,7 +10,7 @@
 import DatabaseComponent from "@/components/DatabaseComponent.vue";
 
 export default {
-  name: 'AdminDashboard',
+  name: 'Admin',
   components: {DatabaseComponent},
   data() {
     return {
@@ -19,13 +19,24 @@ export default {
   },
   methods: {
     handleWebSocketMessage(message) {
-      const data = JSON.parse(message);
-      this.messages.push(data); // Beispiel für die Verarbeitung der empfangenen Nachricht
+      try {
+        const data = typeof message === 'string' ? JSON.parse(message) : message;
+        this.messages.push(...data);
+        console.log('Updated messages in Admin:', this.messages);
+      } catch (e) {
+        console.error('Error parsing message:', e);
+      }
     },
-    sendMessage(message) {
+    sendMessage(message){
       this.$sendMessage(this.$adminWebsocketUrl, message);
     }
+  },
+  mounted() {
+    this.$addMessageHandler(this.$adminWebsocketUrl, this.handleWebSocketMessage);
   }
+
+
+
 };
 </script>
 
