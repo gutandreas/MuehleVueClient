@@ -22,16 +22,16 @@ export default {
   methods: {
     send() {
       console.log("Sending message: " + this.sendMessage);
-      stompService.send('/app/hello', { name: this.sendMessage });
+      stompService.send('/app/game/action', { name: this.sendMessage });
     }
   },
   created() {
-    stompService.subscribe('/topic/greetings', (message) => {
+    stompService.subscribe('/game/action', (message) => {
       this.receivedMessages.push(JSON.parse(message.body).content);
     });
   },
   unmounted() {
-    stompService.unsubscribe('/topic/greetings');
+    stompService.unsubscribe('/game/action');
   }
 };
 </script>

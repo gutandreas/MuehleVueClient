@@ -50,7 +50,7 @@ export default {
   methods: {
     sendMessage() {
       // Verwende die globale Methode, um die Nachricht zu senden
-      this.$sendMessage(this.$adminWebsocketUrl, JSON.stringify({
+      this.sendMessage(this.$adminWebsocketUrl, JSON.stringify({
         category: "database",
         command: "get",
         element: "games"
@@ -81,14 +81,7 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log("Test")
-    this.$addMessageHandler(this.$adminWebsocketUrl, this.handleMessage);
 
-  },
-  beforeUnmount() {
-    this.$removeMessageHandler(this.$adminWebsocketUrl, this.handleMessage);
-  }
 };
 </script>
 <style scoped>
