@@ -1,5 +1,6 @@
 <template>
   <div class="grid-container">
+    <TestSender class="left-panel"/>
     <DatabaseComponent class="center-panel" :sendMessage="sendMessage" :messages="messages" />
   </div>
 </template>
@@ -8,10 +9,11 @@
 <script>
 
 import DatabaseComponent from "@/components/DatabaseComponent.vue";
+import TestSender from "@/components/TestSender.vue";
 
 export default {
   name: 'Admin',
-  components: {DatabaseComponent},
+  components: {DatabaseComponent, TestSender},
 
 };
 </script>
