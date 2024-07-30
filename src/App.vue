@@ -17,15 +17,7 @@ export default {
   components: {
     NavigationBar
   },
-  mounted() {
-    this.$initWebSocket(this.$gameWebsocketUrl);
-    this.$initWebSocket(this.$adminWebsocketUrl);
 
-  },
-  beforeUnmount() {
-    this.$closeWebSocket(this.$gameWebsocketUrl);
-    this.$closeWebSocket(this.$adminWebsocketUrl);
-  },
 };
 </script>
 

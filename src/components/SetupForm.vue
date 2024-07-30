@@ -35,7 +35,7 @@ export default {
 
       })
       console.log(json)
-      this.$sendMessage(this.$gameWebsocketUrl, json);
+      //this.$sendMessage(this.$gameWebsocketUrl, json);
     },
     step0() {
       this.step = 1

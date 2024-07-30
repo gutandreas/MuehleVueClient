@@ -99,9 +99,11 @@ export default {
       const fullUrl = `${this.$gameWebsocketUrl}/${this.urlExtension}`;
       console.log('JSON Ergebnis:', this.jsonResult);
       console.log('WebSocket URL:', fullUrl);
-      this.$sendMessage(fullUrl);
+
+
     }
-  }
+  },
+
 };
 </script>
 

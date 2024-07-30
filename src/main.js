@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import WebSocketPlugin from './plugins/websocket'; // Importiere das WebSocket-Plugin
+import stompService from "./stomp/stompService"; // Importiere das WebSocket-Plugin
 
 const app = createApp(App);
 
@@ -10,8 +10,9 @@ app.config.globalProperties.$gameWebsocketUrl = 'ws://localhost:8081/websocket/g
 app.config.globalProperties.$adminWebsocketUrl = 'ws://localhost:8081/websocket/admin';
 
 
+stompService.connect('http://localhost:8081/ws');
 // Verwende das WebSocket-Plugin
-app.use(WebSocketPlugin);
+//app.use(WebSocketPlugin);
 
 // Router verwenden
 app.use(router);
