@@ -6,7 +6,7 @@
       </div>
       <div class="card-body">
         <button @click="sendMessage">Alle Games abfragen</button>
-        <button @click="getRunningGames">Alle laufenden Games abfragen</button>
+        <button @click="getActiveGames">Alle laufenden Games abfragen</button>
 
         <!-- Tabelle für die Darstellung der Nachrichten -->
         <table class="table">
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import stompService from '../stomp/stompService';
 export default {
   name: 'DatabaseComponent',
   data() {
@@ -48,6 +49,9 @@ export default {
     };
   },
   methods: {
+    getActiveGames(){
+      stompService.send('/app/manager/activegames', "Abfrage Aktive Games")
+    },
     sendMessage() {
       // Verwende die globale Methode, um die Nachricht zu senden
       this.sendMessage(this.$adminWebsocketUrl, JSON.stringify({

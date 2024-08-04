@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import stompService from '../stomp/stompService';
 export default {
   name: 'MuehleBoard',
   data() {
@@ -58,9 +59,11 @@ export default {
     },
     handlePointClick(point) {
       console.log(point.ring + "/" + point.field);
-      this.$sendMessage(this.$gameWebsocketUrl, JSON.stringify({
-        gamecode: "aaa"
-      }));
+      const message = JSON.stringify({
+        ring: point.ring,
+        field: point.field,
+      });
+      stompService.send('/app/game/action', message);
     },
 
   }
