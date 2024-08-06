@@ -41,6 +41,7 @@
 
 <script>
 import stompService from '../stomp/stompService';
+
 export default {
   name: 'DatabaseComponent',
   data() {
@@ -49,45 +50,26 @@ export default {
     };
   },
   methods: {
-    getActiveGames(){
-      stompService.send('/app/manager/activegames', "Abfrage Aktive Games")
-    },
-    sendMessage() {
-      // Verwende die globale Methode, um die Nachricht zu senden
-      this.sendMessage(this.$adminWebsocketUrl, JSON.stringify({
-        category: "database",
-        command: "get",
-        element: "games"
-      }));
-    },
-    handleMessage(message) {
-      let jsonObject;
+    setupGetActiveGames() {
+      fetch(this.$hostname.concat('/manager/activegames'))
+          .then(response => response.json())
+          .then(data => {
+            console.log('Data:', data);
+            this.games = data; // Stellen Sie sicher, dass `this` korrekt verwendet wird
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });},
 
-      if (typeof message === 'object') {
-        jsonObject = message;
-      } else {
-        try {
-          jsonObject = JSON.parse(message);
-        } catch (error) {
-          console.error('Error parsing message as JSON:', error);
-          return;
-        }
-      }
-
-      console.log(jsonObject);
-      // Überprüfen, ob jsonObject ein Array ist
-      if (Array.isArray(jsonObject)) {
-        // Jedes Element im Array zu this.games hinzufügen
-        this.games.push(...jsonObject);
-      } else {
-        // Falls nicht, nur das einzelne Objekt hinzufügen
-        this.games.push(jsonObject);
-      }
-    }
-  },
-
+    getActiveGames() {
+      stompService.send('/manager/activegames', "Abfrage Aktive Games")
+    }},
+  mounted() {
+    this.setupGetActiveGames();
+  }
 };
 </script>
+
 <style scoped>
 .table {
   width: 100%;

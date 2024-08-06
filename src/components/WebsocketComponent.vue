@@ -22,7 +22,7 @@ export default {
   methods: {
     send() {
       console.log("Sending message: " + this.sendMessage);
-      stompService.send('/app/game/action', { name: this.sendMessage });
+      stompService.send('/game/action', { name: this.sendMessage });
     }
   },
   created() {
