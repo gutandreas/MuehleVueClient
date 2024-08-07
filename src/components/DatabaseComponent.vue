@@ -17,6 +17,7 @@
             <th>Phase</th>
             <th>Finished</th>
             <th>Spectators</th>
+            <th>Löschen</th>
           </tr>
           </thead>
           <tbody>
@@ -31,6 +32,7 @@
               </ul>
               <p v-else>No spectators</p>
             </td>
+            <td><button class="btn-danger" @click="deleteGame(game.gameCode)">Löschen</button> </td>
           </tr>
           </tbody>
         </table>
@@ -63,7 +65,18 @@ export default {
 
     getActiveGames() {
       stompService.send('/manager/activegames', "Abfrage Aktive Games")
-    }},
+    },
+    deleteGame(gamecode){
+      fetch(this.$hostname.concat('/manager/delete/'.concat(gamecode)), {method: 'DELETE'})
+          .then(response => response.json())
+          .then(data => {
+            console.log('Data:', data);
+            this.games = data; // Stellen Sie sicher, dass `this` korrekt verwendet wird
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });},
+  },
   mounted() {
     this.setupGetActiveGames();
   }
