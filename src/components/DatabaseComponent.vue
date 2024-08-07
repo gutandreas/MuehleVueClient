@@ -32,7 +32,7 @@
               </ul>
               <p v-else>No spectators</p>
             </td>
-            <td><button class="btn-danger" @click="deleteGame(game.gameCode)">Löschen</button> </td>
+            <td><button class="btn-danger" @click="deleteGame(game.gameCode)">Löschen</button></td>
           </tr>
           </tbody>
         </table>
@@ -48,31 +48,38 @@ export default {
   name: 'DatabaseComponent',
   data() {
     return {
-      games: [], // Array zur Speicherung der empfangenen Nachrichten
+      games: [],
     };
   },
   methods: {
-    setupGetActiveGames() {
-      fetch(this.$hostname.concat('/manager/activegames'))
-          .then(response => response.json())
-          .then(data => {
-            console.log('Data:', data);
-            this.games = data; // Stellen Sie sicher, dass `this` korrekt verwendet wird
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });},
-
     getActiveGames() {
-      stompService.send('/manager/activegames', "Abfrage Aktive Games")
+      stompService.send('/manager/activegames', "Abfrage Aktive Games");
     },
     deleteGame(gamecode) {
-
-      stompService.send('/manager/delete', {gamecode: gamecode});
+      stompService.send('/manager/delete', { gamecode: gamecode });
     }
   },
+  created() {
+    stompService.subscribe('/topic/manager', (message) => {
+      try {
+        // Direkte Verarbeitung als Array
+        const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
+
+        // Setze das Array direkt in `games`
+        this.games = Array.isArray(parsedMessage) ? parsedMessage : [];
+
+        console.log("Updated games:", this.games);
+      } catch (error) {
+        console.error("Failed to process message:", error);
+      }
+    });
+  },
+  unmounted() {
+    stompService.unsubscribe('/topic/manager');
+    console.log("Games unsubscribed");
+  },
   mounted() {
-    this.setupGetActiveGames();
+    this.getActiveGames();
   }
 };
 </script>
