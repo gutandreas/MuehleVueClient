@@ -66,16 +66,10 @@ export default {
     getActiveGames() {
       stompService.send('/manager/activegames', "Abfrage Aktive Games")
     },
-    deleteGame(gamecode){
-      fetch(this.$hostname.concat('/manager/delete/'.concat(gamecode)), {method: 'DELETE'})
-          .then(response => response.json())
-          .then(data => {
-            console.log('Data:', data);
-            this.games = data; // Stellen Sie sicher, dass `this` korrekt verwendet wird
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });},
+    deleteGame(gamecode) {
+
+      stompService.send('/manager/delete', {gamecode: gamecode});
+    }
   },
   mounted() {
     this.setupGetActiveGames();
