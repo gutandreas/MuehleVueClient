@@ -1,4 +1,5 @@
 <script>
+import stompService from '../stomp/stompService';
 export default {
   name: "SetupForm",
   data() {
@@ -23,8 +24,7 @@ export default {
   },
   methods: {
     startGame() {
-      const json = JSON.stringify({
-        "category": "setup",
+      const data = {
         "name": this.answers.name,
         "modus": this.answers.modus,
         "level": this.answers.level,
@@ -33,9 +33,9 @@ export default {
         "firststone": this.answers.firststone,
         "gamecode": this.answers.gamecode,
 
-      })
-      console.log(json)
-      this.sendMessage()
+      }
+      console.log(data)
+      stompService.send("/manager/setup/computer", data)
     },
     step0() {
       this.step = 1
