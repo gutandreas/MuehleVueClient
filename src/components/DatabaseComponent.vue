@@ -5,8 +5,7 @@
         <h5>Datenbank</h5>
       </div>
       <div class="card-body">
-        <button @click="sendMessage">Alle Games abfragen</button>
-        <button @click="getActiveGames">Alle laufenden Games abfragen</button>
+        <button @click="getAllGames">Alle Games abfragen</button>
 
         <!-- Tabelle für die Darstellung der Nachrichten -->
         <table class="table">
@@ -52,15 +51,15 @@ export default {
     };
   },
   methods: {
-    getActiveGames() {
-      stompService.send('/manager/activegames', "Abfrage Aktive Games");
+    getAllGames() {
+      stompService.send('/admin/games/getall', "Abfrage Alle Games");
     },
     deleteGame(gamecode) {
-      stompService.send('/manager/delete', { gamecode: gamecode });
+      stompService.send('/admin/games/delete', { gamecode: gamecode });
     }
   },
   created() {
-    stompService.subscribe('/topic/manager', (message) => {
+    stompService.subscribe('/topic/admin/games/getall', (message) => {
       try {
         // Direkte Verarbeitung als Array
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
@@ -73,7 +72,7 @@ export default {
         console.error("Failed to process message:", error);
       }
     });
-    stompService.subscribe('/topic/manager/games/add', (message) => {
+    stompService.subscribe('/topic/admin/games/add', (message) => {
       try {
         // Direkte Verarbeitung als Array
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
@@ -88,11 +87,11 @@ export default {
     });
   },
   unmounted() {
-    stompService.unsubscribe('/topic/manager');
+    stompService.unsubscribe('/topic/admin');
     console.log("Games unsubscribed");
   },
   mounted() {
-    this.getActiveGames();
+    this.getAllGames();
   }
 };
 </script>
