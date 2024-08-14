@@ -73,6 +73,19 @@ export default {
         console.error("Failed to process message:", error);
       }
     });
+    stompService.subscribe('/topic/manager/games/add', (message) => {
+      try {
+        // Direkte Verarbeitung als Array
+        const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
+
+        // Setze das Array direkt in `games`
+        this.games.push(parsedMessage);
+
+        console.log("Updated games:", this.games);
+      } catch (error) {
+        console.error("Failed to process message:", error);
+      }
+    });
   },
   unmounted() {
     stompService.unsubscribe('/topic/manager');
