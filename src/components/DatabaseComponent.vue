@@ -12,8 +12,10 @@
           <thead>
           <tr>
             <th>Game Code</th>
+            <th>Spieler 1</th>
+            <th>Spieler 2</th>
             <th>Round</th>
-            <th>Phase</th>
+            <th>Board</th>
             <th>Finished</th>
             <th>Spectators</th>
             <th>Löschen</th>
@@ -22,8 +24,10 @@
           <tbody>
           <tr v-for="(game, index) in games" :key="index">
             <td>{{ game.gameCode || 'N/A' }}</td>
-            <td>{{ game.round !== undefined ? game.round : 'N/A' }}</td>
-            <td>{{ game.phase || 'N/A' }}</td>
+            <td>{{ game.pairing.player1.name || 'N/A' }} {{game.pairing.player1.stonecolor}} {{game.pairing.player1.currentPhase}}</td>
+            <td>{{ game.pairing.player2.name || 'N/A' }} {{game.pairing.player1.stonecolor}} {{game.pairing.player1.currentPhase}}</td>
+            <td>{{ game.round !== undefined || g ? game.round : 'N/A' }}</td>
+            <td>{{ game.board.boardPositionsStates || 'N/A' }}</td>
             <td>{{ game.finished !== undefined ? game.finished : 'N/A' }}</td>
             <td>
               <ul v-if="Array.isArray(game.spectators) && game.spectators.length">
