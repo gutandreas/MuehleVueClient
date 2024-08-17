@@ -9,15 +9,15 @@ class StompService {
     }
 
     connect(url) {
-        const socket = new SockJS(url);
-        this.client = Stomp.over(socket);
-        this.client.connect({}, (frame) => {
-            this.connected = true;
-            console.log('Connected: ' + frame);
-            // You can add more initialization logic here if needed
-        }, (error) => {
-            console.error('Connection error:', error);
-            this.connected = false;
+        return new Promise((resolve, reject) => {
+            this.client = Stomp.over(new SockJS(url));
+            this.client.connect({}, () => {
+                this.connected = true;
+                resolve();
+            }, (error) => {
+                this.connected = false;
+                reject(error);
+            });
         });
     }
 

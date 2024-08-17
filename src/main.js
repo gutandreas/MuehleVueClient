@@ -7,14 +7,18 @@ const app = createApp(App);
 
 app.config.globalProperties.$hostname = 'http://localhost:8081';
 
+stompService.connect('http://localhost:8081/ws')
+    .then(() => {
+        console.log('WebSocket connection established.');
+
+        // Verwende den Router und mounte die App erst nach erfolgreicher Verbindung
+        app.use(router);
+        app.mount('#app');
+
+        // Optional: Initialisiere oder abonniere WebSocket-Nachrichten hier, falls erforderlich
+    })
+    .catch((error) => {
+        console.error('Failed to establish WebSocket connection:', error);
+    });
 
 
-stompService.connect('http://localhost:8081/ws');
-// Verwende das WebSocket-Plugin
-//app.use(WebSocketPlugin);
-
-// Router verwenden
-app.use(router);
-
-// Montiere die App
-app.mount('#app');
