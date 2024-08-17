@@ -1,6 +1,7 @@
 <template>
   <div class="grid-container">
     <SetupForm class="left-panel" :sendMessage="sendMessage" :messages="messages" />
+    <GamesToWatch class="left-panel"/>
     <MuehleBoard class="center-panel" :sendMessage="sendMessage" :messages="messages" />
     <StatusDisplay class="right-panel" :messages="messages" />
   </div>

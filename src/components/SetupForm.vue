@@ -4,6 +4,7 @@ export default {
   name: "SetupForm",
   data() {
     return {
+      games: [],
       modus: ["Computergegner", "Loginspiel", "Beobachten"],
       login: ["Spiel eröffnen", "Einem Spiel beitreten"],
       loginState: false,
@@ -103,9 +104,28 @@ export default {
       this.answers.gamecode = this.answers.gamecode.toUpperCase().replace(/[^A-Z0-9]/g, '');
       this.answers.gamecode === "" ? this.completed = false : this.completed = true;
     },
+    getAllGames() {
+      stompService.send('/admin/games/getall', "Abfrage Alle Games");
+    },
 
 
 
+  },
+  mounted() {
+    stompService.subscribe('/topic/admin/games/getall', (message) => {
+      try {
+        // Direkte Verarbeitung als Array
+        const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
+
+        // Setze das Array direkt in `games`
+        this.games = Array.isArray(parsedMessage) ? parsedMessage : [];
+
+        console.log("Updated games:", this.games);
+      } catch (error) {
+        console.error("Failed to process message:", error);
+      }
+    });
+    this.getAllGames();
   }
 }
 
@@ -114,7 +134,7 @@ export default {
 
 <template>
   <div id="setup-form">
-    {{ game }}
+
     <div class="card m-1">
       <div class="card-header text-center">
         <h5>Neues Spiel starten</h5>
@@ -296,7 +316,21 @@ export default {
       </div>
 
     </div>
+    <div class="card m-1">
+      <div class="card-header text-center">
+        <h5>Aktive Spiele zum Beobachten</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Games</h5>
+        <div class="row">
+          <div class="col-md-4" v-for="(game, index) in games" :key="index">
+            <span class="badge badge-primary p-3 d-block text-center text-white bg-dark">{{ game.gameCode }}</span>
+          </div>
+        </div>
+      </div>
   </div>
+  </div>
+
 </template>
 
 <style scoped>
@@ -306,6 +340,8 @@ export default {
   height: 3.5em;
   cursor: pointer;
 }
+
+
 
 
 </style>
