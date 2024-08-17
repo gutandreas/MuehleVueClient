@@ -35,7 +35,20 @@ export default {
 
       }
       console.log(data)
-      stompService.send("/manager/setup/computer", data)
+      if (this.answers.modus === "c"){
+        stompService.send("/manager/setup/computer", data)
+      } else if (this.answers.modus === "l"){
+        if (this.answers.join === "s"){
+          stompService.send("/manager/setup/start", data)
+        }
+        else {
+          stompService.send("/manager/setup/join", data)
+        }
+
+      } else {
+        console.log(+"Ungültiger Modus / ungültiges Join")
+      }
+
     },
     step0() {
       this.step = 1
