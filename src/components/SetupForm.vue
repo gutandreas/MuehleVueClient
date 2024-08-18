@@ -125,6 +125,19 @@ export default {
         console.error("Failed to process message:", error);
       }
     });
+    stompService.subscribe('/topic/admin/games/add', (message) => {
+      try {
+        // Direkte Verarbeitung als Array
+        const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
+
+        // Setze das Array direkt in `games`
+        this.games.push(parsedMessage);
+
+        console.log("Updated games:", this.games);
+      } catch (error) {
+        console.error("Failed to process message:", error);
+      }
+    });
     this.getAllGames();
   }
 }
@@ -303,6 +316,7 @@ export default {
               id="gameCodeInput"
               v-model="this.answers.gamecode"
               @input="validateGameCode"
+              maxlength="8"
           >
 
         </div>
