@@ -107,6 +107,24 @@ export default {
     getAllGames() {
       stompService.send('/admin/games/getall', "Abfrage Alle Games");
     },
+    watchGame(event) {
+      // Den Text des HTML-Elements auslesen
+      const gamecode = event.target.textContent;
+
+      // Eine Eingabeaufforderung mit dem ausgelesenen Text anzeigen
+      const name = prompt(`Bitte geben Sie den Namen an, mit dem Sie das Game ${gamecode} beobachten möchten:`);
+
+      // Den ausgelesenen Text in der Konsole ausgeben
+      console.log(gamecode);
+
+      const message = {
+        "gamecode": gamecode,
+        "name": name,
+        "isroboter" : false
+      }
+
+      stompService.send(stompService.send("/manager/setup/watch", message));
+    }
 
 
 
@@ -338,7 +356,9 @@ export default {
         <h5 class="card-title">Games</h5>
         <div class="row">
           <div class="col-md-4" v-for="(game, index) in games" :key="index">
-            <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark">{{ game.gameCode }}</span>
+            <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark"
+                  style="cursor: pointer;"
+                  @click="watchGame">{{ game.gameCode }}</span>
           </div>
         </div>
       </div>
@@ -353,11 +373,6 @@ export default {
   width: 3.5em;
   height: 3.5em;
   cursor: pointer;
-}
-
-.dynamic-badge {
-
-  font-size: 1em; /* Schriftgröße wird relativ zur Badge-Größe gesetzt */
 }
 
 
