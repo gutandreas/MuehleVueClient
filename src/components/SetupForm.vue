@@ -338,7 +338,7 @@ export default {
         <h5 class="card-title">Games</h5>
         <div class="row">
           <div class="col-md-4" v-for="(game, index) in games" :key="index">
-            <span class="badge badge-primary p-3 d-block text-center text-white bg-dark">{{ game.gameCode }}</span>
+            <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark">{{ game.gameCode }}</span>
           </div>
         </div>
       </div>
@@ -353,6 +353,11 @@ export default {
   width: 3.5em;
   height: 3.5em;
   cursor: pointer;
+}
+
+.dynamic-badge {
+
+  font-size: 1em; /* Schriftgröße wird relativ zur Badge-Größe gesetzt */
 }
 
 
