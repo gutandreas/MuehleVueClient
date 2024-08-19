@@ -4,64 +4,25 @@
     <div class="container">
       <div class="background-image"></div>
       <div class="grid-overlay">
+
         <!-- Grid-Items werden hier dynamisch hinzugefügt -->
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
-        <div class="grid-item"></div>
+        <div
+            v-for="index in 49"
+            :key="index"
+            class="grid-item"
+            @click="handlePointClick(index)"
+        >
+
         <!-- Füge hier weitere Grid-Items hinzu, falls nötig -->
       </div>
     </div>
+  </div>
   </div>
 </template>
 
 <script>
 import stompService from '../stomp/stompService';
+
 
 export default {
   name: 'MuehleBoard',
@@ -71,13 +32,45 @@ export default {
     };
   },
   methods: {
-    handlePointClick(ring, field) {
-      console.log(ring + "/" + field);
+    handlePointClick(index) {
+      console.log("Index: " + index)
+      let position = this.translateIndexToRingAndField(index)
+      console.log(position.ring + "/" + position.field);
       const message = JSON.stringify({
-        ring: ring,
-        field: field,
+        ring: position.ring,
+        field: position.field,
       });
       stompService.send('/app/game/action', message);
+    },
+    translateIndexToRingAndField(index){
+      switch (index){
+        case 1: return {ring: 0, field: 0};
+        case 4: return {ring: 0, field: 1};
+        case 7: return {ring: 0, field: 2};
+        case 28: return {ring: 0, field: 3};
+        case 49: return {ring: 0, field: 4};
+        case 46: return {ring: 0, field: 5};
+        case 44: return {ring: 0, field: 6};
+        case 22: return {ring: 0, field: 7};
+
+        case 9: return {ring: 1, field: 0};
+        case 11: return {ring: 1, field: 1};
+        case 13: return {ring: 1, field: 2};
+        case 27: return {ring: 1, field: 3};
+        case 41: return {ring: 1, field: 4};
+        case 39: return {ring: 1, field: 5};
+        case 37: return {ring: 1, field: 6};
+        case 23: return {ring: 1, field: 7};
+
+        case 17: return {ring: 2, field: 0};
+        case 18: return {ring: 2, field: 1};
+        case 19: return {ring: 2, field: 2};
+        case 26: return {ring: 2, field: 3};
+        case 33: return {ring: 2, field: 4};
+        case 32: return {ring: 2, field: 5};
+        case 30: return {ring: 2, field: 6};
+        case 24: return {ring: 2, field: 7};
+      }
     },
     translateRingAndFieldToGridColumnAndRow(ring, field) {
       let factor = 0;
@@ -128,25 +121,38 @@ export default {
 
       return { row, column };
     },
-    setStone(ring, field) {
+    tranlasteRingAndFieldToIndex(ring, field){
       const { row, column } = this.translateRingAndFieldToGridColumnAndRow(ring, field);
+      const index = row * 7 + column;
+      return index;
+    },
+    putStone(ring, field) {
+      let index = this.tranlasteRingAndFieldToIndex(ring, field);
+      this.setImageToIndex(index, 'StoneBlack')
+
+    },
+    removeStone(ring, field) {
+      let index = this.tranlasteRingAndFieldToIndex(ring, field);
+      this.setImageToIndex(index, 'FullyTransparent')
+    },
+
+    setImageToIndex(index, file){
       const gridItems = document.querySelectorAll('.grid-item');
-      const index = row * 7 + column; // Index im Grid berechnen
 
       if (gridItems[index]) {
         const img = document.createElement('img');
-        img.src = require('@/assets/game_images/StoneBlack.png');
+        img.src = require('@/assets/game_images/' + file + '.png');
         gridItems[index].innerHTML = ''; // Vorhandenen Inhalt löschen
         gridItems[index].appendChild(img);
       }
     }
   },
   mounted() {
-    // Beispiel: Setze einen Stein auf Position (0, 1)
-    this.setStone(0, 0);
-    this.setStone(0, 2);
-    this.setStone(1, 2);
-    this.setStone(2,7)
+    this.putStone(0, 0);
+    this.putStone(0, 2);
+    this.putStone(1, 2);
+    this.putStone(2,7);
+    this.removeStone(2,7);
   }
 };
 </script>
