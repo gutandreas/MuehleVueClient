@@ -1,103 +1,197 @@
 <template>
   <div class="muehle-board rounded-3">
     <!-- Hintergrundbild -->
-    <div class="board-background"></div>
-
-    <!-- Punkte auf dem Spielfeld -->
-    <div
-        v-for="(point, index) in points"
-        :key="index"
-        class="point"
-        :style="getPointStyle(point)"
-        @click="handlePointClick(point)"
-    ></div>
+    <div class="container">
+      <div class="background-image"></div>
+      <div class="grid-overlay">
+        <!-- Grid-Items werden hier dynamisch hinzugefügt -->
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <div class="grid-item"></div>
+        <!-- Füge hier weitere Grid-Items hinzu, falls nötig -->
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import stompService from '../stomp/stompService';
+
 export default {
   name: 'MuehleBoard',
   data() {
     return {
-      points: [
-        {ring: 0, field: 0, top: '2%', left: '2%'},
-        {ring: 0, field: 1, top: '2%', left: '45%'},
-        {ring: 0, field: 2, top: '2%', left: '88%'},
-        {ring: 0, field: 3, top: '45%', left: '88%'},
-        {ring: 0, field: 4, top: '88%', left: '88%'},
-        {ring: 0, field: 5, top: '88%', left: '45%'},
-        {ring: 0, field: 6, top: '88%', left: '2%'},
-        {ring: 0, field: 7, top: '45%', left: '2%'},
-
-        {ring: 1, field: 0, top: '17%', left: '17%'},
-        {ring: 1, field: 1, top: '17%', left: '45%'},
-        {ring: 1, field: 2, top: '17%', left: '73%'},
-        {ring: 1, field: 3, top: '45%', left: '73%'},
-        {ring: 1, field: 4, top: '73%', left: '73%'},
-        {ring: 1, field: 5, top: '73%', left: '45%'},
-        {ring: 1, field: 6, top: '73%', left: '17%'},
-        {ring: 1, field: 7, top: '45%', left: '17%'},
-
-        {ring: 2, field: 0, top: '31%', left: '31%'},
-        {ring: 2, field: 1,top: '31%', left: '45%'},
-        {ring: 2, field: 2,top: '31%', left: '59%'},
-        {ring: 2, field: 3,top: '45%', left: '59%'},
-        {ring: 2, field: 4,top: '59%', left: '59%'},
-        {ring: 2, field: 5,top: '59%', left: '45%'},
-        {ring: 2, field: 6,top: '59%', left: '31%'},
-        {ring: 2, field: 7,top: '45%', left: '31%'},
-      ]
+      phase: "set",
     };
   },
   methods: {
-    getPointStyle(point) {
-      return {
-        top: point.top,
-        left: point.left
-      };
-    },
-    handlePointClick(point) {
-      console.log(point.ring + "/" + point.field);
+    handlePointClick(ring, field) {
+      console.log(ring + "/" + field);
       const message = JSON.stringify({
-        ring: point.ring,
-        field: point.field,
+        ring: ring,
+        field: field,
       });
       stompService.send('/app/game/action', message);
     },
+    translateRingAndFieldToGridColumnAndRow(ring, field) {
+      let factor = 0;
+      let column = ring;
+      let row = ring;
+      switch (ring) {
+        case 0:
+          factor = 3;
+          break;
+        case 1:
+          factor = 2;
+          break;
+        case 2:
+          factor = 1;
+          break;
+      }
 
+      switch (field) {
+        case 0:
+          row = ring;
+          column = ring;
+          break;
+        case 1:
+          column += 1 * factor;
+          break;
+        case 2:
+          column += 2 * factor;
+          break;
+        case 3:
+          row += + 1 * factor;
+          column += 2 * factor;
+          break;
+        case 4:
+          row += 2 * factor;
+          column += 2 * factor;
+          break;
+        case 5:
+          row += 2 * factor;
+          column += 1 * factor;
+          break;
+        case 6:
+          row += 2 * factor;
+          break;
+        case 7:
+          row += 1 * factor;
+          break;
+      }
+
+      return { row, column };
+    },
+    setStone(ring, field) {
+      const { row, column } = this.translateRingAndFieldToGridColumnAndRow(ring, field);
+      const gridItems = document.querySelectorAll('.grid-item');
+      const index = row * 7 + column; // Index im Grid berechnen
+
+      if (gridItems[index]) {
+        const img = document.createElement('img');
+        img.src = require('@/assets/game_images/StoneBlack.png');
+        gridItems[index].innerHTML = ''; // Vorhandenen Inhalt löschen
+        gridItems[index].appendChild(img);
+      }
+    }
+  },
+  mounted() {
+    // Beispiel: Setze einen Stein auf Position (0, 1)
+    this.setStone(0, 0);
+    this.setStone(0, 2);
+    this.setStone(1, 2);
+    this.setStone(2,7)
   }
 };
 </script>
 
 <style scoped>
-.muehle-board {
+.container {
   position: relative;
   width: 100%;
   height: 0;
   padding-bottom: 100%; /* Macht das Element quadratisch */
-  background-color: #f0f0f0; /* Hintergrundfarbe, falls das Bild nicht geladen wird */
-  overflow: hidden; /* Verhindert, dass das Hintergrundbild oder Punkte außerhalb des Containers angezeigt werden */
+  background-color: #f0f0f0;
 }
 
-.board-background {
+.background-image {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: url('../assets/game_images/Spielfeld.png') no-repeat center center;
-  background-size: cover; /* Dehnt das Hintergrundbild aus, um den gesamten Container zu bedecken */
+  background-size: cover;
   z-index: 1;
 }
 
-.point {
+.grid-overlay {
   position: absolute;
-  width: 10%;  /* Größe der Punkte */
-  height: 10%; /* Größe der Punkte */
-  background-color: rgba(255, 0, 0, 0.5); /* Halbtransparente rote Punkte */
-  border-radius: 50%; /* Macht die Punkte rund */
-  cursor: pointer; /* Zeigt einen Pointer-Cursor, wenn über den Punkt gefahren wird */
-  z-index: 2; /* Stellt sicher, dass die Punkte über dem Hintergrundbild liegen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* Anzahl der Spalten */
+  grid-template-rows: repeat(7, 1fr);    /* Anzahl der Reihen */
+  z-index: 2;
+}
+
+.grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0); /* Optional: Gitterlinien */
+  overflow: hidden; /* Verhindert, dass Bild über die Zelle hinausgeht */
+}
+
+.grid-item img {
+  object-fit: contain; /* Bild soll die gesamte Zelle ausfüllen, ohne Verzerrung */
 }
 </style>
