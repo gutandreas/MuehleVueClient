@@ -27,7 +27,8 @@
             <td>{{ game.pairing.player1.name || 'N/A' }} {{game.pairing.player1.stonecolor}} {{game.pairing.player1.currentPhase}}</td>
             <td>{{ game.pairing.player2 ? game.pairing.player2.name : "---"}} {{game.pairing.player2 ? game.pairing.player2.stonecolor : " "}} {{game.pairing.player2 ? game.pairing.player2.currentPhase : " "}}</td>
             <td>{{ game.round !== undefined || g ? game.round : 'N/A' }}</td>
-            <td>{{ game.board.boardPositionsStates || 'N/A' }}</td>
+            <td>{{ game.board.boardPositionsStates || 'N/A' }} <MuehleBoardPreview/></td>
+
             <td>{{ game.finished !== undefined ? game.finished : 'N/A' }}</td>
             <td>
               <ul v-if="Array.isArray(game.spectators) && game.spectators.length">
@@ -46,9 +47,11 @@
 
 <script>
 import stompService from '../stomp/stompService';
+import MuehleBoardPreview from '../components/MuehleBoardPreview';
 
 export default {
   name: 'DatabaseComponent',
+  components: {MuehleBoardPreview},
   data() {
     return {
       games: [],
