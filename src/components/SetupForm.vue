@@ -28,16 +28,33 @@ export default {
 
     ...mapActions(['setupComputerGame']), // Bindet die Methode aus dem Store
 
-    setupGame() {
+    setupGame(){
+      if(this.answers.modus === 'c'){
+        this.setupComputerGame();
+      } else {
+        if (this.answers.join === 's'){
+          this.setupLoginGameStart();
+        } else {
+          this.setupLoginGameJoin();
+        }
+      }
+    },
+    setupComputerGame() {
       // Erstelle die Daten für das Spiel-Setup
       const setupData = {
-        name: 'Hansli',
-        level: 1,
-        stonecolor: 'b',
-        firststone: 'e',
+        name: this.answers.name,
+        level: this.answers.level,
+        stonecolor: this.answers.color,
+        firststone: this.answers.firststone
       };
       // Rufe die Methode aus dem Vuex-Store auf
       this.setupComputerGame(setupData);
+    },
+    setupLoginGameStart(){
+
+    },
+    setupLoginGameJoin(){
+
     },
     startGame() {
       const data = {
@@ -381,6 +398,8 @@ export default {
       </div>
   </div>
   </div>
+
+
 
 </template>
 

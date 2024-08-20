@@ -1,6 +1,13 @@
 import { createStore } from "vuex";
 import stompService from "@/stomp/stompService";
 
+const consoleLogger = (store) => {
+    store.subscribe((mutation, state) => {
+        console.log('Mutation:', mutation.type);
+        console.log('Neuer State:', state);
+    });
+};
+
 
 const store = createStore({
     state: {
@@ -48,7 +55,8 @@ const store = createStore({
 
         }
     },
-    getters: {}
+    getters: {},
+    plugins: [consoleLogger]
 })
 
 export default store;
