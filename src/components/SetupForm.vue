@@ -28,18 +28,18 @@ export default {
 
     ...mapActions(['setupComputerGame']), // Bindet die Methode aus dem Store
 
-    setupGame(){
+    sendGameData(){
       if(this.answers.modus === 'c'){
-        this.setupComputerGame();
+        this.sendComputerGameData();
       } else {
         if (this.answers.join === 's'){
-          this.setupLoginGameStart();
+          this.sendComputerGameData();
         } else {
-          this.setupLoginGameJoin();
+          this.sendLoginGameDataJoin();
         }
       }
     },
-    setupComputerGame() {
+    sendComputerGameData() {
       // Erstelle die Daten für das Spiel-Setup
       const setupData = {
         name: this.answers.name,
@@ -50,10 +50,10 @@ export default {
       // Rufe die Methode aus dem Vuex-Store auf
       this.setupComputerGame(setupData);
     },
-    setupLoginGameStart(){
+    sendLoginGameDataStart(){
 
     },
-    setupLoginGameJoin(){
+    sendLoginGameDataJoin(){
 
     },
     startGame() {
@@ -376,7 +376,7 @@ export default {
 
         <hr/>
         <div class="d-grid gap-2">
-          <button class="btn btn-primary" :disabled=!this.completed @click="setupGame">Spiel starten</button>
+          <button class="btn btn-primary" :disabled=!this.completed @click="sendGameData">Spiel starten</button>
           <button class="btn btn-danger" :disabled="this.step === 0" @click="goToPreviousStep">Zurück</button>
         </div>
       </div>
