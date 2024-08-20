@@ -48,11 +48,12 @@ const store = createStore({
             stompService.subscribe('/user/queue/reply', (response) => {
                 const data = JSON.parse(response.body);
                 console.log("Response received: ", data);
-                context.commit("setUuid", data.uuid);
-                context.commit("setPlayer1Name", data.player1Name);
-                context.commit("setPlayer2Name", data.player2Name);
-                context.commit("setColor", data.stonecolor);
-                context.commit("setIndex", data.index);
+                context.commit("setUuid", { uuid: data.uuid }); // Hier wird ein Objekt übergeben
+                context.commit("setPlayer1Name", { player1Name: data.player1Name });
+                context.commit("setPlayer2Name", { player2Name: data.player2Name });
+                context.commit("setColor", { stonecolor: data.stonecolor });
+                context.commit("setFirststone", { firststone: data.firststone });
+                context.commit("setIndex", { index: data.index });
             });
         },
         setupComputerGame(context, payload){
