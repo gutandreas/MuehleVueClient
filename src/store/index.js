@@ -14,7 +14,8 @@ const store = createStore({
         uuid: null,
         name: null,
         stonecolor: null,
-        firststone: null
+        firststone: null,
+        index: null
     },
     mutations: {
         setUuid(state, payload){
@@ -27,7 +28,10 @@ const store = createStore({
             state.stonecolor = payload.stonecolor;
         },
         setFirststone(state, payload){
-            state.firststone = payload;
+            state.firststone = payload.firststone;
+        },
+        setIndex(state, payload){
+            state.index = payload.index;
         }
 
     },
@@ -47,10 +51,25 @@ const store = createStore({
                 context.commit("setUuid", data.uuid);
                 context.commit("setName", data.name);
                 context.commit("setColor", data.stonecolor);
+                context.commit("setIndex", data.index)
             });
 
-            stompService.send('/manager/setup/computer',setupComputerGameDO)
+            stompService.send('/manager/setup/computer', setupComputerGameDO)
+        },
+        setupLoginGameStart(context, payload){
 
+
+            stompService.subscribe('/user/queue/reply', (response) => {
+                // Hier die Antwort vom Server verarbeiten
+                const data = JSON.parse(response.body);
+                console.log("Response received: ", data);
+                context.commit("setUuid", data.uuid);
+                context.commit("setName", data.name);
+                context.commit("setColor", data.stonecolor);
+                context.commit("setIndex", data.index)
+            });
+
+            stompService.send('/manager/setup/start', payload)
 
 
         }

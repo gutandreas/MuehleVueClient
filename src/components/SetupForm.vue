@@ -26,14 +26,14 @@ export default {
   },
   methods: {
 
-    ...mapActions(['setupComputerGame']), // Bindet die Methode aus dem Store
+    ...mapActions(['setupComputerGame', "setupLoginGameStart"]), // Bindet die Methode aus dem Store
 
     sendGameData(){
       if(this.answers.modus === 'c'){
         this.sendComputerGameData();
       } else {
         if (this.answers.join === 's'){
-          this.sendComputerGameData();
+          this.sendLoginGameDataStart();
         } else {
           this.sendLoginGameDataJoin();
         }
@@ -51,40 +51,25 @@ export default {
       this.setupComputerGame(setupData);
     },
     sendLoginGameDataStart(){
+      const setupData = {
+        name: this.answers.name,
+        gamecode: this.answers.gamecode,
+        firststone: this.answers.firststone,
+        stonecolor: this.answers.color
+
+      }
+      this.setupLoginGameStart(setupData);
+
 
     },
     sendLoginGameDataJoin(){
+      const setupData = {
+        name: this.answers.name,
+        gamecode: this.answers.gamecode}
+      console.log(setupData)
 
     },
-    startGame() {
-      const data = {
-        "name": this.answers.name,
-        "modus": this.answers.modus,
-        "level": this.answers.level,
-        "join": this.answers.join,
-        "color": this.answers.color,
-        "firststone": this.answers.firststone,
-        "gamecode": this.answers.gamecode,
 
-      }
-
-      if (this.answers.modus === "c"){
-
-
-        stompService.send("/manager/setup/computer", data)
-      } else if (this.answers.modus === "l"){
-        if (this.answers.join === "s"){
-          stompService.send("/manager/setup/start", data)
-        }
-        else {
-          stompService.send("/manager/setup/join", data)
-        }
-
-      } else {
-        console.log(+"Ungültiger Modus / ungültiges Join")
-      }
-
-    },
     step0() {
       this.step = 1
       console.log(this.step)
