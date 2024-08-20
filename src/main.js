@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import stompService from "./stomp/stompService"; // Importiere das WebSocket-Plugin
+import store from "./store";
 
 const app = createApp(App);
 
@@ -13,6 +14,7 @@ stompService.connect('http://localhost:8081/ws')
 
         // Verwende den Router und mounte die App erst nach erfolgreicher Verbindung
         app.use(router);
+        app.use(store);
         app.mount('#app');
 
         // Optional: Initialisiere oder abonniere WebSocket-Nachrichten hier, falls erforderlich
