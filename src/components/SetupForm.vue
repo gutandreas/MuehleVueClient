@@ -1,5 +1,6 @@
 <script>
 import stompService from '../stomp/stompService';
+import {mapActions} from "vuex";
 export default {
   name: "SetupForm",
   data() {
@@ -24,6 +25,20 @@ export default {
     }
   },
   methods: {
+
+    ...mapActions(['setupComputerGame']), // Bindet die Methode aus dem Store
+
+    setupGame() {
+      // Erstelle die Daten für das Spiel-Setup
+      const setupData = {
+        name: 'Hansli',
+        level: 1,
+        stonecolor: 'b',
+        firststone: 'e',
+      };
+      // Rufe die Methode aus dem Vuex-Store auf
+      this.setupComputerGame(setupData);
+    },
     startGame() {
       const data = {
         "name": this.answers.name,
@@ -35,8 +50,10 @@ export default {
         "gamecode": this.answers.gamecode,
 
       }
-      console.log(data)
+
       if (this.answers.modus === "c"){
+
+
         stompService.send("/manager/setup/computer", data)
       } else if (this.answers.modus === "l"){
         if (this.answers.join === "s"){
@@ -342,7 +359,7 @@ export default {
 
         <hr/>
         <div class="d-grid gap-2">
-          <button class="btn btn-primary" :disabled=!this.completed @click="startGame">Spiel starten</button>
+          <button class="btn btn-primary" :disabled=!this.completed @click="setupGame">Spiel starten</button>
           <button class="btn btn-danger" :disabled="this.step === 0" @click="goToPreviousStep">Zurück</button>
         </div>
       </div>

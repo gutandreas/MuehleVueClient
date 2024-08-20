@@ -6,40 +6,46 @@ const store = createStore({
     state: {
         uuid: null,
         name: null,
-        color: null
+        stonecolor: null,
+        firststone: null
     },
     mutations: {
         setUuid(state, payload){
             state.uuid = payload.uuid;
+        },
+        setName(state, payload){
             state.name = payload.name;
-            state.color = payload.color;
+        },
+        setColor(state, payload){
+            state.stonecolor = payload.stonecolor;
+        },
+        setFirststone(state, payload){
+            state.firststone = payload;
         }
 
     },
     actions: {
-        setupGame(context, payload){
-            const setupDO = {
+        setupComputerGame(context, payload){
+            const setupComputerGameDO = {
                 name: payload.name,
-                modus: payload.modus,
                 level: payload.level,
-                join: payload.join,
-                color: payload.color,
+                stonecolor: payload.stonecolor,
                 firststone: payload.firststone,
-                gamecode: payload.gamecode
             }
-            if (setupDO.modus === "c"){
-                stompService.send("/manager/setup/computer", setupDO)
-            } else if (setupDO.modus === "l"){
-                if (setupDO.join === "s"){
-                    stompService.send("/manager/setup/start", setupDO)
-                }
-                else {
-                    stompService.send("/manager/setup/join", setupDO)
-                }
 
-            } else {
-                console.log(+"Ungültiger Modus / ungültiges Join")
-            }
+            stompService.subscribe('/user/queue/reply', (response) => {
+                // Hier die Antwort vom Server verarbeiten
+                const data = JSON.parse(response.body);
+                console.log("Response received: ", data);
+                context.commit("setUuid", data.uuid);
+                context.commit("setName", data.name);
+                context.commit("setColor", data.stonecolor);
+            });
+
+            stompService.send('/manager/setup/computer',setupComputerGameDO)
+
+
+
         }
     },
     getters: {}
