@@ -31,7 +31,7 @@ export default {
     ...mapGetters(['getBoard', "getGamecode", "getUuid"]),
   },
   methods: {
-    ...mapActions(['sendAction', 'updateBoard']),
+    ...mapActions(['sendAction', 'updateGame']),
 
     handlePointClick(index) {
       if (!isIndexValidPosition(index)){
@@ -59,10 +59,10 @@ export default {
     }
   },
   mounted() {
-    stompService.subscribe('/topic/game/boardupdate', (message) => {
+    stompService.subscribe('/topic/game/gameupdate', (message) => {
       try {
         const parsedMessage = JSON.parse(message.body);
-        this.updateBoard(parsedMessage);
+        this.updateGame(parsedMessage);
       } catch (error) {
         console.error("Failed to process message:", error);
       }

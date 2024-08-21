@@ -14,7 +14,13 @@ const store = createStore({
         gamecode: null,
         uuid: null,
         player1Name: null,
+        player1Put: 0,
+        player1Lost: 0,
+        player1Killed: 0,
         player2Name: null,
+        player2Put: 0,
+        player2Lost: 0,
+        player2Killed: 0,
         stonecolor: null,
         firststone: null,
         index: null,
@@ -32,8 +38,26 @@ const store = createStore({
         setPlayer1Name(state, payload){
             state.player1Name = payload.player1Name;
         },
+        setPlayer1Put(state, payload){
+            state.player1Put = payload.player1Put;
+        },
+        setPlayer1Lost(state, payload){
+            state.player1Lost = payload.player1Lost;
+        },
+        setPlayer1Killed(state, payload){
+            state.player1Killed = payload.player1Killed;
+        },
         setPlayer2Name(state, payload){
             state.player2Name = payload.player2Name;
+        },
+        setPlayer2Put(state, payload){
+            state.player2Put = payload.player2Put;
+        },
+        setPlayer2Lost(state, payload){
+            state.player2Lost = payload.player2Lost;
+        },
+        setPlayer2Killed(state, payload){
+            state.player2Killed = payload.player2Killed;
         },
         setColor(state, payload){
             state.stonecolor = payload.stonecolor;
@@ -83,10 +107,17 @@ const store = createStore({
         sendAction(context, payload){
             stompService.send('/game/action', payload)
         },
-        updateBoard(context, payload){
-            console.log(payload.board)
-            context.commit("setBoard", {board: payload.boardPositionsStates});
-        }
+        updateGame(context, payload){
+            console.log(payload)
+            context.commit("setBoard", {board: payload.board.boardPositionsStates});
+            context.commit("setPlayer1Put", {player1Put: payload.player1.numberOfStonesPut});
+            context.commit("setPlayer1Lost", {player1Lost: payload.player1.numberOfStonesLost})
+            context.commit("setPlayer1Killed", {player1Killed: payload.player1.numberOfStonesKilled})
+            context.commit("setPlayer2Put", {player2Put: payload.player2.numberOfStonesPut});
+            context.commit("setPlayer2Lost", {player2Lost: payload.player2.numberOfStonesLost})
+            context.commit("setPlayer2Killed", {player2Killed: payload.player2.numberOfStonesKilled})
+        },
+
 
     },
     getters: {
@@ -102,8 +133,26 @@ const store = createStore({
         getPlayer1Name(state){
             return state.player1Name;
         },
+        getPlayer1Put(state){
+            return state.player1Put;
+        },
+        getPlayer1Lost(state){
+            return state.player1Lost;
+        },
+        getPlayer1Killed(state){
+            return state.player1Killed;
+        },
         getPlayer2Name(state){
             return state.player2Name;
+        },
+        getPlayer2Put(state){
+            return state.player2Put;
+        },
+        getPlayer2Lost(state){
+            return state.player2Lost;
+        },
+        getPlayer2Killed(state){
+            return state.player2Killed;
         },
         getRunning(state){
             return state.running;
