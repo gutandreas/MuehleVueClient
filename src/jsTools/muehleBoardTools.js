@@ -1,3 +1,7 @@
+function isIndexValidPosition(index){
+    return translateIndexToRingAndField(index) != null;
+}
+
 function translateIndexToRingAndField(index){
     switch (index){
         case 1: return {ring: 0, field: 0};
@@ -26,6 +30,8 @@ function translateIndexToRingAndField(index){
         case 32: return {ring: 2, field: 5};
         case 31: return {ring: 2, field: 6};
         case 24: return {ring: 2, field: 7};
+
+        default: return null;
     }
 }
 function translateRingAndFieldToGridColumnAndRow(ring, field) {
@@ -83,4 +89,4 @@ function tranlasteRingAndFieldToIndex(ring, field){
     return index;
 }
 
-export { tranlasteRingAndFieldToIndex, translateRingAndFieldToGridColumnAndRow, translateIndexToRingAndField };
+export { isIndexValidPosition, tranlasteRingAndFieldToIndex, translateRingAndFieldToGridColumnAndRow, translateIndexToRingAndField };

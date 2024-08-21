@@ -79,7 +79,11 @@ const store = createStore({
         }
 
     },
-    getters: {},
+    getters: {
+        getBoard(state) {
+            return state.board;
+        }
+    },
     plugins: [consoleLogger]
 })
 

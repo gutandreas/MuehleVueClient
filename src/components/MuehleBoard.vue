@@ -1,10 +1,8 @@
 <template>
   <div class="muehle-board rounded-3">
-    <!-- Hintergrundbild -->
     <div class="container">
       <div class="background-image"></div>
       <div class="grid-overlay">
-
         <!-- Grid-Items werden hier dynamisch hinzugefügt -->
         <div
             v-for="index in 49"
@@ -12,33 +10,36 @@
             class="grid-item"
             @click="handlePointClick(index)"
         >
-
-        <!-- Füge hier weitere Grid-Items hinzu, falls nötig -->
+          <img v-if="getGridItemState(index) === 'PLAYER1'" src="@/assets/game_images/StoneBlack.png" />
+          <img v-if="getGridItemState(index) === 'PLAYER2'" src="@/assets/game_images/StoneWhite.png" />
+          <img v-if="getGridItemState(index) === 'FREE'" src="@/assets/game_images/FullyTransparent.png" />
+          <img v-if="getGridItemState(index) === 'NO POSITION'" src="@/assets/game_images/FullyTransparent.png" />
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script>
 import stompService from '../stomp/stompService';
-import {translateIndexToRingAndField, tranlasteRingAndFieldToIndex} from '@/jsTools/muehleBoardTools';
-import {mapActions} from "vuex";
-
+import { isIndexValidPosition, translateIndexToRingAndField } from '@/jsTools/muehleBoardTools';
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: 'MuehleBoard',
-  data() {
-    return {
-      phase: "set",
-    };
+  computed: {
+    ...mapGetters(['getBoard']),
   },
   methods: {
+    ...mapActions(['sendAction', 'updateBoard']),
 
-    ...mapActions(['sendAction', "updateBoard"]),
     handlePointClick(index) {
-      console.log("Index: " + index)
-      let position = translateIndexToRingAndField(index)
+      if (!isIndexValidPosition(index)){
+        console.log("Ungültige Position angeklickt")
+        return
+      }
+      console.log("Index: " + index);
+      let position = translateIndexToRingAndField(index);
       console.log(position.ring + "/" + position.field);
       const message = {
         type: "put",
@@ -46,63 +47,26 @@ export default {
         field: position.field,
         gamecode: "72YBWG",
         uuid: "bbc6137c-e75c-4d9b-a734-f676c64d97a2"
-      }
+      };
       this.sendAction(message);
-
-    },
-    /*updateBoard(boardArray){
-      for (let i = 0; i < boardArray.length; i++) {
-        for (let j = 0; j < boardArray[0].length; j++) {
-          console.log(boardArray[i][j]);
-          switch (boardArray[i][j]) {
-            case "FREE":
-                this.removeStone(i, j)
-                break;
-            case "PLAYER1":
-                this.putStone(i, j)
-                break;
-
-          }
-
-        }
-
-      }
-    },*/
-
-    putStone(ring, field) {
-      let index = tranlasteRingAndFieldToIndex(ring, field);
-      this.setImageToIndex(index, 'StoneBlack')
-
-    },
-    removeStone(ring, field) {
-      let index = tranlasteRingAndFieldToIndex(ring, field);
-      this.setImageToIndex(index, 'FullyTransparent')
     },
 
-    setImageToIndex(index, file){
-      const gridItems = document.querySelectorAll('.grid-item');
-
-      if (gridItems[index]) {
-        const img = document.createElement('img');
-        img.src = require('@/assets/game_images/' + file + '.png');
-        gridItems[index].innerHTML = ''; // Vorhandenen Inhalt löschen
-        gridItems[index].appendChild(img);
-      }
+    getGridItemState(index) {
+      if (!this.getBoard) return "NO POSITION";
+      if (!isIndexValidPosition(index)) return "NO POSITION";
+      let position = translateIndexToRingAndField(index);
+      return this.getBoard[position.ring][position.field];
     }
   },
   mounted() {
-      stompService.subscribe('/topic/game/boardupdate', (message) => {
-        try {
-          // Direkte Verarbeitung als Array
-          const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
-
-          console.log(parsedMessage)
-          this.updateBoard(parsedMessage)
-
-        } catch (error) {
-          console.error("Failed to process message:", error);
-        }
-      });
+    stompService.subscribe('/topic/game/boardupdate', (message) => {
+      try {
+        const parsedMessage = JSON.parse(message.body);
+        this.updateBoard(parsedMessage);
+      } catch (error) {
+        console.error("Failed to process message:", error);
+      }
+    });
   }
 };
 </script>
