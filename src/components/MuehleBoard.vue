@@ -23,6 +23,7 @@
 <script>
 import stompService from '../stomp/stompService';
 import {translateIndexToRingAndField, tranlasteRingAndFieldToIndex} from '@/jsTools/muehleBoardTools';
+import {mapActions} from "vuex";
 
 
 export default {
@@ -33,6 +34,8 @@ export default {
     };
   },
   methods: {
+
+    ...mapActions(['sendAction', "updateBoard"]),
     handlePointClick(index) {
       console.log("Index: " + index)
       let position = translateIndexToRingAndField(index)
@@ -41,12 +44,13 @@ export default {
         type: "put",
         ring: position.ring,
         field: position.field,
-        gamecode: "IF8U8U",
-        uuid: "13b797e0-9c58-42f8-abc7-41d1b29399e5"
+        gamecode: "72YBWG",
+        uuid: "bbc6137c-e75c-4d9b-a734-f676c64d97a2"
       }
-      stompService.send('/game/action', message);
+      this.sendAction(message);
+
     },
-    updateBoard(boardArray){
+    /*updateBoard(boardArray){
       for (let i = 0; i < boardArray.length; i++) {
         for (let j = 0; j < boardArray[0].length; j++) {
           console.log(boardArray[i][j]);
@@ -63,7 +67,7 @@ export default {
         }
 
       }
-    },
+    },*/
 
     putStone(ring, field) {
       let index = tranlasteRingAndFieldToIndex(ring, field);
@@ -93,8 +97,7 @@ export default {
           const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
 
           console.log(parsedMessage)
-          this.updateBoard(parsedMessage.boardPositionsStates)
-          // Setze das Array direkt in `games`
+          this.updateBoard(parsedMessage)
 
         } catch (error) {
           console.error("Failed to process message:", error);

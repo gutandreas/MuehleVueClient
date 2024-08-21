@@ -69,7 +69,15 @@ const store = createStore({
         setupLoginGameStart(context, payload){
             context.dispatch('subscribeToServer'); // Subscription wird einmal zentral aufgerufen
             stompService.send('/manager/setup/start', payload)
+        },
+        sendAction(context, payload){
+            stompService.send('/game/action', payload)
+        },
+        updateBoard(context, payload){
+            console.log(payload.board)
+            context.commit("setBoard", {board: payload.boardPositionsStates});
         }
+
     },
     getters: {},
     plugins: [consoleLogger]
