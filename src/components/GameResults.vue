@@ -3,7 +3,7 @@ import { mapGetters } from "vuex";
 export default {
   name: 'GameResults',
   computed: {
-    ...mapGetters(['getPlayer1Name', 'getPlayer1Put','getPlayer1Lost', 'getPlayer1Killed', "getPlayer2Name", 'getPlayer2Lost', 'getPlayer2Killed',"getPlayer2Put"]),
+    ...mapGetters(['getRound','getPlayer1Name', 'getPlayer1Put','getPlayer1Lost', 'getPlayer1Killed', "getPlayer2Name", 'getPlayer2Lost', 'getPlayer2Killed',"getPlayer2Put"]),
   },
 }
 
@@ -18,6 +18,7 @@ export default {
         <h5>Spielstand</h5>
       </div>
       <div class="card-body">
+        <h4>Spieler 1: {{getRound}}</h4>
         <h4>Spieler 1: {{getPlayer1Name}}</h4>
         <h5>Steine gesetzt: {{getPlayer1Put}}</h5>
         <h5>Steine verloren: {{getPlayer1Lost}}</h5>

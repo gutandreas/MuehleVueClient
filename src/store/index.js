@@ -12,6 +12,7 @@ const consoleLogger = (store) => {
 const store = createStore({
     state: {
         gamecode: null,
+        round: 0,
         uuid: null,
         player1Name: null,
         player1Put: 0,
@@ -30,6 +31,9 @@ const store = createStore({
     mutations: {
         setGamecode(state, payload) {
             state.gamecode = payload.gameCode;
+        },
+        setRound(state, payload) {
+            state.round = payload.round;
         },
         setUuid(state, payload){
             state.uuid = payload.uuid;
@@ -116,6 +120,7 @@ const store = createStore({
             context.commit("setPlayer2Put", {player2Put: payload.player2.numberOfStonesPut});
             context.commit("setPlayer2Lost", {player2Lost: payload.player2.numberOfStonesLost})
             context.commit("setPlayer2Killed", {player2Killed: payload.player2.numberOfStonesKilled})
+            context.commit("setRound", {round: payload.round})
         },
 
 
@@ -126,6 +131,9 @@ const store = createStore({
         },
         getGamecode(state){
             return state.gamecode
+        },
+        getRound(state){
+            return state.round;
         },
         getUuid(state){
             return state.uuid;
