@@ -99,6 +99,12 @@ const store = createStore({
         getUuid(state){
             return state.uuid;
         },
+        getPlayer1Name(state){
+            return state.player1Name;
+        },
+        getPlayer2Name(state){
+            return state.player2Name;
+        },
         getRunning(state){
             return state.running;
         }
