@@ -1,30 +1,38 @@
 <template>
   <div class="grid-container">
-    <SetupForm class="left-panel" :sendMessage="sendMessage" :messages="messages" />
-    <GamesToWatch class="left-panel"/>
-    <MuehleBoard class="center-panel" :sendMessage="sendMessage" :messages="messages" />
-    <StatusDisplay class="right-panel" :messages="messages" />
+    <component :is="gameRunning ? 'GameResults' : 'SetupForm'"></component>
+    <MuehleBoard class="center-panel"/>
+    <StatusDisplay class="right-panel"/>
   </div>
-
 </template>
 
 <script>
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import SetupForm from "@/components/SetupForm.vue";
 import MuehleBoard from "@/components/MuehleBoard.vue";
 import StatusDisplay from "@/components/StatusDisplay.vue";
+import GameResults  from "@/components/GameResults.vue";
+
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    SetupForm, MuehleBoard, StatusDisplay,
+    SetupForm, MuehleBoard, StatusDisplay, GameResults
   },
 
   data() {
     return {
       messages: [], // Messages received from the WebSocket server
     };
+  },
+  computed: {
+    ...mapGetters(['getRunning']),
+    gameRunning() {
+      return this.getRunning;
+    }
   },
 
 }

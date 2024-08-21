@@ -18,7 +18,8 @@ const store = createStore({
         stonecolor: null,
         firststone: null,
         index: null,
-        board: null
+        board: null,
+        running: false
     },
     mutations: {
         setGamecode(state, payload) {
@@ -45,6 +46,9 @@ const store = createStore({
         },
         setBoard(state, payload){
             state.board = payload.board;
+        },
+        setRunning(state, payload){
+            state.running = payload.running;
         }
     },
     actions: {
@@ -59,6 +63,7 @@ const store = createStore({
                 context.commit("setColor", { stonecolor: data.stonecolor });
                 context.commit("setFirststone", { firststone: data.firststone });
                 context.commit("setIndex", { index: data.index });
+                context.commit("setRunning", {running: true})
             });
         },
         setupComputerGame(context, payload){
@@ -93,6 +98,9 @@ const store = createStore({
         },
         getUuid(state){
             return state.uuid;
+        },
+        getRunning(state){
+            return state.running;
         }
     },
     plugins: [consoleLogger]
