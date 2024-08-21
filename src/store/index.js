@@ -11,6 +11,7 @@ const consoleLogger = (store) => {
 
 const store = createStore({
     state: {
+        gamecode: null,
         uuid: null,
         player1Name: null,
         player2Name: null,
@@ -20,6 +21,9 @@ const store = createStore({
         board: null
     },
     mutations: {
+        setGamecode(state, payload) {
+            state.gamecode = payload.gameCode;
+        },
         setUuid(state, payload){
             state.uuid = payload.uuid;
             console.log(state.uuid)
@@ -48,6 +52,7 @@ const store = createStore({
             stompService.subscribe('/user/queue/reply', (response) => {
                 const data = JSON.parse(response.body);
                 console.log("Response received: ", data);
+                context.commit("setGamecode", {gameCode: data.gameCode});
                 context.commit("setUuid", { uuid: data.uuid }); // Hier wird ein Objekt übergeben
                 context.commit("setPlayer1Name", { player1Name: data.player1Name });
                 context.commit("setPlayer2Name", { player2Name: data.player2Name });
@@ -82,6 +87,12 @@ const store = createStore({
     getters: {
         getBoard(state) {
             return state.board;
+        },
+        getGamecode(state){
+            return state.gamecode
+        },
+        getUuid(state){
+            return state.uuid;
         }
     },
     plugins: [consoleLogger]

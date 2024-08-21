@@ -28,7 +28,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: 'MuehleBoard',
   computed: {
-    ...mapGetters(['getBoard']),
+    ...mapGetters(['getBoard', "getGamecode", "getUuid"]),
   },
   methods: {
     ...mapActions(['sendAction', 'updateBoard']),
@@ -45,8 +45,8 @@ export default {
         type: "put",
         ring: position.ring,
         field: position.field,
-        gamecode: "72YBWG",
-        uuid: "bbc6137c-e75c-4d9b-a734-f676c64d97a2"
+        gamecode: this.getGamecode,
+        uuid: this.getUuid
       };
       this.sendAction(message);
     },
