@@ -92,6 +92,19 @@ export default {
         console.error("Failed to process message:", error);
       }
     });
+    stompService.subscribe('/topic/admin/games/update', (message) => {
+      try {
+        // Direkte Verarbeitung als Array
+        const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
+
+        this.games.filter(row => row[0] !== parsedMessage.gameCode);
+        this.games.push(parsedMessage);
+
+        console.log("Updated games:", this.games);
+      } catch (error) {
+        console.error("Failed to process message:", error);
+      }
+    });
   },
   unmounted() {
     stompService.unsubscribe('/topic/admin');

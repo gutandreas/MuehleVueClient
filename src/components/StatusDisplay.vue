@@ -1,16 +1,85 @@
 <script>
+import stompService from "@/stomp/stompService";
+import {mapGetters} from "vuex";
+
 export default {
   name: "StatusDisplay",
   data() {
     return {
       messagetext: "",
+      currentGameCode: null,
+      games: [],
     }
+  },
+  computed: {
+    ...mapGetters(['getGamecode']),
+    // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
+    gameCode() {
+      return this.getGamecode;
+    },
+  },
+  watch: {
+    gameCode(newGameCode) {
+      this.unsubscribeFromCurrentGame();  // Eventuelle Aufräumarbeiten durchführen
+      this.subscribeToGame(newGameCode);
+    },
   },
   methods: {
     sendChatMessage(){
+      const gameCode  = this.gameCode;
       console.log(this.messagetext)
+      stompService.send(`/chat/${gameCode}/messages`, this.messagetext)
       this.messagetext = ""
-    }
+
+    },
+
+    subscribeToGame(gameCode) {
+      if (gameCode) {
+        // Vorhandene Subscription aufräumen
+        this.unsubscribeFromCurrentGame();
+
+        // Neues Subscription einrichten
+        stompService.subscribe(`/topic/chat/${gameCode}/messages`, (message) => {
+          try {
+            // Direkte Verarbeitung als Array
+            const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
+
+            // Setze das Array direkt in `games`
+            this.games.push(parsedMessage);
+
+            console.log("Updated games:", this.games);
+          } catch (error) {
+            console.error("Failed to process message:", error);
+          }
+        });
+
+        // Setze den aktuellen GameCode
+        this.currentGameCode = gameCode;
+      }
+    },
+    unsubscribeFromCurrentGame() {
+      if (this.currentGameCode) {
+        console.log(`Unsubscribing from game code: ${this.currentGameCode}`);
+        // Hier kannst du zusätzliche Logik hinzufügen, falls notwendig
+        // Für dein Szenario: Eventuelle Aufräumarbeiten oder manuelles Entfernen von Daten
+        this.currentGameCode = null;
+      }
+    },
+  },
+  mounted() {
+    stompService.subscribe('/topic/chat/GAMECODE/messages', (message) => {
+      try {
+        // Direkte Verarbeitung als Array
+        const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
+
+        // Setze das Array direkt in `games`
+        this.games.push(parsedMessage);
+
+        console.log("Updated games:", this.games);
+      } catch (error) {
+        console.error("Failed to process message:", error);
+      }
+    });
   }
 }
 

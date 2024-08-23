@@ -108,6 +108,10 @@ const store = createStore({
             context.dispatch('subscribeToServer'); // Subscription wird einmal zentral aufgerufen
             stompService.send('/manager/setup/start', payload)
         },
+        setupLoginGameJoin(context, payload){
+            context.dispatch('subscribeToServer');
+            stompService.send('/manager/setup/join', payload)
+        },
         sendAction(context, payload){
             stompService.send('/game/action', payload)
         },
