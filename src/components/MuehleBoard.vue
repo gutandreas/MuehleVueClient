@@ -8,7 +8,8 @@
             v-for="index in 49"
             :key="index"
             class="grid-item"
-            @click="handlePointClick(index)"
+            @click="getRunning && handlePointClick(index)"
+
         >
           <img v-if="getGridItemState(index) === 'PLAYER1'" src="@/assets/game_images/StoneBlack.png" />
           <img v-if="getGridItemState(index) === 'PLAYER2'" src="@/assets/game_images/StoneWhite.png" />
@@ -28,7 +29,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: 'MuehleBoard',
   computed: {
-    ...mapGetters(['getBoard', "getGamecode", "getUuid"]),
+    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning']),
   },
   methods: {
     ...mapActions(['sendAction', 'updateGame']),

@@ -1,8 +1,8 @@
 <template>
   <div class="grid-container">
-    <component :is="gameRunning ? 'GameResults' : 'SetupForm'"></component>
+    <component :is="gameRunning ? 'GameResults' : 'SetupForm'" class="left-panel"/>
     <MuehleBoard class="center-panel"/>
-    <StatusDisplay class="right-panel"/>
+    <component :is="gameRunning ? 'StatusDisplay' : 'Statistics'" class="right-panel"/>
   </div>
 </template>
 
@@ -14,13 +14,14 @@ import SetupForm from "@/components/SetupForm.vue";
 import MuehleBoard from "@/components/MuehleBoard.vue";
 import StatusDisplay from "@/components/StatusDisplay.vue";
 import GameResults  from "@/components/GameResults.vue";
+import Statistics from "@/components/Statistics.vue";
 
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    SetupForm, MuehleBoard, StatusDisplay, GameResults
+    SetupForm, MuehleBoard, StatusDisplay, GameResults, Statistics
   },
 
   data() {
