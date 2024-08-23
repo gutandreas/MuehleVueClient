@@ -9,14 +9,18 @@ export default {
       messagetext: "",
       currentGameCode: null,
       games: [],
+      messageHistory: ""
     }
   },
   computed: {
-    ...mapGetters(['getGamecode']),
+    ...mapGetters(['getGamecode', 'getPlayer1Name']),
     // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
     gameCode() {
       return this.getGamecode;
     },
+    playerName() {
+      return this.getPlayer1Name;
+    }
   },
   watch: {
     gameCode(newGameCode) {
@@ -27,8 +31,13 @@ export default {
   methods: {
     sendChatMessage(){
       const gameCode  = this.gameCode;
+      const data = {
+        name: this.playerName,
+        message: this.messagetext,
+
+      }
       console.log(this.messagetext)
-      stompService.send(`/chat/${gameCode}/messages`, this.messagetext)
+      stompService.send(`/chat/${gameCode}/messages`, data)
       this.messagetext = ""
 
     },
@@ -44,10 +53,13 @@ export default {
             // Direkte Verarbeitung als Array
             const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
 
-            // Setze das Array direkt in `games`
-            this.games.push(parsedMessage);
+            const newLine = parsedMessage.name + ": " + parsedMessage.message + "\n";
 
-            console.log("Updated games:", this.games);
+            this.messageHistory += newLine
+
+
+
+
           } catch (error) {
             console.error("Failed to process message:", error);
           }
@@ -103,7 +115,7 @@ export default {
         <h5>Chat</h5>
       </div>
       <div class="card-body text-center mb-1">
-        <textarea class="w-100 mb-1" id="messageBox" type="text" readonly="true" rows="5"></textarea>
+        <textarea class="w-100 mb-1" id="messageBox" :value="messageHistory" type="text" readonly="true" rows="5"></textarea>
         <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben..." v-model="messagetext" @keyup.enter.exact="sendChatMessage">
         <input class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
         <input class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="complimentEnemy">
