@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import stompService from '../stomp/stompService';
+
 import { isIndexValidPosition, translateIndexToRingAndField } from '@/jsTools/muehleBoardTools';
 import { mapGetters, mapActions } from "vuex";
 
@@ -59,16 +59,6 @@ export default {
       return this.getBoard[position.ring][position.field];
     }
   },
-  mounted() {
-    stompService.subscribe('/topic/game/gameupdate', (message) => {
-      try {
-        const parsedMessage = JSON.parse(message.body);
-        this.updateGame(parsedMessage);
-      } catch (error) {
-        console.error("Failed to process message:", error);
-      }
-    });
-  }
 };
 </script>
 

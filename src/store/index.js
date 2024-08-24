@@ -15,6 +15,7 @@ const store = createStore({
         round: 0,
         uuid: null,
         phase: null,
+        currentIndex: null,
         player1Name: null,
         player1Put: 0,
         player1Lost: 0,
@@ -107,6 +108,14 @@ const store = createStore({
             stompService.subscribe('/topic/game/'.concat(gameCode).concat('/gameupdate'), (response) => {
                 const data = JSON.parse(response.body);
                 console.log("Gameupdate: ", data);
+                context.commit("setBoard", {board: data.board.boardPositionsStates});
+                context.commit("setPlayer1Put", {player1Put: data.pairing.player1.numberOfStonesPut});
+                context.commit("setPlayer1Lost", {player1Lost: data.pairing.player1.numberOfStonesLost})
+                context.commit("setPlayer1Killed", {player1Killed: data.pairing.player1.numberOfStonesKilled})
+                context.commit("setPlayer2Put", {player2Put: data.pairing.player2.numberOfStonesPut});
+                context.commit("setPlayer2Lost", {player2Lost: data.pairing.player2.numberOfStonesLost})
+                context.commit("setPlayer2Killed", {player2Killed: data.pairing.player2.numberOfStonesKilled})
+                context.commit("setRound", {round: data.round})
             })
         },
         subscribeForSecondPlayer(context, gameCode){
