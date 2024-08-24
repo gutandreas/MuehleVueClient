@@ -126,16 +126,32 @@ const store = createStore({
 
             });
         },
-        setupComputerGame(context, payload){
-            context.dispatch('subscribeForSetupAnswer');
-            const setupComputerGameDO = {
-                name: payload.name,
-                level: payload.level,
-                stonecolor: payload.stonecolor,
-                firststone: payload.firststone,
+        async setupComputerGame(context, payload){
+            try {
+                const gameCode = await new Promise((resolve, reject) => {
+                    stompService.subscribe('/user/queue/reply', (response) => {
+                        try {
+                            const data = JSON.parse(response.body);
+                            context.commit("setGamecode", { gameCode: data.gameCode });
+                            context.commit("setUuid", { uuid: data.uuid });
+                            context.commit("setPlayer1Name", { player1Name: data.player1Name });
+                            context.commit("setPlayer2Name", { player2Name: data.player2Name });
+                            context.commit("setColor", { stonecolor: data.stonecolor });
+                            context.commit("setFirststone", { firststone: data.firststone });
+                            context.commit("setIndex", { index: data.index });
+                            context.commit("setRunning", { running: true });
+                            resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
+                        } catch (error) {
+                            reject(error);
+                        }
+                    });
+                    stompService.send('/manager/setup/computer', payload);  // Anfrage senden
+                });
+                await context.dispatch('subscribeForGameUpdate', gameCode);
+                await context.dispatch('subscribeForGameChat', gameCode)
+            } catch (error) {
+                console.log("Fehler bei der Verarbeitung:", error);
             }
-            stompService.send('/manager/setup/computer', setupComputerGameDO)
-            context.dispatch('subscribeForGameUpdate');
         },
         async setupLoginGameStart(context, payload) {
             try {

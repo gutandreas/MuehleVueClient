@@ -47,7 +47,7 @@ export default {
         stonecolor: this.answers.color,
         firststone: this.answers.firststone
       };
-      // Rufe die Methode aus dem Vuex-Store auf
+
       this.setupComputerGame(setupData);
     },
     sendLoginGameDataStart(){
@@ -55,12 +55,8 @@ export default {
         name: this.answers.name,
         gamecode: this.answers.gamecode,
         firststone: this.answers.firststone,
-        stonecolor: this.answers.color
-
-      }
+        stonecolor: this.answers.color}
       this.setupLoginGameStart(setupData);
-
-
     },
     sendLoginGameDataJoin(){
       const setupData = {
