@@ -11,78 +11,17 @@ const consoleLogger = (store) => {
 
 const store = createStore({
     state: {
-        gamecode: null,
-        round: 0,
-        uuid: null,
-        phase: "SET",
-        currentIndex: null,
-        player1Name: null,
-        player1Put: 0,
-        player1Lost: 0,
-        player1Killed: 0,
-        player2Name: null,
-        player2Put: 0,
-        player2Lost: 0,
-        player2Killed: 0,
-        stonecolor: null,
-        firststone: null,
+        game: {board: null},
         index: null,
-        board: null,
         running: false,
         chathistory: "",
     },
     mutations: {
-        setGamecode(state, payload) {
-            state.gamecode = payload.gameCode;
-        },
-        setRound(state, payload) {
-            state.round = payload.round;
-        },
-        setUuid(state, payload){
-            state.uuid = payload.uuid;
-            console.log(state.uuid)
-        },
-        setPhase(state, payload) {
-            state.phase = payload.phase;
-        },
-        setCurrentIndex(state, payload) {
-            state.currentIndex = payload.currentIndex;
-        },
-        setPlayer1Name(state, payload){
-            state.player1Name = payload.player1Name;
-        },
-        setPlayer1Put(state, payload){
-            state.player1Put = payload.player1Put;
-        },
-        setPlayer1Lost(state, payload){
-            state.player1Lost = payload.player1Lost;
-        },
-        setPlayer1Killed(state, payload){
-            state.player1Killed = payload.player1Killed;
-        },
-        setPlayer2Name(state, payload){
-            state.player2Name = payload.player2Name;
-        },
-        setPlayer2Put(state, payload){
-            state.player2Put = payload.player2Put;
-        },
-        setPlayer2Lost(state, payload){
-            state.player2Lost = payload.player2Lost;
-        },
-        setPlayer2Killed(state, payload){
-            state.player2Killed = payload.player2Killed;
-        },
-        setColor(state, payload){
-            state.stonecolor = payload.stonecolor;
-        },
-        setFirststone(state, payload){
-            state.firststone = payload.firststone;
+        setGame(state, payload) {
+            state.game = payload.game;
         },
         setIndex(state, payload){
             state.index = payload.index;
-        },
-        setBoard(state, payload){
-            state.board = payload.board;
         },
         setRunning(state, payload){
             state.running = payload.running;
@@ -96,12 +35,7 @@ const store = createStore({
             stompService.subscribe('/user/queue/reply', (response) => {
                 const data = JSON.parse(response.body);
                 console.log("Response received: ", data);
-                context.commit("setGamecode", {gameCode: data.gameCode});
-                context.commit("setUuid", { uuid: data.uuid });
-                context.commit("setPlayer1Name", { player1Name: data.player1Name });
-                context.commit("setPlayer2Name", { player2Name: data.player2Name });
-                context.commit("setColor", { stonecolor: data.stonecolor });
-                context.commit("setFirststone", { firststone: data.firststone });
+                context.commit("setGame", {game: data.game});
                 context.commit("setIndex", { index: data.index });
                 context.commit("setRunning", {running: true})
             });
@@ -111,25 +45,8 @@ const store = createStore({
             stompService.subscribe('/topic/game/'.concat(gameCode).concat('/gameupdate'), (response) => {
                 const data = JSON.parse(response.body);
                 console.log("Gameupdate: ", data);
-                context.commit("setBoard", {board: data.board.boardPositionsStates});
-                context.commit("setCurrentIndex", {currentIndex: data.pairing.currentPlayerIndex});
-                context.commit("setPlayer1Put", {player1Put: data.pairing.player1.numberOfStonesPut});
-                context.commit("setPlayer1Lost", {player1Lost: data.pairing.player1.numberOfStonesLost})
-                context.commit("setPlayer1Killed", {player1Killed: data.pairing.player1.numberOfStonesKilled})
-                context.commit("setPlayer2Put", {player2Put: data.pairing.player2.numberOfStonesPut});
-                context.commit("setPlayer2Lost", {player2Lost: data.pairing.player2.numberOfStonesLost})
-                context.commit("setPlayer2Killed", {player2Killed: data.pairing.player2.numberOfStonesKilled})
-                context.commit("setRound", {round: data.round})
+                context.commit("setGame", {game: data.game});
             })
-        },
-        subscribeForSecondPlayer(context, gameCode){
-            stompService.subscribe(`/topic/game/${gameCode}/secondplayer`, (response) => {
-                const data = JSON.parse(response.body);
-                console.log("Second Player: ", data);
-                context.commit("setRunning", {running: true});
-            });
-
-            console.log(`Subscribed to /topic/game/${gameCode}/secondplayer`); // Log hinzufügen
         },
         subscribeForGameChat(context, gameCode){
             stompService.subscribe(`/topic/chat/${gameCode}/messages`, (response) => {
@@ -145,16 +62,11 @@ const store = createStore({
                     stompService.subscribe('/user/queue/reply', (response) => {
                         try {
                             const data = JSON.parse(response.body);
-                            context.commit("setGamecode", { gameCode: data.gameCode });
-                            context.commit("setUuid", { uuid: data.uuid });
-                            context.commit("setPlayer1Name", { player1Name: data.player1Name });
-                            context.commit("setPlayer2Name", { player2Name: data.player2Name });
-                            context.commit("setColor", { stonecolor: data.stonecolor });
-                            context.commit("setFirststone", { firststone: data.firststone });
+                            console.log("Response received: ", data);
+                            context.commit("setGame", {game: data.game});
                             context.commit("setIndex", { index: data.index });
-                            context.commit("setRunning", { running: true });
-                            context.commit("setCurrentIndex", {currentIndex: data.currentPlayerIndex})
-                            resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
+                            context.commit("setRunning", {running: true})
+                            resolve(data.game.gameCode);
                         } catch (error) {
                             reject(error);
                         }
@@ -174,16 +86,11 @@ const store = createStore({
                     stompService.subscribe('/user/queue/reply', (response) => {
                         try {
                             const data = JSON.parse(response.body);
-                            context.commit("setGamecode", { gameCode: data.gameCode });
-                            context.commit("setUuid", { uuid: data.uuid });
-                            context.commit("setPlayer1Name", { player1Name: data.player1Name });
-                            context.commit("setPlayer2Name", { player2Name: data.player2Name });
-                            context.commit("setColor", { stonecolor: data.stonecolor });
-                            context.commit("setFirststone", { firststone: data.firststone });
+                            console.log("Response received: ", data);
+                            context.commit("setGame", {game: data.game});
                             context.commit("setIndex", { index: data.index });
-                            context.commit("setRunning", { running: true });
-                            context.commit("setCurrentIndex", {currentIndex: data.currentPlayerIndex})
-                            resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
+                            context.commit("setRunning", {running: true})
+                            resolve(data.game.gameCode);
                         } catch (error) {
                             reject(error);
                         }
@@ -203,16 +110,11 @@ const store = createStore({
                     stompService.subscribe('/user/queue/reply', (response) => {
                         try {
                             const data = JSON.parse(response.body);
-                            context.commit("setGamecode", { gameCode: data.gameCode });
-                            context.commit("setUuid", { uuid: data.uuid });
-                            context.commit("setPlayer1Name", { player1Name: data.player1Name });
-                            context.commit("setPlayer2Name", { player2Name: data.player2Name });
-                            context.commit("setColor", { stonecolor: data.stonecolor });
-                            context.commit("setFirststone", { firststone: data.firststone });
+                            console.log("Response received: ", data);
+                            context.commit("setGame", {game: data.game});
                             context.commit("setIndex", { index: data.index });
-                            context.commit("setRunning", { running: true });
-                            context.commit("setCurrentIndex", {currentIndex: data.currentPlayerIndex})
-                            resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
+                            context.commit("setRunning", {running: true})
+                            resolve(data.game.gameCode);
                         } catch (error) {
                             reject(error);
                         }
@@ -228,65 +130,57 @@ const store = createStore({
         sendAction(context, payload){
             stompService.send('/game/action', payload)
         },
-        updateGame(context, payload){
-            console.log(payload)
-            context.commit("setBoard", {board: payload.board.boardPositionsStates});
-            context.commit("setPlayer1Put", {player1Put: payload.player1.numberOfStonesPut});
-            context.commit("setPlayer1Lost", {player1Lost: payload.player1.numberOfStonesLost})
-            context.commit("setPlayer1Killed", {player1Killed: payload.player1.numberOfStonesKilled})
-            context.commit("setPlayer2Put", {player2Put: payload.player2.numberOfStonesPut});
-            context.commit("setPlayer2Lost", {player2Lost: payload.player2.numberOfStonesLost})
-            context.commit("setPlayer2Killed", {player2Killed: payload.player2.numberOfStonesKilled})
-            context.commit("setRound", {round: payload.round})
-        },
 
 
     },
     getters: {
         getBoard(state) {
-            return state.board;
+            return state.game.board;
         },
         getGamecode(state){
-            return state.gamecode
+            return state.game.gameCode;
         },
         getRound(state){
-            return state.round;
-        },
-        getUuid(state){
-            return state.uuid;
-        },
-        getPlayer1Name(state){
-            return state.player1Name;
+            return state.game.round;
         },
         getPhase(state){
-            return state.phase;
+            return state.index === 1 ? state.game.pairing.player1.currentPhase : state.game.pairing.player2.currentPhase;
+        },
+        getUuid(state){
+            return state.index === 1 ? state.game.pairing.player1.uuid : state.game.pairing.player2.uuid;
+        },
+        getOwnName(state){
+            return state.index === 1 ? state.game.pairing.player1.name : state.game.pairing.player2.name;
+        },
+        getPlayer1Name(state){
+            return state.game.pairing.player1.name;
         },
         getPlayer1Put(state){
-            return state.player1Put;
+            return state.game.pairing.player1.numberOfStonesPut;
         },
         getPlayer1Lost(state){
-            return state.player1Lost;
+            return state.game.pairing.player1.numberOfStonesLost;
         },
         getPlayer1Killed(state){
-            return state.player1Killed;
+            return state.game.pairing.player1.numberOfStonesKilled;
         },
         getPlayer2Name(state){
-            return state.player2Name;
+            return state.game.pairing.player2.name;
         },
         getPlayer2Put(state){
-            return state.player2Put;
+            return state.game.pairing.player2.numberOfStonesPut;
         },
         getPlayer2Lost(state){
-            return state.player2Lost;
+            return state.game.pairing.player2.numberOfStonesLost;
         },
         getPlayer2Killed(state){
-            return state.player2Killed;
+            return state.game.pairing.player2.numberOfStonesKilled;
         },
         getIndex(state){
             return state.index;
         },
         getCurrentIndex(state) {
-            return state.currentIndex;
+            return state.game.pairing.currentPlayerIndex;
         },
         getRunning(state){
             return state.running;

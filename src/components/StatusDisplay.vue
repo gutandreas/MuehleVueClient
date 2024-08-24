@@ -10,13 +10,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getGamecode', 'getPlayer1Name', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex']),
+    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex']),
     // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
     gameCode() {
       return this.getGamecode;
     },
     playerName() {
-      return this.getPlayer1Name;
+      return this.getOwnName;
     },
     chatHistory() {
       return this.getChathistory;
