@@ -11,7 +11,7 @@ const consoleLogger = (store) => {
 
 const store = createStore({
     state: {
-        game: {board: null},
+        game: {board: {boardPositionsStates: null}},
         index: null,
         running: false,
         chathistory: "",
@@ -135,7 +135,7 @@ const store = createStore({
     },
     getters: {
         getBoard(state) {
-            return state.game.board;
+            return state.game.board.boardPositionsStates;
         },
         getGamecode(state){
             return state.game.gameCode;
