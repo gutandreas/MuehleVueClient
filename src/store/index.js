@@ -14,7 +14,7 @@ const store = createStore({
         gamecode: null,
         round: 0,
         uuid: null,
-        phase: null,
+        phase: "SET",
         currentIndex: null,
         player1Name: null,
         player1Put: 0,
@@ -44,6 +44,9 @@ const store = createStore({
         },
         setPhase(state, payload) {
             state.phase = payload.phase;
+        },
+        setCurrentIndex(state, payload) {
+            state.currentIndex = payload.currentIndex;
         },
         setPlayer1Name(state, payload){
             state.player1Name = payload.player1Name;
@@ -109,6 +112,7 @@ const store = createStore({
                 const data = JSON.parse(response.body);
                 console.log("Gameupdate: ", data);
                 context.commit("setBoard", {board: data.board.boardPositionsStates});
+                context.commit("setCurrentIndex", {currentIndex: data.pairing.currentPlayerIndex});
                 context.commit("setPlayer1Put", {player1Put: data.pairing.player1.numberOfStonesPut});
                 context.commit("setPlayer1Lost", {player1Lost: data.pairing.player1.numberOfStonesLost})
                 context.commit("setPlayer1Killed", {player1Killed: data.pairing.player1.numberOfStonesKilled})
@@ -149,6 +153,7 @@ const store = createStore({
                             context.commit("setFirststone", { firststone: data.firststone });
                             context.commit("setIndex", { index: data.index });
                             context.commit("setRunning", { running: true });
+                            context.commit("setCurrentIndex", {currentIndex: data.currentPlayerIndex})
                             resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
                         } catch (error) {
                             reject(error);
@@ -177,6 +182,7 @@ const store = createStore({
                             context.commit("setFirststone", { firststone: data.firststone });
                             context.commit("setIndex", { index: data.index });
                             context.commit("setRunning", { running: true });
+                            context.commit("setCurrentIndex", {currentIndex: data.currentPlayerIndex})
                             resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
                         } catch (error) {
                             reject(error);
@@ -205,6 +211,7 @@ const store = createStore({
                             context.commit("setFirststone", { firststone: data.firststone });
                             context.commit("setIndex", { index: data.index });
                             context.commit("setRunning", { running: true });
+                            context.commit("setCurrentIndex", {currentIndex: data.currentPlayerIndex})
                             resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
                         } catch (error) {
                             reject(error);
@@ -251,6 +258,9 @@ const store = createStore({
         getPlayer1Name(state){
             return state.player1Name;
         },
+        getPhase(state){
+            return state.phase;
+        },
         getPlayer1Put(state){
             return state.player1Put;
         },
@@ -271,6 +281,12 @@ const store = createStore({
         },
         getPlayer2Killed(state){
             return state.player2Killed;
+        },
+        getIndex(state){
+            return state.index;
+        },
+        getCurrentIndex(state) {
+            return state.currentIndex;
         },
         getRunning(state){
             return state.running;

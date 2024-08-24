@@ -10,7 +10,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getGamecode', 'getPlayer1Name', 'getChathistory']),
+    ...mapGetters(['getGamecode', 'getPlayer1Name', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex']),
     // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
     gameCode() {
       return this.getGamecode;
@@ -20,6 +20,15 @@ export default {
     },
     chatHistory() {
       return this.getChathistory;
+    },
+    phase(){
+      return this.getPhase;
+    },
+    index(){
+      return this.getIndex;
+    },
+    currentIndex() {
+      return this.getCurrentIndex;
     }
   },
   methods: {
@@ -51,9 +60,14 @@ export default {
         <h5>Nächster Schritt</h5>
       </div>
       <div class="card-body">
-        <label id="putPhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label green-label active-label">SETZEN</label><br>
-        <label id="movePhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label blue-label inactive-label">VERSCHIEBEN</label><br>
-        <label id="killPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label red-label inactive-label">ENTFERNEN</label><br>
+        <label id="putPhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label green-label"
+               :class="{'active-label': index === currentIndex && phase === 'SET', 'inactive-label': index != currentIndex}">SETZEN</label><br>
+        <label id="movePhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label blue-label"
+               :class="{'active-label': index === currentIndex && phase === 'MOVE', 'inactive-label': index != currentIndex}">VERSCHIEBEN</label><br>
+        <label id="killPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label red-label"
+               :class="{'active-label': index === currentIndex && phase === 'KILL', 'inactive-label': index != currentIndex}">ENTFERNEN</label><br>
+        <label id="waitPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label yellow-label"
+               :class="{'active-label': index != currentIndex, 'inactive-label': index === currentIndex}">WARTEN</label><br>
         <label id="spielverlaufLabel">asdf</label>
       </div>
     </div>
@@ -110,6 +124,12 @@ export default {
 
 .red-label {
   background: darkred;
+  border-width: 3px;
+  border-style: solid;
+}
+
+.yellow-label {
+  background: darkgoldenrod;
   border-width: 3px;
   border-style: solid;
 }
