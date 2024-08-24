@@ -61,13 +61,13 @@ export default {
       </div>
       <div class="card-body">
         <label id="putPhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label green-label"
-               :class="{'active-label': index === currentIndex && phase === 'SET', 'inactive-label': index != currentIndex}">SETZEN</label><br>
+               :class="{'active-label': phase === 'SET', 'inactive-label': phase != 'SET'}">SETZEN</label><br>
         <label id="movePhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label blue-label"
-               :class="{'active-label': index === currentIndex && phase === 'MOVE', 'inactive-label': index != currentIndex}">VERSCHIEBEN</label><br>
+               :class="{'active-label': phase === 'MOVE', 'inactive-label': phase != 'MOVE'}">VERSCHIEBEN</label><br>
         <label id="killPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label red-label"
-               :class="{'active-label': index === currentIndex && phase === 'KILL', 'inactive-label': index != currentIndex}">ENTFERNEN</label><br>
+               :class="{'active-label': phase === 'KILL', 'inactive-label': phase != 'KILL'}">ENTFERNEN</label><br>
         <label id="waitPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label yellow-label"
-               :class="{'active-label': index != currentIndex, 'inactive-label': index === currentIndex}">WARTEN</label><br>
+               :class="{'active-label': phase === 'WAIT', 'inactive-label': phase != 'WAIT'}">WARTEN</label><br>
         <label id="spielverlaufLabel">asdf</label>
       </div>
     </div>
