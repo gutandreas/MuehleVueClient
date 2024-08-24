@@ -7,9 +7,6 @@ export default {
   data() {
     return {
       messagetext: "",
-      currentGameCode: null,
-      games: [],
-      messageHistory: ""
     }
   },
   computed: {
@@ -25,12 +22,6 @@ export default {
       return this.getChathistory;
     }
   },
-  watch: {
-    gameCode(newGameCode) {
-      this.unsubscribeFromCurrentGame();  // Eventuelle Aufräumarbeiten durchführen
-      this.subscribeToGame(newGameCode);
-    },
-  },
   methods: {
     sendChatMessage(){
       const gameCode  = this.gameCode;
@@ -45,56 +36,9 @@ export default {
 
     },
 
-    subscribeToGame(gameCode) {
-      if (gameCode) {
-        // Vorhandene Subscription aufräumen
-        this.unsubscribeFromCurrentGame();
-
-        // Neues Subscription einrichten
-        stompService.subscribe(`/topic/chat/${gameCode}/messages`, (message) => {
-          try {
-            // Direkte Verarbeitung als Array
-            const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
-
-            const newLine = parsedMessage.name + ": " + parsedMessage.message + "\n";
-
-            this.messageHistory += newLine
 
 
 
-
-          } catch (error) {
-            console.error("Failed to process message:", error);
-          }
-        });
-
-        // Setze den aktuellen GameCode
-        this.currentGameCode = gameCode;
-      }
-    },
-    unsubscribeFromCurrentGame() {
-      if (this.currentGameCode) {
-        console.log(`Unsubscribing from game code: ${this.currentGameCode}`);
-        // Hier kannst du zusätzliche Logik hinzufügen, falls notwendig
-        // Für dein Szenario: Eventuelle Aufräumarbeiten oder manuelles Entfernen von Daten
-        this.currentGameCode = null;
-      }
-    },
-  },
-  mounted() {
-    stompService.subscribe('/topic/chat/GAMECODE/messages', (message) => {
-      try {
-        // Direkte Verarbeitung als Array
-        const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
-
-        // Setze das Array direkt in `games`
-        this.games.push(parsedMessage);
-
-        console.log("Updated games:", this.games);
-      } catch (error) {
-        console.error("Failed to process message:", error);
-      }
-    });
   }
 }
 
