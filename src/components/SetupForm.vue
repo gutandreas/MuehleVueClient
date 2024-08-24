@@ -26,7 +26,7 @@ export default {
   },
   methods: {
 
-    ...mapActions(['setupComputerGame', "setupLoginGameStart"]), // Bindet die Methode aus dem Store
+    ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin"]), // Bindet die Methode aus dem Store
 
     sendGameData(){
       if(this.answers.modus === 'c'){
@@ -66,7 +66,7 @@ export default {
       const setupData = {
         name: this.answers.name,
         gamecode: this.answers.gamecode}
-      console.log(setupData)
+      this.setupLoginGameJoin(setupData)
 
     },
 

@@ -13,13 +13,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getGamecode', 'getPlayer1Name']),
+    ...mapGetters(['getGamecode', 'getPlayer1Name', 'getChathistory']),
     // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
     gameCode() {
       return this.getGamecode;
     },
     playerName() {
       return this.getPlayer1Name;
+    },
+    chatHistory() {
+      return this.getChathistory;
     }
   },
   watch: {
@@ -115,7 +118,7 @@ export default {
         <h5>Chat</h5>
       </div>
       <div class="card-body text-center mb-1">
-        <textarea class="w-100 mb-1" id="messageBox" :value="messageHistory" type="text" readonly="true" rows="5"></textarea>
+        <textarea class="w-100 mb-1" id="messageBox" :value="chatHistory" type="text" readonly="true" rows="5"></textarea>
         <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben..." v-model="messagetext" @keyup.enter.exact="sendChatMessage">
         <input class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
         <input class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="complimentEnemy">

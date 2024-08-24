@@ -14,6 +14,7 @@ const store = createStore({
         gamecode: null,
         round: 0,
         uuid: null,
+        phase: null,
         player1Name: null,
         player1Put: 0,
         player1Lost: 0,
@@ -26,7 +27,8 @@ const store = createStore({
         firststone: null,
         index: null,
         board: null,
-        running: false
+        running: false,
+        chathistory: "",
     },
     mutations: {
         setGamecode(state, payload) {
@@ -38,6 +40,9 @@ const store = createStore({
         setUuid(state, payload){
             state.uuid = payload.uuid;
             console.log(state.uuid)
+        },
+        setPhase(state, payload) {
+            state.phase = payload.phase;
         },
         setPlayer1Name(state, payload){
             state.player1Name = payload.player1Name;
@@ -77,15 +82,18 @@ const store = createStore({
         },
         setRunning(state, payload){
             state.running = payload.running;
+        },
+        addMessageToChatHistory(state, payload){
+            state.chathistory += payload.name + ": " + payload.message + "\n";
         }
     },
     actions: {
-        subscribeToServer(context) {
+        subscribeForSetupAnswer(context) {
             stompService.subscribe('/user/queue/reply', (response) => {
                 const data = JSON.parse(response.body);
                 console.log("Response received: ", data);
                 context.commit("setGamecode", {gameCode: data.gameCode});
-                context.commit("setUuid", { uuid: data.uuid }); // Hier wird ein Objekt übergeben
+                context.commit("setUuid", { uuid: data.uuid });
                 context.commit("setPlayer1Name", { player1Name: data.player1Name });
                 context.commit("setPlayer2Name", { player2Name: data.player2Name });
                 context.commit("setColor", { stonecolor: data.stonecolor });
@@ -93,9 +101,33 @@ const store = createStore({
                 context.commit("setIndex", { index: data.index });
                 context.commit("setRunning", {running: true})
             });
+
+        },
+        subscribeForGameUpdate(context, gameCode){
+            stompService.subscribe('/topic/game/'.concat(gameCode).concat('/gameupdate'), (response) => {
+                const data = JSON.parse(response.body);
+                console.log("Gameupdate: ", data);
+            })
+        },
+        subscribeForSecondPlayer(context, gameCode){
+            stompService.subscribe(`/topic/game/${gameCode}/secondplayer`, (response) => {
+                const data = JSON.parse(response.body);
+                console.log("Second Player: ", data);
+                context.commit("setRunning", {running: true});
+            });
+
+            console.log(`Subscribed to /topic/game/${gameCode}/secondplayer`); // Log hinzufügen
+        },
+        subscribeForGameChat(context, gameCode){
+            stompService.subscribe(`/topic/chat/${gameCode}/messages`, (response) => {
+                const data = JSON.parse(response.body);
+                console.log("Message ", data);
+                context.commit('addMessageToChatHistory', data)
+
+            });
         },
         setupComputerGame(context, payload){
-            context.dispatch('subscribeToServer'); // Subscription wird einmal zentral aufgerufen
+            context.dispatch('subscribeForSetupAnswer');
             const setupComputerGameDO = {
                 name: payload.name,
                 level: payload.level,
@@ -103,14 +135,41 @@ const store = createStore({
                 firststone: payload.firststone,
             }
             stompService.send('/manager/setup/computer', setupComputerGameDO)
+            context.dispatch('subscribeForGameUpdate');
         },
-        setupLoginGameStart(context, payload){
-            context.dispatch('subscribeToServer'); // Subscription wird einmal zentral aufgerufen
-            stompService.send('/manager/setup/start', payload)
+        async setupLoginGameStart(context, payload) {
+            try {
+                // Schritt 1: Abonniere und warte auf die Setup-Antwort
+                const gameCode = await new Promise((resolve, reject) => {
+                    stompService.subscribe('/user/queue/reply', (response) => {
+                        try {
+                            const data = JSON.parse(response.body);
+                            context.commit("setGamecode", { gameCode: data.gameCode });
+                            context.commit("setUuid", { uuid: data.uuid });
+                            context.commit("setPlayer1Name", { player1Name: data.player1Name });
+                            context.commit("setPlayer2Name", { player2Name: data.player2Name });
+                            context.commit("setColor", { stonecolor: data.stonecolor });
+                            context.commit("setFirststone", { firststone: data.firststone });
+                            context.commit("setIndex", { index: data.index });
+                            context.commit("setRunning", { running: true });
+                            resolve(data.gameCode);  // Hier wird das Promise aufgelöst und der gameCode zurückgegeben
+                        } catch (error) {
+                            reject(error);
+                        }
+                    });
+                    stompService.send('/manager/setup/start', payload);  // Anfrage senden
+                });
+                await context.dispatch('subscribeForGameUpdate', gameCode);
+                await context.dispatch('subscribeForSecondPlayer', gameCode);
+                await context.dispatch('subscribeForGameChat', gameCode)
+            } catch (error) {
+                console.log("Fehler bei der Verarbeitung:", error);
+            }
         },
         setupLoginGameJoin(context, payload){
-            context.dispatch('subscribeToServer');
+            context.dispatch('subscribeForSetupAnswer');
             stompService.send('/manager/setup/join', payload)
+            context.dispatch('subscribeForGameUpdate');
         },
         sendAction(context, payload){
             stompService.send('/game/action', payload)
@@ -168,6 +227,9 @@ const store = createStore({
         },
         getRunning(state){
             return state.running;
+        },
+        getChathistory(state) {
+            return state.chathistory;
         }
     },
     plugins: [consoleLogger]
