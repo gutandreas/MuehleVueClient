@@ -98,7 +98,6 @@ const store = createStore({
                     stompService.send('/manager/setup/start', payload);  // Anfrage senden
                 });
                 await context.dispatch('subscribeForGameUpdate', gameCode);
-                await context.dispatch('subscribeForSecondPlayer', gameCode);
                 await context.dispatch('subscribeForGameChat', gameCode)
             } catch (error) {
                 console.log("Fehler bei der Verarbeitung:", error);
@@ -165,16 +164,16 @@ const store = createStore({
             return state.game.pairing.player1.numberOfStonesKilled;
         },
         getPlayer2Name(state){
-            return state.game.pairing.player2.name;
+            return state.game.pairing.player2?.name || "---";
         },
         getPlayer2Put(state){
-            return state.game.pairing.player2.numberOfStonesPut;
+            return state.game.pairing.player2?.numberOfStonesPut || 0;
         },
         getPlayer2Lost(state){
-            return state.game.pairing.player2.numberOfStonesLost;
+            return state.game.pairing.player2?.numberOfStonesLost || 0;
         },
         getPlayer2Killed(state){
-            return state.game.pairing.player2.numberOfStonesKilled;
+            return state.game.pairing.player2?.numberOfStonesKilled || 0;
         },
         getIndex(state){
             return state.index;
