@@ -29,7 +29,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: 'MuehleBoard',
   computed: {
-    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning']),
+    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase']),
   },
   methods: {
     ...mapActions(['sendAction', 'updateGame']),
@@ -49,7 +49,12 @@ export default {
         gamecode: this.getGamecode,
         uuid: this.getUuid
       };
-      this.sendAction(message);
+      if (this.getPhase === "WAIT"){
+        alert("Warten Sie, bis Sie an der Reihe sind!")
+      } else {
+        this.sendAction(message);
+      }
+
     },
 
     getGridItemState(index) {
