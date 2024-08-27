@@ -44,6 +44,14 @@ export default {
       this.messagetext = ""
 
     },
+    sendOffend(){
+      const gameCode  = this.gameCode;
+      const data = {
+        name: this.playerName,
+
+      }
+      stompService.send(`/chat/${gameCode}/offend`, data)
+    }
 
 
 
@@ -82,7 +90,7 @@ export default {
         <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben..." v-model="messagetext" @keyup.enter.exact="sendChatMessage">
         <input class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
         <input class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="complimentEnemy">
-        <input class="w-100 btn btn-secondary mb-1" id="offendEnemyButton" type="button" value="Gegner beleidigen" @click="offendEnemy">
+        <input class="w-100 btn btn-secondary mb-1" id="offendEnemyButton" type="button" value="Gegner beleidigen" @click="sendOffend">
         <input class="w-100 btn btn-danger mb-1" id="giveUpButton" type="button" value="💀 Spiel aufgeben 💀" @click="giveUp">
       </div>
     </div>
