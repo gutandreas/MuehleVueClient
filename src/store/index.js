@@ -46,6 +46,7 @@ const store = createStore({
                 const data = JSON.parse(response.body);
                 console.log("Gameupdate: ", data);
                 context.commit("setGame", {game: data.game});
+                context.commit("setRunning", { running: data.game.pairing.player2 != null });
             })
         },
         subscribeForGameChat(context, gameCode){
@@ -89,7 +90,6 @@ const store = createStore({
                             console.log("Response received: ", data);
                             context.commit("setGame", {game: data.game});
                             context.commit("setIndex", { index: data.index });
-                            context.commit("setRunning", {running: true})
                             resolve(data.game.gameCode);
                         } catch (error) {
                             reject(error);
