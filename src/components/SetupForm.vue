@@ -19,6 +19,10 @@ export default {
         firststone: "",
         gamecode: "",
       },
+      orderToExecute: null,
+      computerOrder: [0, 1, 2, 4, 5],
+      startOrder: [0, 1, 3, 4, 5, 6],
+      joinOrder: [0, 1, 3, 6],
       stepOrder: [],
       step: 0,
       completed: false
@@ -77,12 +81,12 @@ export default {
       this.stepOrder.push(1)
     },
     step2() {
-      this.step = 5;
+      this.step = 4;
       console.log(this.step)
       this.stepOrder.push(2)
     },
     step3() {
-      this.answers.join === "s" ? this.step = 4 : this.step = 5;
+      this.answers.join === "s" ? this.step = 4 : this.step = 6;
       console.log(this.step)
       this.stepOrder.push(3)
     },
@@ -94,7 +98,6 @@ export default {
         console.log("Weiss")
         this.answers.color = 'w';
       }
-      this.answers.join === "s" ? this.step = 5 : this.step = 6;
       this.step = 5;
       console.log(this.step);
       this.stepOrder.push(4)
@@ -102,6 +105,7 @@ export default {
     step5() {
       this.step = 6;
       console.log(this.step);
+      this.validateGameCode();
       this.stepOrder.push(5)
     },
 
@@ -117,7 +121,7 @@ export default {
     },
     validateGameCode() {
       this.answers.gamecode = this.answers.gamecode.toUpperCase().replace(/[^A-Z0-9]/g, '');
-      this.answers.gamecode === "" ? this.completed = false : this.completed = true;
+      this.answers.gamecode === "" && this.answers.modus === "l" ? this.completed = false : this.completed = true;
     },
     getAllGames() {
       stompService.send('/admin/games/getall', "Abfrage Alle Games");
@@ -342,7 +346,7 @@ export default {
         </div>
         <div v-if="step===6">
           <h5>Wähle einen Gamecode, damit sich dein Gegner mit dem Spiel verbinden kann:</h5>
-          <input
+          <input :disabled="this.answers.modus === 'c'"
               type="text"
               class="form-control"
               placeholder="Gamecode"
@@ -351,6 +355,7 @@ export default {
               @input="validateGameCode"
               maxlength="8"
           >
+          <label v-if="this.answers.modus === 'c'">Gamecode wird bei Computergame automatisch generiert</label>
 
         </div>
 
