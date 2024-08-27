@@ -154,6 +154,9 @@ const store = createStore({
         getPlayer1Name(state){
             return state.game.pairing.player1.name;
         },
+        getPlayer1Phase(state){
+            return state.game.pairing.player1.currentPhase;
+        },
         getPlayer1Color(state){
             return state.game.pairing.player1.stonecolor;
         },
@@ -168,6 +171,9 @@ const store = createStore({
         },
         getPlayer2Name(state){
             return state.game.pairing.player2?.name || "---";
+        },
+        getPlayer2Phase(state){
+            return state.game.pairing.player2.currentPhase;
         },
         getPlayer2Color(state){
             return state.game.pairing.player2.stonecolor;
