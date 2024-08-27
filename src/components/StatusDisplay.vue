@@ -66,6 +66,8 @@ export default {
                :class="{'active-label': phase === 'MOVE', 'inactive-label': phase != 'MOVE'}">VERSCHIEBEN</label><br>
         <label id="killPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label red-label"
                :class="{'active-label': phase === 'KILL', 'inactive-label': phase != 'KILL'}">ENTFERNEN</label><br>
+        <label id="jumpPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label orange-label"
+               :class="{'active-label': phase === 'JUMP', 'inactive-label': phase != 'JUMP'}">SPRINGEN</label><br>
         <label id="waitPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label yellow-label"
                :class="{'active-label': phase === 'WAIT', 'inactive-label': phase != 'WAIT'}">WARTEN</label><br>
         <label id="spielverlaufLabel">asdf</label>
@@ -124,6 +126,12 @@ export default {
 
 .red-label {
   background: darkred;
+  border-width: 3px;
+  border-style: solid;
+}
+
+.orange-label {
+  background: orangered;
   border-width: 3px;
   border-style: solid;
 }
