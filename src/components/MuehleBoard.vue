@@ -9,8 +9,7 @@
             :key="index"
             class="grid-item"
             :class="getGridItemClass(index)"
-            @click="getRunning && handlePointClick(index)"
-
+            @click="!isFinished && getRunning && handlePointClick(index)"
         >
           <img v-if="getGridItemState(index) === 'PLAYER1'" src="@/assets/game_images/StoneBlack.png" />
           <img v-if="getGridItemState(index) === 'PLAYER2'" src="@/assets/game_images/StoneWhite.png" />
@@ -36,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase', 'getIndex', 'getStateOnPosition']),
+    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase', 'getIndex', 'getStateOnPosition', 'isFinished']),
   },
   methods: {
     ...mapActions(['sendAction', 'updateGame']),
@@ -148,12 +147,13 @@ export default {
         fieldPlusNeighbour = this.getStateOnPosition(ring, 0) === 'FREE'
       }
 
-      if (ring % 2 == 1){
+      if (field % 2 == 1){
         if (ring - 1 >= 0){
           ringMinusNeighbour = this.getStateOnPosition(ring-1, field) === 'FREE'
         }
         if (ring + 1 <= 3){
           ringPlusNeighbour = this.getStateOnPosition(ring+1, field) === 'FREE'
+          console.log("Test")
         }
       }
 

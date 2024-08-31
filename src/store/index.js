@@ -209,6 +209,9 @@ const store = createStore({
             } else {
                 return null;
             }
+        },
+        isFinished(state){
+            return state.game.finished;
         }
     },
     plugins: [consoleLogger]
