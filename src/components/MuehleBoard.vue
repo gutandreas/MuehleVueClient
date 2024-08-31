@@ -28,6 +28,12 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: 'MuehleBoard',
+  data(){
+    return {
+      moveFrom: null,
+
+    }
+  },
   computed: {
     ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase']),
   },
@@ -40,23 +46,49 @@ export default {
         return
       }
       console.log("Index: " + index);
-      let position = translateIndexToRingAndField(index);
-      console.log(position.ring + "/" + position.field);
+      let clickedPosition = translateIndexToRingAndField(index);
+      console.log(clickedPosition.ring + "/" + clickedPosition.field);
+
+      if (this.getPhase === "WAIT"){
+        alert("Warten Sie, bis Sie an der Reihe sind!")
+      } else if (this.getPhase === "PUT") {
+        this.sendMessage(clickedPosition, "PUT")
+      } else if (this.getPhase === "MOVE"){
+          if (this.moveFrom == null){
+            this.moveFrom = clickedPosition;
+          }
+          else {
+            this.sendMoveMessage(this.moveFrom, clickedPosition)
+            this.moveFrom = null;
+          }
+        this.sendMessage(clickedPosition, "MOVE")
+      } else if (this.getPhase === "KILL"){
+        this.sendMessage(clickedPosition, "KILL")
+      } else if (this.getPhase === "JUMP"){
+        this.sendMessage(clickedPosition, "JUMP")
+      }
+
+    },
+    sendMessage(position, type){
       const message = {
-        type: "put",
+        type: type,
         ring: position.ring,
         field: position.field,
         gamecode: this.getGamecode,
         uuid: this.getUuid
       };
-      if (this.getPhase === "WAIT"){
-        alert("Warten Sie, bis Sie an der Reihe sind!")
-      } else {
-        this.sendAction(message);
-      }
-
+      this.sendAction(message);
     },
-
+    sendMoveMessage(from, to){
+      const message = {
+        type: "MOVE",
+        from: from,
+        to: to,
+        gamecode: this.getGamecode,
+        uuid: this.getUuid
+      };
+      this.sendAction(message);
+    },
     getGridItemState(index) {
       if (!this.getBoard) return "NO POSITION";
       if (!isIndexValidPosition(index)) return "NO POSITION";

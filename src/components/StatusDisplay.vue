@@ -60,6 +60,10 @@ export default {
 
       }
       stompService.send(`/chat/${gameCode}/compliment`, data)
+    },
+    scrollDown(){
+      const textarea = document.getElementById('messageBox');
+      textarea.scrollTop = textarea.scrollHeight;
     }
 
 
@@ -78,7 +82,7 @@ export default {
       </div>
       <div class="card-body">
         <label id="putPhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label green-label"
-               :class="{'active-label': phase === 'SET', 'inactive-label': phase != 'SET'}">SETZEN</label><br>
+               :class="{'active-label': phase === 'SET', 'inactive-label': phase != 'PUT'}">SETZEN</label><br>
         <label id="movePhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label blue-label"
                :class="{'active-label': phase === 'MOVE', 'inactive-label': phase != 'MOVE'}">VERSCHIEBEN</label><br>
         <label id="killPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label red-label"
@@ -95,7 +99,7 @@ export default {
         <h5>Chat</h5>
       </div>
       <div class="card-body text-center mb-1">
-        <textarea class="w-100 mb-1" id="messageBox" :value="chatHistory" type="text" readonly="true" rows="5"></textarea>
+        <textarea class="w-100 mb-1" id="messageBox" :value="chatHistory" @change="scrollDown" type="text" readonly="true" rows="5"></textarea>
         <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben..." v-model="messagetext" @keyup.enter.exact="sendChatMessage">
         <input class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
         <input class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="sendCompliment">
