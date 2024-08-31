@@ -35,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase']),
+    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase', 'getIndex', 'getStateOnPosition']),
   },
   methods: {
     ...mapActions(['sendAction', 'updateGame']),
@@ -53,11 +53,10 @@ export default {
         alert("Warten Sie, bis Sie an der Reihe sind!")
       } else if (this.getPhase === "PUT") {
         this.sendMessage(clickedPosition, "PUT")
-      } else if (this.getPhase === "MOVE"){
-          if (this.moveFrom == null){
-            this.moveFrom = clickedPosition;
-          }
-          else {
+      } else if (this.getPhase === "MOVE") {
+          if (this.moveFrom == null) {
+            this.moveFrom = this.isThisMyStone(index) && this.isThereAFreeNeighbourPosition(index) ? clickedPosition : null
+          } else {
             this.sendMoveMessage(this.moveFrom, clickedPosition)
             this.moveFrom = null;
           }
@@ -93,7 +92,42 @@ export default {
       if (!isIndexValidPosition(index)) return "NO POSITION";
       let position = translateIndexToRingAndField(index);
       return this.getBoard[position.ring][position.field];
-    }
+    },
+    isThisMyStone(index){
+      const ownState = this.getIndex === 1 ? 'PLAYER1' : 'PLAYER2';
+      return this.getGridItemState(index) === ownState
+    },
+    isThereAFreeNeighbourPosition(index){
+      const position = translateIndexToRingAndField(index)
+      const ring = position.ring
+      const field = position.field
+
+      let fieldMinusNeighbour = false;
+      let fieldPlusNeighbour = false;
+      let ringMinusNeighbour = false;
+      let ringPlusNeighbour = false;
+
+      if (field - 1 >= 0 ){
+        fieldMinusNeighbour = this.getStateOnPosition(ring, field-1) === 'FREE'
+      }
+
+      if (field + 1 <= 7){
+        fieldPlusNeighbour = this.getStateOnPosition(ring, field+1) === 'FREE'
+      }
+
+      if (ring % 2 == 1){
+        if (ring - 1 >= 0){
+          ringMinusNeighbour = this.getStateOnPosition(ring-1, field) === 'FREE'
+        }
+        if (ring + 1 >= 3){
+          ringPlusNeighbour = this.getStateOnPosition(ring+1, field) === 'FREE'
+        }
+      }
+
+      return fieldMinusNeighbour || fieldPlusNeighbour || ringMinusNeighbour || ringPlusNeighbour;
+
+
+    },
   },
 };
 </script>

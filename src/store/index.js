@@ -198,6 +198,17 @@ const store = createStore({
         },
         getChathistory(state) {
             return state.chathistory;
+        },
+        getStateOnPosition: (state) => (ring, field) => {
+            if (!state.game.board.boardPositionsStates) return null;
+            if (
+                ring >= 0 && ring < state.game.board.boardPositionsStates.length &&
+                field >= 0 && field < state.game.board.boardPositionsStates[ring].length
+            ) {
+                return state.game.board.boardPositionsStates[ring][field];
+            } else {
+                return null;
+            }
         }
     },
     plugins: [consoleLogger]
