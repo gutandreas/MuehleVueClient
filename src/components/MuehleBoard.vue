@@ -78,7 +78,7 @@ export default {
             return;
           }
           this.moveFrom = clickedPosition;
-          // HIER
+          console.log("JUMP-Test")
         } else {
           this.sendMoveOrJumpMessage("JUMP", this.moveFrom, clickedPosition)
           this.moveFrom = null;
