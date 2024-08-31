@@ -67,9 +67,7 @@ export default {
         name: this.answers.name,
         gamecode: this.answers.gamecode}
       this.setupLoginGameJoin(setupData)
-
     },
-
     step0() {
       this.step = 1
       console.log(this.step)

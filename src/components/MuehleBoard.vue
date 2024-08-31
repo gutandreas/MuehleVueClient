@@ -8,6 +8,7 @@
             v-for="index in 49"
             :key="index"
             class="grid-item"
+            :class="getGridItemClass(index)"
             @click="getRunning && handlePointClick(index)"
 
         >
@@ -55,7 +56,16 @@ export default {
         this.sendMessage(clickedPosition, "PUT")
       } else if (this.getPhase === "MOVE") {
           if (this.moveFrom == null) {
-            this.moveFrom = this.isThisMyStone(index) && this.isThereAFreeNeighbourPosition(index) ? clickedPosition : null
+            if (!this.isThisMyStone(index)){
+              alert("Das ist nicht Ihr Stein...")
+              return;
+            }
+            if (!this.isThereAFreeNeighbourPosition(index)){
+              alert("Dieser Stein hat keine freien Nachbarsfelder...")
+              return;
+            }
+            this.moveFrom = clickedPosition;
+            // HIER
           } else {
             this.sendMoveMessage(this.moveFrom, clickedPosition)
             this.moveFrom = null;
@@ -93,6 +103,15 @@ export default {
       let position = translateIndexToRingAndField(index);
       return this.getBoard[position.ring][position.field];
     },
+    getGridItemClass(index) {
+      if (this.moveFrom) {
+        const position = translateIndexToRingAndField(index);
+        if (isIndexValidPosition(index) && this.moveFrom.ring === position.ring && this.moveFrom.field === position.field) {
+          return 'blinking';
+        }
+      }
+      return '';
+    },
     isThisMyStone(index){
       const ownState = this.getIndex === 1 ? 'PLAYER1' : 'PLAYER2';
       return this.getGridItemState(index) === ownState
@@ -119,7 +138,7 @@ export default {
         if (ring - 1 >= 0){
           ringMinusNeighbour = this.getStateOnPosition(ring-1, field) === 'FREE'
         }
-        if (ring + 1 >= 3){
+        if (ring + 1 <= 3){
           ringPlusNeighbour = this.getStateOnPosition(ring+1, field) === 'FREE'
         }
       }
@@ -133,6 +152,17 @@ export default {
 </script>
 
 <style scoped>
+
+.blinking {
+  animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .container {
   position: relative;
   width: 100%;
