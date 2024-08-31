@@ -67,13 +67,23 @@ export default {
             this.moveFrom = clickedPosition;
             // HIER
           } else {
-            this.sendMoveMessage(this.moveFrom, clickedPosition)
+            this.sendMoveOrJumpMessage("MOVE", this.moveFrom, clickedPosition)
             this.moveFrom = null;
           }
       } else if (this.getPhase === "KILL"){
         this.sendMessage(clickedPosition, "KILL")
       } else if (this.getPhase === "JUMP"){
-        this.sendMessage(clickedPosition, "JUMP")
+        if (this.moveFrom == null) {
+          if (!this.isThisMyStone(index)){
+            alert("Das ist nicht Ihr Stein...")
+            return;
+          }
+          this.moveFrom = clickedPosition;
+          // HIER
+        } else {
+          this.sendMoveOrJumpMessage("JUMP", this.moveFrom, clickedPosition)
+          this.moveFrom = null;
+        }
       }
 
     },
@@ -87,9 +97,9 @@ export default {
       };
       this.sendAction(message);
     },
-    sendMoveMessage(from, to){
+    sendMoveOrJumpMessage(type, from, to){
       const message = {
-        type: "MOVE",
+        type: type,
         from: from,
         to: to,
         gamecode: this.getGamecode,
@@ -128,10 +138,14 @@ export default {
 
       if (field - 1 >= 0 ){
         fieldMinusNeighbour = this.getStateOnPosition(ring, field-1) === 'FREE'
+      } else {
+        fieldMinusNeighbour = this.getStateOnPosition(ring, 7) === 'FREE'
       }
 
       if (field + 1 <= 7){
         fieldPlusNeighbour = this.getStateOnPosition(ring, field+1) === 'FREE'
+      } else {
+        fieldPlusNeighbour = this.getStateOnPosition(ring, 0) === 'FREE'
       }
 
       if (ring % 2 == 1){
