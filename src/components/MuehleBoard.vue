@@ -61,7 +61,6 @@ export default {
             this.sendMoveMessage(this.moveFrom, clickedPosition)
             this.moveFrom = null;
           }
-        this.sendMessage(clickedPosition, "MOVE")
       } else if (this.getPhase === "KILL"){
         this.sendMessage(clickedPosition, "KILL")
       } else if (this.getPhase === "JUMP"){
