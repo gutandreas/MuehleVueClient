@@ -139,6 +139,8 @@ export default {
 }
 
 .grid-item img {
-  object-fit: contain; /* Bild soll die gesamte Zelle ausfüllen, ohne Verzerrung */
+  width: 100%; /* Bild auf die Breite der Zelle strecken */
+  height: 100%; /* Bild auf die Höhe der Zelle strecken */
+  object-fit: cover; /* Bild so anpassen, dass es die gesamte Zelle ausfüllt */
 }
 </style>
