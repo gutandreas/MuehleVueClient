@@ -212,6 +212,9 @@ const store = createStore({
         },
         isFinished(state){
             return state.game.finished;
+        },
+        getSpectators(state){
+            return state.game.spectators;
         }
     },
     plugins: [consoleLogger]

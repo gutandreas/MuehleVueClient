@@ -20,7 +20,11 @@ export default {
       "getPlayer2Killed",
       "getPlayer2Phase",
       "getIndex",
+      "getSpectators"
     ]),
+    spectators(){
+      return this.getSpectators;
+    }
   },
 };
 </script>
@@ -84,6 +88,21 @@ export default {
             <h5 class="m-1">Steine gewonnen: {{ getPlayer2Killed }}</h5>
           </div>
         </div>
+
+        <div class="card m-1">
+          <div class="card-header text-center">
+            <h5>Zuschauer</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4" v-for="(spectator, index) in spectators" :key="index">
+            <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark">{{ spectator.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
