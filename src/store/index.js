@@ -64,10 +64,14 @@ const store = createStore({
                         try {
                             const data = JSON.parse(response.body);
                             console.log("Response received: ", data);
-                            context.commit("setGame", {game: data.game});
-                            context.commit("setIndex", { index: data.index });
-                            context.commit("setRunning", {running: true})
-                            resolve(data.game.gameCode);
+                            if (data.success){
+                                context.commit("setGame", {game: data.game});
+                                context.commit("setIndex", { index: data.index });
+                                context.commit("setRunning", {running: true})
+                                resolve(data.game.gameCode);} else {
+                                reject(new Error(data.message || "Das Spiel konnte nicht eröffnet werden! Überprüfe deine Angaben..."));
+                            }
+
                         } catch (error) {
                             reject(error);
                         }
@@ -82,15 +86,19 @@ const store = createStore({
         },
         async setupLoginGameStart(context, payload) {
             try {
-                // Schritt 1: Abonniere und warte auf die Setup-Antwort
                 const gameCode = await new Promise((resolve, reject) => {
                     stompService.subscribe('/user/queue/reply', (response) => {
                         try {
                             const data = JSON.parse(response.body);
                             console.log("Response received: ", data);
-                            context.commit("setGame", {game: data.game});
-                            context.commit("setIndex", { index: data.index });
-                            resolve(data.game.gameCode);
+                            if (data.success){
+                                context.commit("setGame", {game: data.game});
+                                context.commit("setIndex", { index: data.index });
+                                resolve(data.game.gameCode);
+                            } else {
+                                reject(new Error(data.message || "Das Spiel konnte nicht eröffnet werden! Überprüfe deine Angaben..."));
+                            }
+
                         } catch (error) {
                             reject(error);
                         }
@@ -110,10 +118,15 @@ const store = createStore({
                         try {
                             const data = JSON.parse(response.body);
                             console.log("Response received: ", data);
-                            context.commit("setGame", {game: data.game});
-                            context.commit("setIndex", { index: data.index });
-                            context.commit("setRunning", {running: true})
-                            resolve(data.game.gameCode);
+                            if (data.success){
+                                context.commit("setGame", {game: data.game});
+                                context.commit("setIndex", { index: data.index });
+                                context.commit("setRunning", {running: true})
+                                resolve(data.game.gameCode);
+                            } else {
+                                reject(new Error(data.message || "Dem Spiel konnte nicht beigetreten werden! Überprüfe deine Angaben..."));
+                            }
+
                         } catch (error) {
                             reject(error);
                         }
@@ -123,6 +136,7 @@ const store = createStore({
                 await context.dispatch('subscribeForGameUpdate', gameCode);
                 await context.dispatch('subscribeForGameChat', gameCode)
             } catch (error) {
+                alert(error.message)
                 console.log("Fehler bei der Verarbeitung:", error);
             }
         },
@@ -172,7 +186,14 @@ const store = createStore({
             return state.index === 1 ? state.game.pairing.player1.uuid : state.game.pairing.player2.uuid;
         },
         getOwnName(state){
-            return state.index === 1 ? state.game.pairing.player1.name : state.game.pairing.player2.name;
+            if (state.index ===1){
+                return state.game.pairing.player1.name
+            } else if (state.index === 2){
+                return state.game.pairing.player2.name
+            } else {
+                return "Zuschauer"
+                //TODO: Eigenen Namen finden und zurückgeben
+            }
         },
         getPlayer1Name(state){
             return state.game.pairing.player1.name;

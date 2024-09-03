@@ -29,6 +29,9 @@ export default {
     },
     currentIndex() {
       return this.getCurrentIndex;
+    },
+    isPlayer(){
+      return this.getIndex === 1 || this.getIndex === 2
     }
   },
   methods: {
@@ -76,7 +79,7 @@ export default {
 
 <template>
   <div class="status-container">
-    <div class="card m-1 next-step-card" v-if="getIndex === 1 || getIndex === 2">
+    <div class="card m-1 next-step-card" v-if="isPlayer">
       <div class="card-header text-center">
         <h5>Nächster Schritt</h5>
       </div>
@@ -101,9 +104,9 @@ export default {
         <textarea class="w-100 mb-1" id="messageBox" :value="chatHistory" @change="scrollDown" type="text" readonly="true" rows="5"></textarea>
         <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben..." v-model="messagetext" @keyup.enter.exact="sendChatMessage">
         <input class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
-        <input class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="sendCompliment">
-        <input class="w-100 btn btn-secondary mb-1" id="offendEnemyButton" type="button" value="Gegner beleidigen" @click="sendOffend">
-        <input class="w-100 btn btn-danger mb-1" id="giveUpButton" type="button" value="💀 Spiel aufgeben 💀" @click="giveUp">
+        <input v-if="isPlayer" class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="sendCompliment">
+        <input v-if="isPlayer" class="w-100 btn btn-secondary mb-1" id="offendEnemyButton" type="button" value="Gegner beleidigen" @click="sendOffend">
+        <input v-if="isPlayer" class="w-100 btn btn-danger mb-1" id="giveUpButton" type="button" value="💀 Spiel aufgeben 💀" @click="giveUp">
       </div>
     </div>
   </div>

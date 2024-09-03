@@ -28,6 +28,11 @@ export default {
       completed: false
     }
   },
+  computed: {
+    activeGames() {
+      return this.games.filter(game => !game.finished);
+    }
+  },
   methods: {
 
     ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin", "setupWatch"]), // Bindet die Methode aus dem Store
@@ -134,8 +139,9 @@ export default {
     },
     handleClickOnGameLabel(event) {
       const gamecode = event.target.textContent;
-      const name = prompt(`Bitte geben Sie den Namen an, mit dem Sie das Game ${gamecode} beobachten möchten:`);
+      let name = prompt(`Bitte geben Sie den Namen an, mit dem Sie das Game ${gamecode} beobachten möchten:`);
 
+      name = name ? name.toUpperCase() : '';
       this.answers.gamecode = gamecode;
       this.answers.name = name;
 
@@ -360,10 +366,10 @@ export default {
       <div class="card-body">
         <h5 class="card-title">Games</h5>
         <div class="row">
-          <div class="col-md-4" v-for="(game, index) in games" :key="index">
+          <div class="col-md-4" v-for="(game, index) in activeGames" :key="index" >
             <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark"
-                  style="cursor: pointer;"
-                  @click="handleClickOnGameLabel">{{ game.gameCode }}</span>
+            style="cursor: pointer;"
+            @click="handleClickOnGameLabel">{{ game.gameCode }}</span>
           </div>
         </div>
       </div>
