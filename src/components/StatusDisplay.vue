@@ -76,7 +76,7 @@ export default {
 
 <template>
   <div class="status-container">
-    <div class="card m-1 next-step-card">
+    <div class="card m-1 next-step-card" v-if="getIndex === 1 || getIndex === 2">
       <div class="card-header text-center">
         <h5>Nächster Schritt</h5>
       </div>
@@ -91,7 +91,6 @@ export default {
                :class="{'active-label': phase === 'JUMP', 'inactive-label': phase != 'JUMP'}">SPRINGEN</label><br>
         <label id="waitPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label yellow-label"
                :class="{'active-label': phase === 'WAIT', 'inactive-label': phase != 'WAIT'}">WARTEN</label><br>
-        <label id="spielverlaufLabel">asdf</label>
       </div>
     </div>
     <div class="card m-1 chat-card">

@@ -126,6 +126,29 @@ const store = createStore({
                 console.log("Fehler bei der Verarbeitung:", error);
             }
         },
+        async setupWatch(context, payload){
+            try {
+                const gameCode = await new Promise((resolve, reject) => {
+                    stompService.subscribe('/user/queue/reply', (response) => {
+                        try {
+                            const data = JSON.parse(response.body);
+                            console.log("Response received: ", data);
+                            context.commit("setGame", {game: data.game});
+                            context.commit("setIndex", { index: data.index });
+                            context.commit("setRunning", {running: true})
+                            resolve(data.game.gameCode);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    });
+                    stompService.send('/manager/setup/watch', payload);  // Anfrage senden
+                });
+                await context.dispatch('subscribeForGameUpdate', gameCode);
+                await context.dispatch('subscribeForGameChat', gameCode)
+            } catch (error) {
+                console.log("Fehler bei der Verarbeitung:", error);
+            }
+        },
         sendAction(context, payload){
             stompService.send('/game/action', payload)
         },

@@ -30,7 +30,7 @@ export default {
   },
   methods: {
 
-    ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin"]), // Bindet die Methode aus dem Store
+    ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin", "setupWatch"]), // Bindet die Methode aus dem Store
 
     sendGameData(){
       if(this.answers.modus === 'c'){
@@ -44,7 +44,6 @@ export default {
       }
     },
     sendComputerGameData() {
-      // Erstelle die Daten für das Spiel-Setup
       const setupData = {
         name: this.answers.name,
         level: this.answers.level,
@@ -67,6 +66,15 @@ export default {
         name: this.answers.name,
         gamecode: this.answers.gamecode}
       this.setupLoginGameJoin(setupData)
+    },
+    sendGameDataWatch(){
+      const setupData = {
+        "gamecode": this.answers.gamecode,
+        "name": this.answers.name,
+        "isroboter" : false
+      }
+      this.setupWatch(setupData)
+
     },
     step0() {
       this.step = 1
@@ -124,23 +132,14 @@ export default {
     getAllGames() {
       stompService.send('/admin/games/getall', "Abfrage Alle Games");
     },
-    watchGame(event) {
-      // Den Text des HTML-Elements auslesen
+    handleClickOnGameLabel(event) {
       const gamecode = event.target.textContent;
-
-      // Eine Eingabeaufforderung mit dem ausgelesenen Text anzeigen
       const name = prompt(`Bitte geben Sie den Namen an, mit dem Sie das Game ${gamecode} beobachten möchten:`);
 
-      // Den ausgelesenen Text in der Konsole ausgeben
-      console.log(gamecode);
+      this.answers.gamecode = gamecode;
+      this.answers.name = name;
 
-      const message = {
-        "gamecode": gamecode,
-        "name": name,
-        "isroboter" : false
-      }
-
-      stompService.send(stompService.send("/manager/setup/watch", message));
+      this.sendGameDataWatch();
     }
 
 
@@ -204,8 +203,7 @@ export default {
         </div>
 
         <div v-if="step === 1">
-          <h5>Möchtest du gegen den Computergegner oder gegen einen eingeloggten Spieler antreten? Oder willst du ein
-            bestehendes Spiel beobachten?</h5>
+          <h5>Möchtest du gegen den Computergegner oder gegen einen eingeloggten Spieler antreten?</h5>
 
           <div class="form-check">
             <input
@@ -228,17 +226,6 @@ export default {
                 @change="step1"
             />
             <label class="form-check-label">Loginspiel</label>
-          </div>
-          <div class="form-check">
-            <input
-                type="radio"
-                class="form-check-input"
-                name="step1"
-                v-model="this.answers.modus"
-                value="b"
-                @change="step1"
-            />
-            <label class="form-check-label">Spiel beobachten</label>
           </div>
         </div>
         <div v-if="step===2">
@@ -376,7 +363,7 @@ export default {
           <div class="col-md-4" v-for="(game, index) in games" :key="index">
             <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark"
                   style="cursor: pointer;"
-                  @click="watchGame">{{ game.gameCode }}</span>
+                  @click="handleClickOnGameLabel">{{ game.gameCode }}</span>
           </div>
         </div>
       </div>

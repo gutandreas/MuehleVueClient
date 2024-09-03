@@ -9,7 +9,7 @@
             :key="index"
             class="grid-item"
             :class="getGridItemClass(index)"
-            @click="!isFinished && getRunning && handlePointClick(index)"
+            @click="(getIndex === 1 || getIndex ===2) && !isFinished && getRunning && handlePointClick(index)"
         >
           <img v-if="getGridItemState(index) === 'PLAYER1'" src="@/assets/game_images/StoneBlack.png" />
           <img v-if="getGridItemState(index) === 'PLAYER2'" src="@/assets/game_images/StoneWhite.png" />
@@ -35,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase', 'getIndex', 'getStateOnPosition', 'isFinished']),
+    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase', 'getIndex', 'getStateOnPosition', 'isFinished', 'isPlayer']),
   },
   methods: {
     ...mapActions(['sendAction', 'updateGame']),
