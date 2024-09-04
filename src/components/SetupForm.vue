@@ -1,6 +1,6 @@
 <script>
 import stompService from '../stomp/stompService';
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 export default {
   name: "SetupForm",
   data() {
@@ -31,11 +31,12 @@ export default {
   computed: {
     activeGames() {
       return this.games.filter(game => !game.finished);
-    }
+    },
   },
   methods: {
 
-    ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin", "setupWatch"]), // Bindet die Methode aus dem Store
+    ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin", "setupWatch"]),
+    ...mapGetters([ 'waitingForSecondPlayer']),
 
     sendGameData(){
       if(this.answers.modus === 'c'){

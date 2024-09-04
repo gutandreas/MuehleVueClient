@@ -1,8 +1,6 @@
 <template>
   <div class="grid-container">
-    <TestSender class="left-panel"/>
-    <DatabaseComponent class="center-panel" :sendMessage="sendMessage" :messages="messages" />
-    <WebsocketComponent class="right-panel"/>
+    <DatabaseComponent class="center-panel" />
   </div>
 </template>
 
@@ -10,12 +8,10 @@
 <script>
 
 import DatabaseComponent from "@/components/DatabaseComponent.vue";
-import TestSender from "@/components/TestSender.vue";
-import WebsocketComponent from "@/components/WebsocketComponent.vue";
 
 export default {
   name: 'Admin',
-  components: {DatabaseComponent, TestSender, WebsocketComponent},
+  components: {DatabaseComponent},
 
 };
 </script>

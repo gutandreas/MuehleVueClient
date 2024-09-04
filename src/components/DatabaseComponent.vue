@@ -6,8 +6,6 @@
       </div>
       <div class="card-body">
         <button @click="getAllGames">Alle Games abfragen</button>
-
-        <!-- Tabelle für die Darstellung der Nachrichten -->
         <table class="table">
           <thead>
           <tr>
@@ -68,12 +66,8 @@ export default {
   created() {
     stompService.subscribe('/topic/admin/games/getall', (message) => {
       try {
-        // Direkte Verarbeitung als Array
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
-
-        // Setze das Array direkt in `games`
         this.games = Array.isArray(parsedMessage) ? parsedMessage : [];
-
         console.log("Updated games:", this.games);
       } catch (error) {
         console.error("Failed to process message:", error);
@@ -81,12 +75,8 @@ export default {
     });
     stompService.subscribe('/topic/admin/games/add', (message) => {
       try {
-        // Direkte Verarbeitung als Array
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
-
-        // Setze das Array direkt in `games`
         this.games.push(parsedMessage);
-
         console.log("Updated games:", this.games);
       } catch (error) {
         console.error("Failed to process message:", error);
@@ -94,7 +84,6 @@ export default {
     });
     stompService.subscribe('/topic/admin/games/update', (message) => {
       try {
-        // Direkte Verarbeitung als Array
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
 
         this.games.filter(row => row[0] !== parsedMessage.gameCode);

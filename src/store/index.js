@@ -259,6 +259,12 @@ const store = createStore({
         },
         getSpectators(state){
             return state.game.spectators;
+        },
+        waitingForSecondPlayer(state){
+            if (state.game == null){
+                return false
+            }
+            return !state.game.pairing.complete;
         }
     },
     plugins: [consoleLogger]
