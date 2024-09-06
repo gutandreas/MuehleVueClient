@@ -32,11 +32,12 @@ export default {
     activeGames() {
       return this.games.filter(game => !game.finished);
     },
+
   },
   methods: {
 
     ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin", "setupWatch"]),
-    ...mapGetters([ 'waitingForSecondPlayer']),
+    ...mapGetters([ 'isWaitingForSecondPlayer']),
 
     sendGameData(){
       if(this.answers.modus === 'c'){
@@ -187,8 +188,17 @@ export default {
 </script>
 
 <template>
-  <div id="setup-form">
-
+  <div v-if="isWaitingForSecondPlayer()" id="waiting">
+    <div class="card m-1">
+    <div class="card-header text-center">
+      <h5>Warten auf Mitspieler</h5>
+    </div>
+    <div class="card-body">
+      <h5 class="m-1">Gamecode zum Einloggen: {{ this.answers.gamecode }}</h5>
+    </div>
+  </div>
+  </div>
+  <div v-if="!isWaitingForSecondPlayer()" id="setup-form">
     <div class="card m-1">
       <div class="card-header text-center">
         <h5>Neues Spiel starten</h5>

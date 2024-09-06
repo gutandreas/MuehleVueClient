@@ -11,10 +11,11 @@ const consoleLogger = (store) => {
 
 const store = createStore({
     state: {
-        game: {board: {boardPositionsStates: null}},
+        game: {board: {boardPositionsStates: null}, complete: false},
         index: null,
         running: false,
         chathistory: "",
+        waitingForSecondPlayer: false
     },
     mutations: {
         setGame(state, payload) {
@@ -28,6 +29,9 @@ const store = createStore({
         },
         addMessageToChatHistory(state, payload){
             state.chathistory += payload.name + ": " + payload.message + "\n";
+        },
+        setWaitingForSecondPlayer(state, payload){
+            state.waitingForSecondPlayer = payload.waitingForSecondPlayer;
         }
     },
     actions: {
@@ -94,6 +98,8 @@ const store = createStore({
                             if (data.success){
                                 context.commit("setGame", {game: data.game});
                                 context.commit("setIndex", { index: data.index });
+                                context.commit("setWaitingForSecondPlayer", {waitingForSecondPlayer: true});
+
                                 resolve(data.game.gameCode);
                             } else {
                                 reject(new Error(data.message || "Das Spiel konnte nicht eröffnet werden! Überprüfe deine Angaben..."));
@@ -260,11 +266,8 @@ const store = createStore({
         getSpectators(state){
             return state.game.spectators;
         },
-        waitingForSecondPlayer(state){
-            if (state.game == null){
-                return false
-            }
-            return !state.game.pairing.complete;
+        isWaitingForSecondPlayer(state){
+            return state.waitingForSecondPlayer;
         }
     },
     plugins: [consoleLogger]
