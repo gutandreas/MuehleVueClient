@@ -188,7 +188,7 @@ export default {
 </script>
 
 <template>
-  <div v-if="isWaitingForSecondPlayer()" id="waiting">
+  <div v-if="isWaitingForSecondPlayer()" id="waiting" class="waiting">
     <div class="card m-1">
     <div class="card-header text-center">
       <h5>Warten auf Mitspieler</h5>
@@ -397,6 +397,26 @@ export default {
   width: 3.5em;
   height: 3.5em;
   cursor: pointer;
+}
+
+.orange {
+  background: orangered;
+  border-width: 3px;
+  border-style: solid;
+}
+
+.waiting {
+  animation: glow 1s infinite alternate;
+}
+
+
+@keyframes glow {
+  from {
+    -webkit-text-fill-color: black;
+  }
+  to {
+    -webkit-text-fill-color: darkred;
+  }
 }
 
 
