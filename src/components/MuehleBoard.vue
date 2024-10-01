@@ -54,13 +54,13 @@ export default {
       console.log(clickedPosition.ring + "/" + clickedPosition.field);
 
       if (this.getPhase === "WAIT"){
-        alert("Warten Sie, bis Sie an der Reihe sind!")
+        alert("Warte, bis du an der Reihe bist!")
       } else if (this.getPhase === "PUT") {
         this.sendMessage(clickedPosition, "PUT")
       } else if (this.getPhase === "MOVE") {
           if (this.moveFrom == null) {
             if (!this.isThisMyStone(index)){
-              alert("Das ist nicht Ihr Stein...")
+              alert("Das ist nicht dein Stein...")
               return;
             }
             if (!this.isThereAFreeNeighbourPosition(index)){
@@ -78,7 +78,7 @@ export default {
       } else if (this.getPhase === "JUMP"){
         if (this.moveFrom == null) {
           if (!this.isThisMyStone(index)){
-            alert("Das ist nicht Ihr Stein...")
+            alert("Das ist nicht dein Stein...")
             return;
           }
           this.moveFrom = clickedPosition;
