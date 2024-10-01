@@ -33,7 +33,7 @@
             <td>{{ game.gameState.finished !== undefined ? game.gameState.finished ?  game.gameState.winnerIndex === 1 ? "Ja\nGewinner:\n" + game.pairing.player1.name :  "Ja\nGewinner:\n" + game.pairing.player2.name  : "Nein" : 'N/A' }}</td>
             <td>
               <ul v-if="Array.isArray(game.spectators) && game.spectators.length">
-                <li v-for="(spectator, sIndex) in game.spectators" :key="sIndex">{{ spectator }}</li>
+                <li v-for="(spectator, sIndex) in game.spectators" :key="sIndex">{{ spectator.name }}</li>
               </ul>
               <p v-else>---</p>
             </td>

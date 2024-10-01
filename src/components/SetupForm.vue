@@ -378,9 +378,17 @@ export default {
         <h5 class="card-title">Games</h5>
         <div class="row">
           <div class="col-md-4" v-for="(game, index) in activeGames" :key="index" >
-            <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark"
-            style="cursor: pointer;"
-            @click="handleClickOnGameLabel">{{ game.gameCode }}</span>
+            <!-- Bootstrap Tooltip mit data-bs-toggle -->
+            <span
+                class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-dark"
+                style="cursor: pointer;"
+                @click="handleClickOnGameLabel"
+                :data-bs-toggle="`tooltip`"
+                :data-bs-placement="`top`"
+                :title="`${game.pairing.player1.name} vs ${game.pairing.player2.name} \n${game.pairing.complete ?'Game läuft' : 'Warten auf zweiten Spieler...'}` "
+            >
+              {{ game.gameCode }}
+            </span>
           </div>
         </div>
       </div>
@@ -417,6 +425,31 @@ export default {
   to {
     -webkit-text-fill-color: darkred;
   }
+}
+
+.tooltip {
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Positionierung über dem Label */
+  left: 50%;
+  margin-left: -100px; /* Damit es zentriert ist */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
 
 

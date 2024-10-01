@@ -10,8 +10,6 @@ export default {
       numberOfHumanPlayers: 0,
       numberOfSpectators: 0,
       activeHumanPlayers: [],
-
-
     }
   },
   computed: {
@@ -41,16 +39,17 @@ export default {
 </script>
 
 <template>
+
   <div class="statistics-container">
     <div class="card m-1 next-step-card">
       <div class="card-header text-center">
         <h5>Statistik</h5>
       </div>
       <div class="card-body">
-        <h5>Spiele Total: {{numberOfGamesTotal}}</h5>
-        <h5>Aktive Spiele: {{numberOfActiveGames}}</h5>
-        <h5>Spieler Total: {{numberOfHumanPlayers}}</h5>
-        <h5>Aktive Spieler: {{numberOfActiveHumanPlayers}}</h5>
+        <h6><i class="fas fa-chess-pawn" style="color: gray;"></i> {{numberOfGamesTotal}} Games total </h6>
+        <h6><i class="fas fa-chess-pawn" style="color: green;"></i> {{numberOfActiveGames}} Games aktiv</h6>
+        <h6><i class="fas fa-user" style="color: gray;"></i> {{numberOfHumanPlayers}} Player total</h6>
+        <h6><i class="fas fa-user" style="color: green;"></i> {{numberOfActiveHumanPlayers}} Player aktiv</h6>
         <div class="row">
         <div class="col-md-4" v-for="(player, index) in activeHumanPlayers" :key="index">
             <span class="badge badge-primary ms-0 me-0 mb-1 p-2 d-block text-center text-white bg-secondary"
@@ -58,7 +57,7 @@ export default {
         </div>
         </div>
 
-        <h5>Beobachter Total: {{numberOfSpectators}}</h5>
+        <h6><i class="fas fa-eye" style="color: black"></i> Beobachter Total: {{numberOfSpectators}}</h6>
       </div>
     </div>
 

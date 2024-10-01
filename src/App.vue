@@ -10,6 +10,7 @@
 
 <script>
 import NavigationBar from '@/components/NavigationBar.vue';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 
 export default {

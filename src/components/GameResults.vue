@@ -20,7 +20,8 @@ export default {
       "getPlayer2Killed",
       "getPlayer2Phase",
       "getIndex",
-      "getSpectators"
+      "getSpectators",
+        "isFinished"
     ]),
     spectators(){
       return this.getSpectators;
@@ -45,7 +46,7 @@ export default {
             class="card m-1"
             :class="[
             getIndex === 1 ? 'own-player' : '',
-            getPlayer1Phase !== 'WAIT' ? 'active-player' : ''
+            getPlayer1Phase !== 'WAIT' && !isFinished ? 'active-player' : ''
           ]"
         >
           <div class="card-header text-center">
