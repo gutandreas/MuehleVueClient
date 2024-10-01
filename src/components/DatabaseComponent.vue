@@ -22,12 +22,15 @@
           <tbody>
           <tr v-for="(game, index) in games" :key="index">
             <td>{{ game.gameCode || 'N/A' }}</td>
-            <td>{{ game.pairing.player1.name || 'N/A' }} {{game.pairing.player1.stonecolor}} {{game.pairing.player1.currentPhase}}</td>
-            <td>{{ game.pairing.player2 ? game.pairing.player2.name : "---"}} {{game.pairing.player2 ? game.pairing.player2.stonecolor : " "}} {{game.pairing.player2 ? game.pairing.player2.currentPhase : " "}}</td>
+            <td :class="game.pairing.player1.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
+              {{ game.pairing.player1.name || 'N/A' }} <br> <br>  {{ game.pairing.player1.currentPhase }}
+            </td>
+            <td :class="game.pairing.player2.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
+              {{ game.pairing.player2 ? game.pairing.player2.name : "---"}} <br> <br>  {{game.pairing.player2 ? game.pairing.player2.currentPhase : " "}}</td>
             <td>{{ game.gameState.round !== undefined || g ? game.gameState.round : 'N/A' }}</td>
             <td class="board-preview"><MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" /></td>
 
-            <td>{{ game.gameState.finished !== undefined ? game.gameState.finished ? "Ja" : "Nein" : 'N/A' }}</td>
+            <td>{{ game.gameState.finished !== undefined ? game.gameState.finished ?  game.gameState.winnerIndex === 1 ? "Ja\nGewinner:\n" + game.pairing.player1.name :  "Ja\nGewinner:\n" + game.pairing.player2.name  : "Nein" : 'N/A' }}</td>
             <td>
               <ul v-if="Array.isArray(game.spectators) && game.spectators.length">
                 <li v-for="(spectator, sIndex) in game.spectators" :key="sIndex">{{ spectator }}</li>
@@ -142,6 +145,16 @@ export default {
 
 .board-preview {
   width: 20%;
+}
+
+.black-player {
+  background: black;
+  -webkit-text-fill-color: white;
+}
+
+.white-player {
+  background: whitesmoke;
+  -webkit-text-fill-color: black;
 }
 
 ul {
