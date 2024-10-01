@@ -114,7 +114,7 @@ const store = createStore({
 
                                 resolve(data.game.gameCode);
                             } else {
-                                reject(new Error(data.message || "Das Spiel konnte nicht eröffnet werden! Überprüfe deine Angaben..."));
+                                reject(new Error(data.errorMessage || "Das Spiel konnte nicht eröffnet werden! Überprüfe deine Angaben..."));
                             }
 
                         } catch (error) {
@@ -126,6 +126,7 @@ const store = createStore({
                 await context.dispatch('subscribeForGameUpdate', gameCode);
                 await context.dispatch('subscribeForGameChat', gameCode)
             } catch (error) {
+                alert(error.message)
                 console.log("Fehler bei der Verarbeitung:", error);
             }
         },
@@ -142,7 +143,7 @@ const store = createStore({
                                 context.commit("setRunning", {running: true})
                                 resolve(data.game.gameCode);
                             } else {
-                                reject(new Error(data.message || "Dem Spiel konnte nicht beigetreten werden! Überprüfe deine Angaben..."));
+                                reject(new Error(data.errorMessage || "Dem Spiel konnte nicht beigetreten werden! Überprüfe deine Angaben..."));
                             }
 
                         } catch (error) {
