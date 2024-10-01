@@ -35,26 +35,28 @@ export default {
     },
     finished(){
       return this.isFinished;
-    }
+    },
+    messageWritten(){
+      return this.messagetext.trim().length > 0;
+    },
   },
   methods: {
     sendChatMessage(){
-      const gameCode  = this.gameCode;
-      const data = {
-        name: this.playerName,
-        message: this.messagetext,
-
+      if (this.messageWritten){
+        const gameCode  = this.gameCode;
+        const data = {
+          name: this.playerName,
+          message: this.messagetext,
+        }
+        console.log(this.messagetext)
+        stompService.send(`/chat/${gameCode}/messages`, data)
+        this.messagetext = ""
       }
-      console.log(this.messagetext)
-      stompService.send(`/chat/${gameCode}/messages`, data)
-      this.messagetext = ""
-
     },
     sendOffend(){
       const gameCode  = this.gameCode;
       const data = {
         name: this.playerName,
-
       }
       stompService.send(`/chat/${gameCode}/offend`, data)
     },
@@ -68,13 +70,18 @@ export default {
       stompService.send(`/chat/${gameCode}/compliment`, data)
     },
     scrollDown(){
-      const textarea = document.getElementById('messageBox');
-      textarea.scrollTop = textarea.scrollHeight;
+      this.$nextTick(() => {
+        const textarea = document.getElementById('messageBox');
+        if (textarea) {
+          textarea.scrollTop = textarea.scrollHeight;
+        }
+      });
     }
-
-
-
-
+  },
+  watch: {
+    chatHistory() {
+      this.scrollDown();
+    }
   }
 }
 
@@ -104,9 +111,9 @@ export default {
         <h5>Chat</h5>
       </div>
       <div class="card-body text-center mb-1">
-        <textarea class="w-100 mb-1" id="messageBox" :value="chatHistory" @change="scrollDown" type="text" readonly="true" rows="5"></textarea>
+        <textarea class="w-100 mb-1" id="messageBox" :value="chatHistory" type="text" readonly="true" rows="5"></textarea>
         <input class="w-100 mb-1" id="messageLine" type="text" placeholder="Nachricht hier eingeben..." v-model="messagetext" @keyup.enter.exact="sendChatMessage">
-        <input class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
+        <input :disabled=!messageWritten class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
         <input v-if="isPlayer" class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="sendCompliment">
         <input v-if="isPlayer" class="w-100 btn btn-secondary mb-1" id="offendEnemyButton" type="button" value="Gegner beleidigen" @click="sendOffend">
         <input v-if="isPlayer" class="w-100 btn btn-danger mb-1" id="giveUpButton" type="button" value="💀 Spiel aufgeben 💀" @click="giveUp">
@@ -186,5 +193,11 @@ export default {
     box-shadow: 0 0 20px rgba(200, 200, 200, 1);
     -webkit-text-fill-color: white;
   }
+}
+
+textarea {
+  user-select: none; /* Verhindert das Markieren des Textes */
+  overflow: auto; /* Ermöglicht das Scrollen */
+  resize: none; /* Deaktiviert die Möglichkeit, das Textfeld zu vergrößern/verkleinern */
 }
 </style>

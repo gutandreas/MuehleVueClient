@@ -28,7 +28,10 @@ const store = createStore({
             state.running = payload.running;
         },
         addMessageToChatHistory(state, payload){
-            state.chathistory += payload.name + ": " + payload.message + "\n";
+            if (state.chathistory !== ""){
+                state.chathistory += "\n"
+            }
+            state.chathistory += payload.name + ": " + payload.message;
         },
         setWaitingForSecondPlayer(state, payload){
             state.waitingForSecondPlayer = payload.waitingForSecondPlayer;
