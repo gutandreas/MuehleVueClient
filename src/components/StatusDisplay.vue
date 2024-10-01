@@ -10,7 +10,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex']),
+    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex', 'isFinished']),
     // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
     gameCode() {
       return this.getGamecode;
@@ -32,6 +32,9 @@ export default {
     },
     isPlayer(){
       return this.getIndex === 1 || this.getIndex === 2
+    },
+    finished(){
+      return this.isFinished;
     }
   },
   methods: {
@@ -85,15 +88,15 @@ export default {
       </div>
       <div class="card-body">
         <label id="putPhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label green-label"
-               :class="{'active-label': phase === 'SET', 'inactive-label': phase != 'PUT'}">SETZEN</label><br>
+               :class="{'active-label': phase === 'SET' && !finished, 'inactive-label': phase !== 'PUT' || finished}">SETZEN</label><br>
         <label id="movePhaseLabel" class="w-100 text-light text-center rounded mb-1 border-1 step-label blue-label"
-               :class="{'active-label': phase === 'MOVE', 'inactive-label': phase != 'MOVE'}">VERSCHIEBEN</label><br>
+               :class="{'active-label': phase === 'MOVE' && !finished, 'inactive-label': phase !== 'MOVE' || finished}">VERSCHIEBEN</label><br>
         <label id="killPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label red-label"
-               :class="{'active-label': phase === 'KILL', 'inactive-label': phase != 'KILL'}">ENTFERNEN</label><br>
+               :class="{'active-label': phase === 'KILL' && !finished, 'inactive-label': phase !== 'KILL' || finished}">ENTFERNEN</label><br>
         <label id="jumpPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label orange-label"
-               :class="{'active-label': phase === 'JUMP', 'inactive-label': phase != 'JUMP'}">SPRINGEN</label><br>
+               :class="{'active-label': phase === 'JUMP' && !finished, 'inactive-label': phase !== 'JUMP' || finished}">SPRINGEN</label><br>
         <label id="waitPhaseLabel" class="w-100 text-light text-center rounded mb-1 order-1 step-label yellow-label"
-               :class="{'active-label': phase === 'WAIT', 'inactive-label': phase != 'WAIT'}">WARTEN</label><br>
+               :class="{'active-label': phase === 'WAIT' && !finished, 'inactive-label': phase !== 'WAIT' || finished}">WARTEN</label><br>
       </div>
     </div>
     <div class="card m-1 chat-card">
