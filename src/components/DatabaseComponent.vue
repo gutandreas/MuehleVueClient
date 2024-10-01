@@ -76,7 +76,7 @@ export default {
     stompService.subscribe('/topic/admin/games/add', (message) => {
       try {
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
-        this.games.push(parsedMessage);
+        this.games.push(parsedMessage.game);
         console.log("Updated games:", this.games);
       } catch (error) {
         console.error("Failed to process message:", error);
@@ -84,17 +84,27 @@ export default {
     });
     stompService.subscribe('/topic/admin/games/update', (message) => {
       try {
+        console.log("Received message:", message.body);
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
 
-        this.games.filter(row => row[0] !== parsedMessage.gameCode);
-        this.games.push(parsedMessage);
+        console.log("Parsed message:", parsedMessage);
+
+
+        const gameIndex = this.games.findIndex(game => game.gameCode === parsedMessage.game.gameCode);
+
+        if (gameIndex !== -1) {
+          // Ersetze das vorhandene Spiel, wenn es existiert
+          this.games[gameIndex] = parsedMessage.game;
+        } else {
+          // Optional: Füge das Spiel hinzu, wenn es nicht existiert
+          this.games.push(parsedMessage.game);
+        }
 
         console.log("Updated games:", this.games);
       } catch (error) {
         console.error("Failed to process message:", error);
       }
-    });
-  },
+    });},
   unmounted() {
     stompService.unsubscribe('/topic/admin');
     console.log("Games unsubscribed");
