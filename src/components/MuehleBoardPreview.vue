@@ -9,14 +9,37 @@
         :key="index"
         class="point"
         :style="getPointStyle(point)"
-    ></div>
+    >
+      <!-- Bedingte Anzeige der Steine -->
+      <img
+          :src="imagePath(boardPositionsStates[point.ring][point.field])"
+          class="stone"
+          alt="Stone"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import stompService from '../stomp/stompService';
+import {mapGetters} from "vuex";
+
 export default {
-  name: 'MuehleBoard',
+  name: 'MuehleBoardPreview',
+  props: {
+    boardPositionsStates: {
+      type: Array,
+      required: true
+    },
+    color1: {
+      type: String,
+      required: true
+    },
+    color2: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       points: [
@@ -28,7 +51,6 @@ export default {
         {ring: 0, field: 5, top: '88%', left: '45%'},
         {ring: 0, field: 6, top: '88%', left: '2%'},
         {ring: 0, field: 7, top: '45%', left: '2%'},
-
         {ring: 1, field: 0, top: '17%', left: '17%'},
         {ring: 1, field: 1, top: '17%', left: '45%'},
         {ring: 1, field: 2, top: '17%', left: '73%'},
@@ -37,17 +59,19 @@ export default {
         {ring: 1, field: 5, top: '73%', left: '45%'},
         {ring: 1, field: 6, top: '73%', left: '17%'},
         {ring: 1, field: 7, top: '45%', left: '17%'},
-
         {ring: 2, field: 0, top: '31%', left: '31%'},
-        {ring: 2, field: 1,top: '31%', left: '45%'},
-        {ring: 2, field: 2,top: '31%', left: '59%'},
-        {ring: 2, field: 3,top: '45%', left: '59%'},
-        {ring: 2, field: 4,top: '59%', left: '59%'},
-        {ring: 2, field: 5,top: '59%', left: '45%'},
-        {ring: 2, field: 6,top: '59%', left: '31%'},
-        {ring: 2, field: 7,top: '45%', left: '31%'},
+        {ring: 2, field: 1, top: '31%', left: '45%'},
+        {ring: 2, field: 2, top: '31%', left: '59%'},
+        {ring: 2, field: 3, top: '45%', left: '59%'},
+        {ring: 2, field: 4, top: '59%', left: '59%'},
+        {ring: 2, field: 5, top: '59%', left: '45%'},
+        {ring: 2, field: 6, top: '59%', left: '31%'},
+        {ring: 2, field: 7, top: '45%', left: '31%'},
       ]
     };
+  },
+  computed: {
+    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex', 'isFinished']),
   },
   methods: {
     getPointStyle(point) {
@@ -55,6 +79,19 @@ export default {
         top: point.top,
         left: point.left
       };
+    },
+    imagePath(positionState) {
+      if (positionState === 'PLAYER1') {
+        return this.color1 === "BLACK"
+            ? require('@/assets/game_images/StoneBlack.png')
+            : require('@/assets/game_images/StoneWhite.png');
+      }
+      if (positionState === 'PLAYER2') {
+        return this.color2 === "BLACK"
+            ? require('@/assets/game_images/StoneBlack.png')
+            : require('@/assets/game_images/StoneWhite.png');
+      }
+      return require('@/assets/game_images/FullyTransparent.png');
     },
     handlePointClick(point) {
       console.log(point.ring + "/" + point.field);
@@ -64,7 +101,6 @@ export default {
       });
       stompService.send('/app/game/action', message);
     },
-
   }
 };
 </script>
@@ -92,10 +128,14 @@ export default {
 
 .point {
   position: absolute;
-  width: 10%;  /* Größe der Punkte */
+  width: 10%; /* Größe der Punkte */
   height: 10%; /* Größe der Punkte */
-  background-color: rgba(255, 0, 0, 0.5); /* Halbtransparente rote Punkte */
-  border-radius: 50%; /* Macht die Punkte rund */
-  z-index: 2; /* Stellt sicher, dass die Punkte über dem Hintergrundbild liegen */
+  z-index: 1; /* Stellt sicher, dass die Punkte über dem Hintergrundbild liegen */
+}
+
+.stone {
+  position: absolute;
+  width: 100%; /* Größe der Steine anpassen */
+  height: auto; /* Höhe automatisch basierend auf der Breite */
 }
 </style>

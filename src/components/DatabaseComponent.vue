@@ -25,7 +25,7 @@
             <td>{{ game.pairing.player1.name || 'N/A' }} {{game.pairing.player1.stonecolor}} {{game.pairing.player1.currentPhase}}</td>
             <td>{{ game.pairing.player2 ? game.pairing.player2.name : "---"}} {{game.pairing.player2 ? game.pairing.player2.stonecolor : " "}} {{game.pairing.player2 ? game.pairing.player2.currentPhase : " "}}</td>
             <td>{{ game.gameState.round !== undefined || g ? game.gameState.round : 'N/A' }}</td>
-            <td>{{ game.board.boardPositionsStates || 'N/A' }} <MuehleBoardPreview/></td>
+            <MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" />
 
             <td>{{ game.gameState.finished !== undefined ? game.gameState.finished : 'N/A' }}</td>
             <td>
