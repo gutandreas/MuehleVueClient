@@ -22,11 +22,32 @@
           <tbody>
           <tr v-for="(game, index) in games" :key="index">
             <td>{{ game.gameCode || 'N/A' }}</td>
-            <td :class="game.pairing.player1.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
-              {{ game.pairing.player1.name || 'N/A' }} <br> <br>  {{ game.pairing.player1.currentPhase }}
+            <td class="text-center" :class="game.pairing.player1.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
+              {{ game.pairing.player1.name || 'N/A' }}
+              <span class="badge" :class="{
+                'bg-green': game.pairing.player1.currentPhase === 'PUT',
+                'bg-yellow': game.pairing.player1.currentPhase === 'WAIT',
+                'bg-red': game.pairing.player1.currentPhase === 'KILL',
+                'bg-blue': game.pairing.player1.currentPhase === 'MOVE',
+                'bg-orange': game.pairing.player1.currentPhase === 'JUMP',
+
+              }">
+              {{ translatePhase(game.pairing.player1.currentPhase)}}
+            </span>
             </td>
-            <td :class="game.pairing.player2.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
-              {{ game.pairing.player2 ? game.pairing.player2.name : "---"}} <br> <br>  {{game.pairing.player2 ? game.pairing.player2.currentPhase : " "}}</td>
+            <td class="text-center" :class="game.pairing.player2.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
+              {{ game.pairing.player2.name || 'N/A' }}
+              <span class="badge" :class="{
+                'bg-green': game.pairing.player2.currentPhase === 'PUT',
+                'bg-yellow': game.pairing.player2.currentPhase === 'WAIT',
+                'bg-red': game.pairing.player2.currentPhase === 'KILL',
+                'bg-blue': game.pairing.player2.currentPhase === 'MOVE',
+                'bg-orange': game.pairing.player2.currentPhase === 'JUMP',
+
+              }">
+              {{ translatePhase(game.pairing.player2.currentPhase) }}
+            </span>
+            </td>
             <td>{{ game.gameState.round !== undefined || g ? game.gameState.round : 'N/A' }}</td>
             <td class="board-preview"><MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" /></td>
 
@@ -64,8 +85,23 @@ export default {
     },
     deleteGame(gamecode) {
       stompService.send('/admin/games/delete', { gamecode: gamecode });
-    }
-  },
+    },
+    translatePhase(phase) {
+      switch (phase) {
+        case 'PUT':
+          return 'SETZEN';
+        case 'WAIT':
+          return 'WARTEN';
+        case 'KILL':
+          return 'ENTFERNEN';
+        case 'MOVE':
+          return 'VERSCHIEBEN';
+        case 'JUMP':
+          return 'SPRINGEN';
+        default:
+          return phase; // falls keine Übersetzung vorhanden ist
+      }
+  }},
   created() {
     stompService.subscribe('/topic/admin/games/getall', (message) => {
       try {
@@ -155,6 +191,47 @@ export default {
 .white-player {
   background: whitesmoke;
   -webkit-text-fill-color: black;
+}
+
+.bg-green {
+  background: green;
+  display: flex;
+  flex-direction: column; /* Die Elemente untereinander anordnen */
+  justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
+  height: 100%; /* Volle Höhe der Zelle */
+}
+
+.bg-red {
+  background: red;
+  display: flex;
+  flex-direction: column; /* Die Elemente untereinander anordnen */
+  justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
+  height: 100%; /* Volle Höhe der Zelle */
+}
+
+.bg-blue {
+  background: dodgerblue;
+  display: flex;
+  flex-direction: column; /* Die Elemente untereinander anordnen */
+  justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
+  height: 100%; /* Volle Höhe der Zelle */
+}
+
+.bg-orange {
+  background: orange;
+  display: flex;
+  flex-direction: column; /* Die Elemente untereinander anordnen */
+  justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
+  height: 100%; /* Volle Höhe der Zelle */
+}
+
+.bg-yellow {
+  background: yellow;
+  -webkit-text-fill-color: black;
+  display: flex;
+  flex-direction: column; /* Die Elemente untereinander anordnen */
+  justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
+  height: 100%; /* Volle Höhe der Zelle */
 }
 
 ul {
