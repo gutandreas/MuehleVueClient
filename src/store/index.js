@@ -183,7 +183,7 @@ const store = createStore({
             return state.game.gameCode;
         },
         getRound(state){
-            return state.game.round;
+            return state.game.gameState.round;
         },
         getPhase(state){
             return state.index === 1 ? state.game.pairing.player1.currentPhase : state.game.pairing.player2.currentPhase;
@@ -261,7 +261,7 @@ const store = createStore({
             }
         },
         isFinished(state){
-            return state.game.finished;
+            return state.game.gameState.finished;
         },
         getSpectators(state){
             return state.game.spectators;
