@@ -12,9 +12,9 @@
             <th>Game Code</th>
             <th>Spieler 1</th>
             <th>Spieler 2</th>
-            <th>Round</th>
-            <th>Board</th>
-            <th>Finished</th>
+            <th>Runde</th>
+            <th class="board-preview">Board</th>
+            <th>Beendet</th>
             <th>Spectators</th>
             <th>Löschen</th>
           </tr>
@@ -25,14 +25,14 @@
             <td>{{ game.pairing.player1.name || 'N/A' }} {{game.pairing.player1.stonecolor}} {{game.pairing.player1.currentPhase}}</td>
             <td>{{ game.pairing.player2 ? game.pairing.player2.name : "---"}} {{game.pairing.player2 ? game.pairing.player2.stonecolor : " "}} {{game.pairing.player2 ? game.pairing.player2.currentPhase : " "}}</td>
             <td>{{ game.gameState.round !== undefined || g ? game.gameState.round : 'N/A' }}</td>
-            <MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" />
+            <td class="board-preview"><MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" /></td>
 
-            <td>{{ game.gameState.finished !== undefined ? game.gameState.finished : 'N/A' }}</td>
+            <td>{{ game.gameState.finished !== undefined ? game.gameState.finished ? "Ja" : "Nein" : 'N/A' }}</td>
             <td>
               <ul v-if="Array.isArray(game.spectators) && game.spectators.length">
                 <li v-for="(spectator, sIndex) in game.spectators" :key="sIndex">{{ spectator }}</li>
               </ul>
-              <p v-else>No spectators</p>
+              <p v-else>---</p>
             </td>
             <td><button class="btn-danger" @click="deleteGame(game.gameCode)">Löschen</button></td>
           </tr>
@@ -138,6 +138,10 @@ export default {
 
 .table tr:hover {
   background-color: #f1f1f1;
+}
+
+.board-preview {
+  width: 20%;
 }
 
 ul {
