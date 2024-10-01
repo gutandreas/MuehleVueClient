@@ -124,4 +124,9 @@ export default {
 .own-player h5 {
   font-weight: bold;
 }
+
+.crowned-player {
+  position: relative;
+}
+
 </style>

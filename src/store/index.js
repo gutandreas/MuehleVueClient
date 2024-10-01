@@ -51,6 +51,18 @@ const store = createStore({
                 console.log("Gameupdate: ", data);
                 context.commit("setGame", {game: data.game});
                 context.commit("setRunning", { running: data.game.pairing.player2 != null });
+
+                const winnerIndex = data.game.gameState.winnerIndex;
+                const playerIndex = context.state.index;
+
+                if (winnerIndex !== 0) {
+                    if (winnerIndex === playerIndex) {
+                        alert("Gratuliere, du hast das Spiel gewonnen!");
+                    } else {
+                        alert("Du hast das Spiel leider verloren...");
+                    }
+                }
+
             })
         },
         subscribeForGameChat(context, gameCode){
