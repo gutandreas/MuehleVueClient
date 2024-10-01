@@ -11,8 +11,12 @@
             :class="getGridItemClass(index)"
             @click="(getIndex === 1 || getIndex ===2) && !isFinished && getRunning && handlePointClick(index)"
         >
-          <img v-if="getGridItemState(index) === 'PLAYER1'" src="@/assets/game_images/StoneBlack.png" />
-          <img v-if="getGridItemState(index) === 'PLAYER2'" src="@/assets/game_images/StoneWhite.png" />
+          <img v-if="getGridItemState(index) === 'PLAYER1'" :src="getPlayer1Color === 'BLACK'
+                ? require('@/assets/game_images/StoneBlack.png')
+                : require('@/assets/game_images/StoneWhite.png')" />
+          <img v-if="getGridItemState(index) === 'PLAYER2'" :src="getPlayer2Color === 'BLACK'
+                ? require('@/assets/game_images/StoneBlack.png')
+                : require('@/assets/game_images/StoneWhite.png')" />
           <img v-if="getGridItemState(index) === 'FREE'" src="@/assets/game_images/FullyTransparent.png" />
           <img v-if="getGridItemState(index) === 'NO POSITION'" src="@/assets/game_images/FullyTransparent.png" />
         </div>
@@ -35,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase', 'getIndex', 'getStateOnPosition', 'isFinished', 'isPlayer']),
+    ...mapGetters(['getBoard', "getGamecode", "getUuid", 'getRunning', 'getPhase', 'getIndex', 'getStateOnPosition', 'isFinished', 'isPlayer', 'getPlayer1Color', 'getPlayer2Color']),
   },
   methods: {
     ...mapActions(['sendAction', 'updateGame']),
