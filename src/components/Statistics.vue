@@ -10,6 +10,9 @@ export default {
       numberOfHumanPlayers: 0,
       numberOfSpectators: 0,
       activeHumanPlayers: [],
+      numberOfComputerGames: 0,
+      numberOfGamesWonByComputer: 0,
+
     }
   },
   computed: {
@@ -26,6 +29,8 @@ export default {
         this.numberOfHumanPlayers = parsedMessage.numberOfHumanPlayers;
         this.numberOfSpectators = parsedMessage.numberOfSpectators;
         this.activeHumanPlayers = parsedMessage.activeHumanPlayers;
+        this.numberOfComputerGames = parsedMessage.numberOfComputerGames;
+        this.numberOfGamesWonByComputer = parsedMessage.numberOfGamesWonByComputer;
         console.log("Grösse: " + this.activeHumanPlayers.length);
       } catch (error) {
         console.error("Failed to process message:", error);
@@ -46,8 +51,13 @@ export default {
         <h5>Statistik</h5>
       </div>
       <div class="card-body">
+        <div class="section">
+        <h5>Games</h5>
         <h6><i class="fas fa-chess-pawn" style="color: gray;"></i> {{numberOfGamesTotal}} Games total </h6>
         <h6><i class="fas fa-chess-pawn" style="color: green;"></i> {{numberOfActiveGames}} Games aktiv</h6>
+        </div>
+        <div class="section">
+        <h5>Player</h5>
         <h6><i class="fas fa-user" style="color: gray;"></i> {{numberOfHumanPlayers}} Player total</h6>
         <h6><i class="fas fa-user" style="color: green;"></i> {{numberOfActiveHumanPlayers}} Player aktiv</h6>
         <div class="row">
@@ -56,15 +66,32 @@ export default {
                   style="cursor: pointer;">{{player.name}}</span>
         </div>
         </div>
+        </div>
+        <div class="section">
+          <h5>Computer Player</h5>
+          <h6><i class="fas fa-list-ol" style="color: gray"></i> {{numberOfComputerGames}} Games vom Computer gespielt</h6>
+          <h6><i class="fas fa-trophy" style="color: darkgoldenrod;"></i> {{numberOfGamesWonByComputer}} Games vom Computer gewonnen</h6>
+        </div>
+        <div class="section">
+          <h5>Beobachter</h5>
+          <h6><i class="fas fa-eye" style="color: black"></i> Beobachter Total: {{numberOfSpectators}}</h6>
+        </div>
 
-        <h6><i class="fas fa-eye" style="color: black"></i> Beobachter Total: {{numberOfSpectators}}</h6>
+      </div>
+
+
+
+
+
       </div>
     </div>
 
-  </div>
 
 </template>
 
 <style scoped>
+.section {
+  margin-bottom: 7%;
+}
 
 </style>

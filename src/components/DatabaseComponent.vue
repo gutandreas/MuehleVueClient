@@ -195,6 +195,7 @@ export default {
 
 .bg-green {
   background: green;
+  -webkit-text-fill-color: white;
   display: flex;
   flex-direction: column; /* Die Elemente untereinander anordnen */
   justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
@@ -203,6 +204,7 @@ export default {
 
 .bg-red {
   background: red;
+  -webkit-text-fill-color: white;
   display: flex;
   flex-direction: column; /* Die Elemente untereinander anordnen */
   justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
@@ -211,6 +213,7 @@ export default {
 
 .bg-blue {
   background: dodgerblue;
+  -webkit-text-fill-color: white;
   display: flex;
   flex-direction: column; /* Die Elemente untereinander anordnen */
   justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
