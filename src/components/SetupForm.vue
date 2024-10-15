@@ -173,7 +173,7 @@ export default {
         const parsedMessage = typeof message.body === 'string' ? JSON.parse(message.body) : message.body;
 
         // Setze das Array direkt in `games`
-        this.games.push(parsedMessage);
+        this.games.push(parsedMessage.game);
 
         console.log("Updated games:", this.games);
       } catch (error) {
