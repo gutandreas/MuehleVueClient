@@ -15,7 +15,8 @@ const store = createStore({
         index:  null,
         running: false,
         chathistory: "",
-        waitingForSecondPlayer: false
+        waitingForSecondPlayer: false,
+        spectatorName: null
     },
     mutations: {
         setGame(state, payload) {
@@ -35,6 +36,9 @@ const store = createStore({
         },
         setWaitingForSecondPlayer(state, payload){
             state.waitingForSecondPlayer = payload.waitingForSecondPlayer;
+        },
+        setSpectatorName(state, payload){
+            state.spectatorName = payload.spectatorName;
         }
     },
     actions: {
@@ -171,6 +175,7 @@ const store = createStore({
                             console.log("Response received: ", data);
                             context.commit("setGame", {game: data.game});
                             context.commit("setIndex", { index: data.index });
+                            context.commit("setSpectatorName", {spectatorName: data.spectatorName});
                             context.commit("setRunning", {running: true})
                             resolve(data.game.gameCode);
                         } catch (error) {
@@ -213,7 +218,7 @@ const store = createStore({
             } else if (state.index === 2){
                 return state.game.pairing.player2.name
             } else {
-                return "Zuschauer"
+                return state.spectatorName
                 //TODO: Eigenen Namen finden und zurückgeben
             }
         },
@@ -281,6 +286,9 @@ const store = createStore({
         },
         getSpectators(state){
             return state.game.spectators;
+        },
+        getSpectatornName(state){
+            return state.spectatorName;
         },
         isWaitingForSecondPlayer(state){
             return state.waitingForSecondPlayer;

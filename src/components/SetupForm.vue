@@ -1,6 +1,6 @@
 <script>
 import stompService from '../stomp/stompService';
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 export default {
   name: "SetupForm",
   data() {
@@ -38,6 +38,7 @@ export default {
 
     ...mapActions(['setupComputerGame', "setupLoginGameStart", "setupLoginGameJoin", "setupWatch"]),
     ...mapGetters([ 'isWaitingForSecondPlayer']),
+    ...mapMutations([ 'setSpectatorName']),
 
     sendGameData(){
       if(this.answers.modus === 'c'){
@@ -146,6 +147,7 @@ export default {
       name = name ? name.toUpperCase() : '';
       this.answers.gamecode = gamecode;
       this.answers.name = name;
+      this.setSpectatorName(name);
 
       this.sendGameDataWatch();
     }

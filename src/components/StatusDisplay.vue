@@ -10,12 +10,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex', 'isFinished']),
+    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex', 'isFinished', 'getSpectatornName']),
     // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
     gameCode() {
       return this.getGamecode;
     },
-    playerName() {
+    ownName() {
       return this.getOwnName;
     },
     chatHistory() {
@@ -45,7 +45,7 @@ export default {
       if (this.messageWritten){
         const gameCode  = this.gameCode;
         const data = {
-          name: this.playerName,
+          name: this.ownName,
           message: this.messagetext,
         }
         console.log(this.messagetext)
