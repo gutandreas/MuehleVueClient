@@ -8,13 +8,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Aktuelles Spiel</router-link>
+            <router-link class="nav-link" to="/" active-class="active"><i class="fas fa-play"></i> Aktuelles Spiel</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/admin">Administrator</router-link>
+            <router-link class="nav-link" to="/admin" active-class="active"><i class="fas fa-cogs"></i> Administrator</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/services">Über das Spiel</router-link>
+            <router-link class="nav-link" to="/services" active-class="active"><i class="fas fa-info-circle"></i> Über das Spiel</router-link>
           </li>
         </ul>
       </div>
@@ -29,8 +29,11 @@ export default {
 </script>
 
 <style scoped>
-.nav-link,
-.dropdown-item {
+.nav-link {
   cursor: pointer;
+}
+
+.nav-link.active {
+  font-weight: bold; /* Beispiel für Hervorhebung */
 }
 </style>
