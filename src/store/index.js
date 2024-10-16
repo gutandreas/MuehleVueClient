@@ -12,7 +12,7 @@ const consoleLogger = (store) => {
 const store = createStore({
     state: {
         game: {board: {boardPositionsStates: null}, complete: false},
-        index: null,
+        index:  null,
         running: false,
         chathistory: "",
         waitingForSecondPlayer: false

@@ -385,7 +385,7 @@ export default {
                 @click="handleClickOnGameLabel"
                 :data-bs-toggle="`tooltip`"
                 :data-bs-placement="`top`"
-                :title="`${game.pairing.player1.name} vs ${game.pairing.player2.name} \n${game.pairing.complete ?'Game läuft' : 'Warten auf zweiten Spieler...'}` "
+                :title="`${game.pairing.player1.name} vs ${game.pairing.player2?.name || '???'} \n${game.pairing.complete ?'Game läuft' : 'Warten auf zweiten Spieler...'}` "
             >
               {{ game.gameCode }}
             </span>

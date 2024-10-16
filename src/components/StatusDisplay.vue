@@ -76,6 +76,14 @@ export default {
           textarea.scrollTop = textarea.scrollHeight;
         }
       });
+    },
+    giveUp(){
+      const gameCode  = this.gameCode;
+      const data = {
+        gamecode: gameCode,
+        index: this.getIndex
+      }
+      stompService.send(`/manager/setup/giveup`, data)
     }
   },
   watch: {
