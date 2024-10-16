@@ -30,6 +30,7 @@
                 'bg-red': game.pairing.player1.currentPhase === 'KILL',
                 'bg-blue': game.pairing.player1.currentPhase === 'MOVE',
                 'bg-orange': game.pairing.player1.currentPhase === 'JUMP',
+                'invisible' : game.gameState.finished
 
               }">
               {{ translatePhase(game.pairing.player1.currentPhase)}}
@@ -43,6 +44,7 @@
                 'bg-red': game.pairing.player2?.currentPhase === 'KILL',
                 'bg-blue': game.pairing.player2?.currentPhase === 'MOVE',
                 'bg-orange': game.pairing.player2?.currentPhase === 'JUMP',
+                'invisible' : game.gameState.finished
 
               }">
               {{ translatePhase(game.pairing.player2?.currentPhase) }}
@@ -235,6 +237,10 @@ export default {
   flex-direction: column; /* Die Elemente untereinander anordnen */
   justify-content: flex-end; /* Elemente zum unteren Rand ausrichten */
   height: 100%; /* Volle Höhe der Zelle */
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 ul {
