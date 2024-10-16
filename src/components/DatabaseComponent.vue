@@ -60,7 +60,7 @@
               </ul>
               <p v-else>---</p>
             </td>
-            <td><button class="btn-danger" @click="deleteGame(game.gameCode)">Löschen</button></td>
+            <td><button class="btn btn-danger" @click="deleteGame(game.gameCode)">Löschen</button></td>
           </tr>
           </tbody>
         </table>
