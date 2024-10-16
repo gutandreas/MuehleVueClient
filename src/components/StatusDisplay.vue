@@ -78,12 +78,16 @@ export default {
       });
     },
     giveUp(){
-      const gameCode  = this.gameCode;
-      const data = {
-        gamecode: gameCode,
-        index: this.getIndex
+      const confirmed = confirm("Willst du das Spiel tatsächlich aufgeben? Bestätige mit OK...")
+      if (confirmed){
+        const gameCode  = this.gameCode;
+        const data = {
+          gamecode: gameCode,
+          index: this.getIndex
+        }
+        stompService.send(`/manager/setup/giveup`, data)
       }
-      stompService.send(`/manager/setup/giveup`, data)
+
     }
   },
   watch: {
