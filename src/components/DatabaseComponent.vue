@@ -2,10 +2,10 @@
   <div class="database-container">
     <div class="card m-1 next-step-card">
       <div class="card-header text-center">
-        <h5>Datenbank</h5>
+        <h5>Spielübersicht</h5>
       </div>
       <div class="card-body">
-        <button @click="getAllGames">Alle Games abfragen</button>
+<!--        <button @click="getAllGames">Alle Games abfragen</button>-->
         <table class="table">
           <thead>
           <tr>
@@ -53,7 +53,7 @@
             <td>{{ game.gameState.round !== undefined || g ? game.gameState.round : 'N/A' }}</td>
             <td class="board-preview"><MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2?.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" /></td>
 
-            <td>{{ game.gameState.finished !== undefined ? game.gameState.finished ?  game.gameState.winnerIndex === 1 ? "Ja\nGewinner:\n" + game.pairing.player1.name :  "Ja\nGewinner:\n" + game.pairing.player2.name  : "Nein" : 'N/A' }}</td>
+            <td>{{ game.gameState.finished !== undefined ? game.gameState.finished ?  game.gameState.winnerIndex === 1 ? "Ja, Gewinner:\n" + game.pairing.player1.name :  "Ja, Gewinner:\n" + game.pairing.player2.name  : "Nein" : 'N/A' }}</td>
             <td>
               <ul v-if="Array.isArray(game.spectators) && game.spectators.length">
                 <li v-for="(spectator, sIndex) in game.spectators" :key="sIndex">{{ spectator.name }}</li>
@@ -182,7 +182,7 @@ export default {
 }
 
 .board-preview {
-  width: 20%;
+  width: 15%;
 }
 
 .black-player {

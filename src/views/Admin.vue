@@ -1,6 +1,6 @@
 <template>
   <div class="grid-container">
-    <DatabaseComponent class="center-panel" />
+    <DatabaseComponent class="full-panel" />
   </div>
 </template>
 
@@ -22,9 +22,10 @@ export default {
 
 <style scoped>
 
+
 .grid-container {
   display: grid;
-  grid-template-columns: 0.5fr 1fr 0.5fr; /* Setzt die Breiten der Spalten */
+  grid-template-columns: 1fr; /* Setzt die Breiten der Spalten */
   grid-template-rows: auto; /* Auto Höhe basierend auf dem Inhalt */
   grid-template-areas:
     "left center right";
@@ -50,5 +51,11 @@ export default {
   grid-area: right;
   width: 100%;
   border-left: 2px solid #fff; /* Optional: Border zur Trennung */
+}
+
+.full-panel {
+  grid-area: 1 / 1 / 2 / 2; /* Nimmt den gesamten Platz ein */
+  width: 100%;
+  height: 100%; /* Optional: Stellt sicher, dass die Höhe des Panels 100% beträgt */
 }
 </style>
