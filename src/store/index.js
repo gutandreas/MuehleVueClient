@@ -219,7 +219,6 @@ const store = createStore({
                 return state.game.pairing.player2.name
             } else {
                 return state.spectatorName
-                //TODO: Eigenen Namen finden und zurückgeben
             }
         },
         getPlayer1Name(state){

@@ -76,10 +76,10 @@ export default {
           <h6><i class="fas fa-trophy" style="color: darkgoldenrod;"></i> {{numberOfGamesWonByComputer}} Games vom Computer gewonnen</h6>
           <h6><i class="fas fa-pie-chart" style="color: green"></i> {{this.wonComputerGamesInPercent}}% der Games gewonnen</h6>
         </div>
-        <div class="section">
+<!--        <div class="section">
           <h5>Beobachter</h5>
           <h6><i class="fas fa-eye" style="color: black"></i> Beobachter Total: {{numberOfSpectators}}</h6>
-        </div>
+        </div>-->
 
       </div>
 
