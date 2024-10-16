@@ -35,21 +35,21 @@
               {{ translatePhase(game.pairing.player1.currentPhase)}}
             </span>
             </td>
-            <td class="text-center" :class="game.pairing.player2.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
-              {{ game.pairing.player2.name || 'N/A' }}
+            <td class="text-center" :class="game.pairing.player2?.stonecolor === 'BLACK' ? 'black-player' : 'white-player'">
+              {{ game.pairing.player2?.name || 'N/A' }}
               <span class="badge" :class="{
-                'bg-green': game.pairing.player2.currentPhase === 'PUT',
-                'bg-yellow': game.pairing.player2.currentPhase === 'WAIT',
-                'bg-red': game.pairing.player2.currentPhase === 'KILL',
-                'bg-blue': game.pairing.player2.currentPhase === 'MOVE',
-                'bg-orange': game.pairing.player2.currentPhase === 'JUMP',
+                'bg-green': game.pairing.player2?.currentPhase === 'PUT',
+                'bg-yellow': game.pairing.player2?.currentPhase === 'WAIT',
+                'bg-red': game.pairing.player2?.currentPhase === 'KILL',
+                'bg-blue': game.pairing.player2?.currentPhase === 'MOVE',
+                'bg-orange': game.pairing.player2?.currentPhase === 'JUMP',
 
               }">
-              {{ translatePhase(game.pairing.player2.currentPhase) }}
+              {{ translatePhase(game.pairing.player2?.currentPhase) }}
             </span>
             </td>
             <td>{{ game.gameState.round !== undefined || g ? game.gameState.round : 'N/A' }}</td>
-            <td class="board-preview"><MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" /></td>
+            <td class="board-preview"><MuehleBoardPreview :color1="game.pairing.player1.stonecolor" :color2="game.pairing.player2?.stonecolor" :boardPositionsStates="game.board.boardPositionsStates" /></td>
 
             <td>{{ game.gameState.finished !== undefined ? game.gameState.finished ?  game.gameState.winnerIndex === 1 ? "Ja\nGewinner:\n" + game.pairing.player1.name :  "Ja\nGewinner:\n" + game.pairing.player2.name  : "Nein" : 'N/A' }}</td>
             <td>
