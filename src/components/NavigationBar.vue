@@ -14,7 +14,7 @@
             <router-link class="nav-link" to="/admin" active-class="active"><i class="fas fa-cogs"></i> Administrator</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/services" active-class="active"><i class="fas fa-info-circle"></i> Über das Spiel</router-link>
+            <router-link class="nav-link" to="/about" active-class="active"><i class="fas fa-info-circle"></i> Über das Spiel</router-link>
           </li>
         </ul>
       </div>

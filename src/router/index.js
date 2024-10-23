@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import Admin from '../views/Admin.vue';
 import PasswordPrompt from '../views/PasswordPrompt.vue'; // Importieren Sie die Passwort-Eingabekomponente
+import About from '../views/About.vue';
 
 const routes = [
     {
@@ -19,7 +20,13 @@ const routes = [
         path: '/password-prompt',
         name: 'password-prompt',
         component: PasswordPrompt
-    }
+    },
+    {
+        path: '/about',
+        name: 'about',
+        component: About
+    },
+
 ];
 
 const router = createRouter({
