@@ -56,7 +56,7 @@ export default {
     sendOffend(){
       const gameCode  = this.gameCode;
       const data = {
-        name: this.playerName,
+        name: this.ownName,
       }
       stompService.send(`/chat/${gameCode}/offend`, data)
     },
@@ -64,7 +64,7 @@ export default {
     sendCompliment(){
       const gameCode  = this.gameCode;
       const data = {
-        name: this.playerName,
+        name: this.ownName,
 
       }
       stompService.send(`/chat/${gameCode}/compliment`, data)
