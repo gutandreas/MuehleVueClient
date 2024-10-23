@@ -10,49 +10,42 @@ export default {
       <div class="col-lg-8 col-md-10">
         <div class="card shadow">
           <div class="card-header text-center">
-            <h1>Über das Mühlespiel</h1>
+            <h1>Über das Spiel</h1>
           </div>
           <div class="card-body">
             <p class="lead text-center">
-              Willkommen zum Mühlespiel, einer digitalen Umsetzung des klassischen Brettspiels,
-              das auch als "Neun-Menschen-Morris" bekannt ist. Dieses Spiel bietet eine
-              strategische Herausforderung, die seit Jahrhunderten geschätzt wird.
+              Das Spiel wurde von Andreas Gut als Individuelles Projekt im Rahmen des Studiengangs GymInf unter der Betreuung von Prof. Dr. Dominik Gruntz erstellt.
             </p>
 
             <div class="mb-4">
-              <h2>Spielmerkmale</h2>
+              <h2>Spielmöglichkeiten</h2>
               <ul class="list-group">
-                <li class="list-group-item">Spielen gegen menschliche Spieler oder Computergegner</li>
-                <li class="list-group-item">Mehrere Schwierigkeitsstufen für Computergegner</li>
-                <li class="list-group-item">Echtzeit-Spielstatistiken und Spieler-Tracking</li>
-                <li class="list-group-item">Einfaches und intuitives Interface</li>
+                <li class="list-group-item">Spielen gegen andere eingeloggte Spieler</li>
+                <li class="list-group-item">Spielen gegen unterschiedliche Schwierigkeitsstufen des Computerspielers</li>
+                <li class="list-group-item">Beobachten von laufenden Spielen</li>
               </ul>
             </div>
 
             <div class="mb-4">
-              <h2>Programmierung</h2>
-              <p><strong>Entwickelt von:</strong> Andreas Gut</p>
+              <h2>Projekt und Programmierung</h2>
               <p>
-                Diese Version des Mühlespiels wurde sorgfältig entwickelt, um ein flüssiges und unterhaltsames
-                Spielerlebnis zu bieten. Alle Funktionen und der gesamte Code wurden von Andreas Gut erstellt,
-                mit dem Fokus auf saubere und effiziente Programmierung.
+                Der Computerspieler basiert auf dem Alpha-Beta-Algorithmus, einer Weiterentwicklung des Minimax-Algorithmus.
+                Zur Implementierung des Frontends wurde <a href="https://vuejs.org">Vue3</a> eingesetzt. Das Backend basiert auf <a href="https://spring.io/projects/spring-boot">Spring Boot</a>.
+                Zum Projekt gehören ebenfalls eine Desktopanwendung auf Basis von <a href="https://openjfx.io">JavaFX</a> und ein Spielroboter. Das Projekt ist neben weiteren Arbeiten auf dem <a href="https://github.com/gutandreas/">Github-Repository</a> von Andreas Gut zu finden.
               </p>
             </div>
 
             <div class="mb-4">
               <h2>Spielanleitung</h2>
               <p>
-                Das Ziel des Mühlespiels ist es, Reihen von drei Steinen, sogenannte Mühlen, zu bilden
+                Das Ziel des Spiels ist es, Reihen von drei Steinen, sogenannte Mühlen, zu bilden
                 und dabei gegnerische Steine vom Spielfeld zu entfernen. Die Spieler setzen abwechselnd
                 ihre Steine auf freie Felder, um den Gegner zu blockieren und eigene Mühlen zu schaffen.
-                Hat ein Spieler nur noch drei Steine, kann er seine Steine frei auf dem Brett bewegen.
+                Sobald beide Spieler 9 Steine gesetzt haben, werden die Steine abwechslungsweise den Linien entlang verschoben.
+                Hat ein Spieler nur noch drei Steine, kann er seine Steine frei auf dem Brett bewegen. Hat ein Spieler weniger als 3 Steine hat oder kann er sich nicht mehr bewegen, so ist das Spiel beendet.
               </p>
             </div>
 
-            <div class="mb-4">
-              <h2>Kontakt</h2>
-              <p>Haben Sie Fragen oder Feedback? Kontaktieren Sie Andreas Gut gerne unter <a href="mailto:andreas@example.com">andreas@example.com</a>.</p>
-            </div>
           </div>
         </div>
       </div>
