@@ -10,7 +10,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex', 'isFinished', 'getSpectatornName']),
+    ...mapGetters(['getGamecode', 'getOwnName', 'getChathistory', 'getPhase', 'getCurrentIndex', 'getIndex', 'isFinished', 'getSpectatornName', 'isFinished']),
     // Annahme: Der gameCode wird im Store verwaltet und ist als Getter verfügbar
     gameCode() {
       return this.getGamecode;
@@ -128,7 +128,7 @@ export default {
         <input :disabled=!messageWritten class="w-100 btn btn-dark mb-1" id="messageButton" type="button" value="Nachricht senden" @click="sendChatMessage">
         <input v-if="isPlayer" class="w-100 btn btn-secondary mb-1" id="complimentEnemyButton" type="button" value="Gegner loben" @click="sendCompliment">
         <input v-if="isPlayer" class="w-100 btn btn-secondary mb-1" id="offendEnemyButton" type="button" value="Gegner beleidigen" @click="sendOffend">
-        <input v-if="isPlayer" class="w-100 btn btn-danger mb-1" id="giveUpButton" type="button" value="💀 Spiel aufgeben 💀" @click="giveUp">
+        <input v-if="isPlayer" class="w-100 btn btn-danger mb-1" :disabled=finished id="giveUpButton" type="button" value="💀 Spiel aufgeben 💀" @click="giveUp">
       </div>
     </div>
   </div>

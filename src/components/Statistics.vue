@@ -10,8 +10,12 @@ export default {
       numberOfHumanPlayers: 0,
       numberOfSpectators: 0,
       activeHumanPlayers: [],
-      numberOfComputerGames: 0,
-      numberOfGamesWonByComputer: 0,
+      numberOfComputerGamesLevel1: 0,
+      numberOfGamesWonByComputerLevel1: 0,
+      numberOfComputerGamesLevel2: 0,
+      numberOfGamesWonByComputerLevel2: 0,
+      numberOfComputerGamesLevel3: 0,
+      numberOfGamesWonByComputerLevel3: 0,
 
     }
   },
@@ -19,8 +23,20 @@ export default {
       numberOfActiveHumanPlayers() {
         return this.activeHumanPlayers.length;
     },
-    wonComputerGamesInPercent(){
-        return this.numberOfGamesWonByComputer / this.numberOfComputerGames * 100
+  },
+  methods: {
+    getGamesWonByComputerInPercent(level){
+      switch (level) {
+        case 1:
+          return this.numberOfGamesWonByComputerLevel1 / this.numberOfComputerGamesLevel1 * 100;
+        case 2:
+          return this.numberOfGamesWonByComputerLevel2 / this.numberOfComputerGamesLevel2 * 100;
+        case 3:
+          return this.numberOfGamesWonByComputerLevel3 / this.numberOfComputerGamesLevel3 * 100;
+        default:
+          return null;
+      }
+
     }
   },
   mounted() {
@@ -32,8 +48,15 @@ export default {
         this.numberOfHumanPlayers = parsedMessage.numberOfHumanPlayers;
         this.numberOfSpectators = parsedMessage.numberOfSpectators;
         this.activeHumanPlayers = parsedMessage.activeHumanPlayers;
-        this.numberOfComputerGames = parsedMessage.numberOfComputerGames;
-        this.numberOfGamesWonByComputer = parsedMessage.numberOfGamesWonByComputer;
+        this.numberOfComputerGamesLevel1 = parsedMessage.computerGameNumbers[0].numberOfComputerGames;
+        this.numberOfGamesWonByComputerLevel1 = parsedMessage.computerGameNumbers[0].numberOfGamesWonByComputer;
+        this.numberOfComputerGamesLevel2 = parsedMessage.computerGameNumbers[1].numberOfComputerGames;
+        this.numberOfGamesWonByComputerLevel2 = parsedMessage.computerGameNumbers[1].numberOfGamesWonByComputer;
+        this.numberOfComputerGamesLevel3 = parsedMessage.computerGameNumbers[2].numberOfComputerGames;
+        this.numberOfGamesWonByComputerLevel3 = parsedMessage.computerGameNumbers[2].numberOfGamesWonByComputer;
+
+
+
         console.log("Grösse: " + this.activeHumanPlayers.length);
       } catch (error) {
         console.error("Failed to process message:", error);
@@ -72,9 +95,21 @@ export default {
         </div>
         <div class="section">
           <h5>Computer Player</h5>
-          <h6><i class="fas fa-list-ol" style="color: gray"></i> {{numberOfComputerGames}} Games vom Computer gespielt</h6>
-          <h6><i class="fas fa-trophy" style="color: darkgoldenrod;"></i> {{numberOfGamesWonByComputer}} Games vom Computer gewonnen</h6>
-          <h6><i class="fas fa-pie-chart" style="color: green"></i> {{this.wonComputerGamesInPercent}}% der Games gewonnen</h6>
+          <h6>Schwacher Computer</h6>
+          <h6><i class="fas fa-list-ol" style="color: gray"></i> {{this.numberOfComputerGamesLevel1}} Games vom Computer gespielt</h6>
+          <h6><i class="fas fa-trophy" style="color: darkgoldenrod;"></i> {{this.numberOfGamesWonByComputerLevel1}} Games vom Computer gewonnen</h6>
+          <h6><i class="fas fa-pie-chart" style="color: green"></i> {{ this.getGamesWonByComputerInPercent(1) }}% der
+            Games gewonnen</h6>
+          <h6>Mittelstarker Computer</h6>
+          <h6><i class="fas fa-list-ol" style="color: gray"></i> {{this.numberOfComputerGamesLevel2}} Games vom Computer gespielt</h6>
+          <h6><i class="fas fa-trophy" style="color: darkgoldenrod;"></i> {{this.numberOfGamesWonByComputerLevel2}} Games vom Computer gewonnen</h6>
+          <h6><i class="fas fa-pie-chart" style="color: green"></i> {{ this.getGamesWonByComputerInPercent(2) }}% der
+            Games gewonnen</h6>
+          <h6>Starker Computer</h6>
+          <h6><i class="fas fa-list-ol" style="color: gray"></i> {{this.numberOfComputerGamesLevel3}} Games vom Computer gespielt</h6>
+          <h6><i class="fas fa-trophy" style="color: darkgoldenrod;"></i> {{this.numberOfGamesWonByComputerLevel3}} Games vom Computer gewonnen</h6>
+          <h6><i class="fas fa-pie-chart" style="color: green"></i> {{ this.getGamesWonByComputerInPercent(3) }}% der
+            Games gewonnen</h6>
         </div>
 <!--        <div class="section">
           <h5>Beobachter</h5>
